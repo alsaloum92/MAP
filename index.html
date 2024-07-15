@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>خارطة مشاريع فالك العقارية</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        #floating-box {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            text-align: right;
+            width: 180px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        #project-dropdown {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        #logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            border-radius: 5px;
+            z-index: 3;
+            background-color: rgb(255, 255, 255);
+            width: 60px; /* Adjust as needed */
+            height: auto; /* Maintain aspect ratio */
+        }
+    </style>
+</head>
+
+<body>
+    <img id="logo" src="https://falek.sa/wp-content/uploads/2023/01/شعار-فالك-مفرغ-2@2x-8.png" alt="Logo"> <!-- Replace with the path to your logo -->
+    <div id="floating-box">أنقر على القطعة المراد عرض تفاصيلها</div>
+    <div id="login-box">
+        <input type="password" id="password" placeholder="Enter password">
+        <button id="login-button" class="button">Login</button>
+    </div>
+    <button id="logout-button" class="button hidden">Logout</button>
+    <select id="project-dropdown">
+        <option value="">مشاريعنا</option>
+        <option value="project1">مشروع الخزامى</option>
+        <option value="project2">مشروع غرناطة</option>
+        <option value="project3">مشروع واحة الخير</option>
+    </select>
+    <div id="map"></div>
+
+    <script>
+        const PASSWORD = '9991'; // Correct password
+        const loginBox = document.getElementById('login-box');
+        const loginButton = document.getElementById('login-button');
+        const logoutButton = document.getElementById('logout-button');
+        const floatingBox = document.getElementById('floating-box');
+        const floatingForm = document.getElementById('floating-form');
+        const formContainer = document.getElementById('form-container');
+        const saveButton = document.getElementById('save-button');
+        const projectDropdown = document.getElementById('project-dropdown');
+        let editFeature = null; // To keep track of the feature being edited
+
+        loginButton.addEventListener('click', () => {
+            const passwordInput = document.getElementById('password').value;
+            if (passwordInput === PASSWORD) {
+                loginBox.classList.add('hidden');
+                logoutButton.classList.remove('hidden');
+            } else {
+                alert('Incorrect password, please try again.');
+            }
+        });
+
+        logoutButton.addEventListener('click', () => {
+            loginBox.classList.remove('hidden');
+            logoutButton.classList.add('hidden');
+            document.getElementById('password').value = ''; // Clear the password input
+        });
+
+        const projectCoordinates = {
+            'project1': [43.936768, 26.347163], // Replace with actual coordinates for project 1
+            'project2': [44.010858, 26.340546], // Replace with actual coordinates for project 2
+            'project3': [39.600575, 24.363737]  // Replace with actual coordinates for project 3
+        };
+
+        projectDropdown.addEventListener('change', (event) => {
+            const selectedProject = event.target.value;
+            if (projectCoordinates[selectedProject]) {
+                map.flyTo({
+                    center: projectCoordinates[selectedProject],
+                    zoom: 15
+                });
+            }
+        });
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/satellite-streets-v12',
+            zoom: 15,
+            center: [43.936768, 26.347163],
+            projection: 'globe'
+        });
+
+        map.on('load', () => {
+            map.setFog({});
+
+            // Fetch dataset from Mapbox API
+            fetch('https://api.mapbox.com/datasets/v1/falekrealestate/clynbl8ph0oo61mo626c0whc3/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw')
+                .then(response => response.json())
+                .then(data => {
+                    map.addSource('mapbox-dataset', {
+                        type: 'geojson',
+                        data: data
+                    });
+
+                    map.addLayer({
+                        id: 'dataset-fill',
+                        type: 'fill',
+                        source: 'mapbox-dataset',
+                        paint: {
+                            'fill-color': [
+                                'match',
+                                ['get', 'status1'],
+                                'متاح', '#c2d257',
+                                'مباع', '#7e74b5',
+                                'مرفق', '#7e74b5',
+                                '#c2d257' // Default value
+                            ],
+                            'fill-opacity': 0.8
+                        }
+                    });
+
+                    map.addLayer({
+                        id: 'dataset-line',
+                        type: 'line',
+                        source: 'mapbox-dataset',
+                        paint: {
+                            'line-color': '#fff',
+                            'line-width': 1
+                        }
+                    });
+
+                    map.addLayer({
+                        id: `dataset-symbol`,
+                        type: 'symbol',
+                        source: 'mapbox-dataset',
+                        layout: {
+                            'text-field': ['get', 'SM Title'],
+                            'text-size': 16,
+                            'text-offset': [0, 0.0] // Adjust offsets for each symbol layer
+                        },
+                        paint: {
+                            'text-color': 'black'
+                        },
+                        minzoom: 20, // Adjust zoom levels accordingly
+                        maxzoom: 23
+                    });
+
+                    // Add a symbol layer to display PARCEL_NO
+                    ['', 'name', 'Title'].forEach((property, index) => {
+                        map.addLayer({
+                            id: `dataset-symbol2${index}`,
+                            type: 'symbol',
+                            source: 'mapbox-dataset',
+                            layout: {
+                                'text-field': ['get', property],
+                                'text-size': 20,
+                                'text-offset': [0, -0.8 + 0.8 * index] // Adjust offsets for each symbol layer
+                            },
+                            paint: {
+                                'text-color': index === 2 ? 'white' : 'black'
+                            },
+                            minzoom: index == 2 ? 19 : 17, // Adjust zoom levels accordingly
+                            maxzoom: 23
+                        });
+                    });
+
+                    
+
+                    // Add event listeners or additional layers for dataset features if needed
+                })
+                .catch(err => console.error('Error fetching dataset:', err));
+
+                
+            // ------ Fetch dataset from Mapbox API 2 (واحة الخير) -----------------------------------------
+            fetch('https://api.mapbox.com/datasets/v1/falekrealestate/clynbo6o30ost1to6dro14z5g/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw')
+                .then(response => response.json())
+                .then(data => {
+                    map.addSource('mapbox-dataset2', {
+                        type: 'geojson',
+                        data: data
+                    });
+
+                    map.addLayer({
+                        id: 'dataset-fill2',
+                        type: 'fill',
+                        source: 'mapbox-dataset2',
+                        paint: {
+                            'fill-color': [
+                                'match',
+                                ['get', 'status1'],
+                                'متاح', '#c2d257',
+                                'مباع', '#7e74b5',
+                                'مرفق', '#7e74b5',
+                                '#c2d257' // Default value
+                            ],
+                            'fill-opacity': 0.8
+                        }
+                    });
+
+                    map.addLayer({
+                        id: 'dataset-line2',
+                        type: 'line',
+                        source: 'mapbox-dataset2',
+                        paint: {
+                            'line-color': '#fff',
+                            'line-width': 1
+                        }
+                    });
+
+                    map.addLayer({
+                        id: `dataset-symbol2`,
+                        type: 'symbol',
+                        source: 'mapbox-dataset2',
+                        layout: {
+                            'text-field': ['get', 'SM Title'],
+                            'text-size': 16,
+                            'text-offset': [0, 0.0] // Adjust offsets for each symbol layer
+                        },
+                        paint: {
+                            'text-color': 'black'
+                        },
+                        minzoom: 20, // Adjust zoom levels accordingly
+                        maxzoom: 23
+                    });
+
+                    // Add a symbol layer to display PARCEL_NO
+                    ['', 'name', 'Title'].forEach((property, index) => {
+                        map.addLayer({
+                            id: `dataset-symbol3${index}`,
+                            type: 'symbol',
+                            source: 'mapbox-dataset2',
+                            layout: {
+                                'text-field': ['get', property],
+                                'text-size': 20,
+                                'text-offset': [0, -0.8 + 0.8 * index] // Adjust offsets for each symbol layer
+                            },
+                            paint: {
+                                'text-color': index === 2 ? 'white' : 'black'
+                            },
+                            minzoom: index == 2 ? 19 : 17, // Adjust zoom levels accordingly
+                            maxzoom: 23
+                        });
+                    });
+
+                    
+
+                    // Add event listeners or additional layers for dataset features if needed
+                })
+                .catch(err => console.error('Error fetching dataset:', err));
+
+
+
+            map.on('click', (e) => {
+                const features = map.queryRenderedFeatures(e.point, {
+                    layers: ['dataset-fill','dataset-fill2']
+                });
+
+                if (features.length) {
+                    const feature = features[0];
+                    const { SHAPE_Area, use, status1 } = feature.properties;
+
+                    floatingBox.innerHTML = `
+                        <strong>إستخدام الأرض:</strong> ${use}<br/>
+                        <strong>الحالة:</strong> ${status1}
+                    `;
+
+                    const coordinates = feature.geometry.coordinates;
+                    const center = getPolygonCenter(coordinates);
+
+                    if (!loginBox.classList.contains('hidden')) {
+                        map.flyTo({
+                            center: center,
+                            zoom: 20
+                        });
+                    } else {
+                        floatingForm.style.display = 'block';
+                        formContainer.innerHTML = ''; // Clear previous form
+                        editFeature = feature;
+
+                        // Generate form fields for each property
+                        Object.keys(feature.properties).forEach(key => {
+                            const value = feature.properties[key];
+                            const formField = `
+                                <label for="${key}">${key}:</label>
+                                <input type="${typeof value === 'number' ? 'number' : 'text'}" id="${key}" value="${value}">
+                            `;
+                            formContainer.innerHTML += formField;
+                        });
+                    }
+                } else {
+                    floatingBox.innerHTML = 'أنقر على القطعة المراد عرض تفاصيلها';
+                }
+            });
+
+            saveButton.addEventListener('click', () => {
+                if (editFeature) {
+                    // Update the properties of the feature
+                    Object.keys(editFeature.properties).forEach(key => {
+                        const input = document.getElementById(key);
+                        if (input) {
+                            editFeature.properties[key] = input.type === 'number' ? parseFloat(input.value) : input.value;
+                        }
+                    });
+
+                    // Update the geojson source with the new data
+                    const source = map.getSource('bland-g');
+                    const data = source._data; // GeoJSON data
+                    source.setData(data); // Refresh the data source
+
+                    // Hide the form after saving
+                    floatingForm.style.display = 'none';
+                }
+            });
+
+            map.on('mouseenter', 'dataset-fill', () => {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            map.on('mouseleave', 'dataset-fill', () => {
+                map.getCanvas().style.cursor = '';
+            });
+
+            function getPolygonCenter(coordinates) {
+                const bounds = new mapboxgl.LngLatBounds();
+                coordinates[0].forEach(coord => bounds.extend(coord));
+                return bounds.getCenter();
+            }
+        });
+    </script>
+</body>
+
+</html>
