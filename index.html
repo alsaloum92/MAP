@@ -81,7 +81,7 @@
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
             font-size: 18px;
             text-align: right;
-             width: 150px
+            width: 150px;
         }
 
         #logo {
@@ -119,10 +119,32 @@
             color: #CFA37A;
             font-size: 12px;
         }
+
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.877);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        #loading-logo {
+            width: 100px;
+            height: auto;
+        }
     </style>
 </head>
 
 <body>
+    <div id="loading-screen">
+        <img id="loading-logo" src="https://falek.sa/wp-content/uploads/2023/01/شعار-فالك-مفرغ-2@2x-8.png" alt="Loading Logo">
+    </div>
+
     <img id="logo" src="https://falek.sa/wp-content/uploads/2023/01/شعار-فالك-مفرغ-2@2x-8.png" alt="Logo">
     <div id="floating-box">
         <div class="status-indicator invisible"></div>
@@ -144,6 +166,7 @@
         const statusIndicator = document.querySelector('.status-indicator');
         const details = document.querySelector('.details');
         const projectDropdown = document.getElementById('project-dropdown');
+        const loadingScreen = document.getElementById('loading-screen');
 
         const projectCoordinates = {
             'project1': [43.936768, 26.347163],  // Replace with actual coordinates for project 1
@@ -172,6 +195,11 @@
 
         map.on('load', () => {
             map.setFog({});
+
+            // Hide loading screen after 2 seconds
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 2000);
 
             // Fetch dataset from Mapbox API for project 1 (الخزامى)
             fetch('https://api.mapbox.com/datasets/v1/falekrealestate/clynbl8ph0oo61mo626c0whc3/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw')
@@ -334,9 +362,7 @@
                     details.innerHTML = `
                         <strong>إستخدام الأرض:</strong> ${use}<br/>
                         <strong>البلوك رقم:</strong> ${block}<br/>
-                       
                     `;
-                  //  <span class="details-price">${price ? price.toLocaleString() : '---'} ر.س</span> (لو نبي نحط سعر)
 
                     // Determine the background color based on the status1 value
                     const statusColor = status1 === 'متاح' ? 'green' : 'red';
