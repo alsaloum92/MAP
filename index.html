@@ -77,7 +77,7 @@
             z-index: 3;
             background-color: rgba(255, 255, 255, 0.9);
             padding: 10px;
-            border-radius: 5px;
+            border-radius: 15px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
             font-size: 18px;
             text-align: right;
@@ -134,7 +134,7 @@
         }
 
         #loading-logo {
-            width: 100px;
+            width: 150px;
             height: auto;
         }
     </style>
@@ -185,13 +185,20 @@
         });
 
         mapboxgl.accessToken = 'pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw';
+        mapboxgl.setRTLTextPlugin(
+        'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
+        null,
+        true // Lazy load the plugin
+    );
         const map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/satellite-streets-v12',
+            style: 'mapbox://styles/falekrealestate/clyx2kgu9009m01nuauz45xzv',
             zoom: 7,
             center: [43.936768, 26.347163],
             projection: 'globe'
         });
+
+        map.addControl(new mapboxgl.NavigationControl());
 
         map.on('load', () => {
             map.setFog({});
@@ -251,6 +258,21 @@
                         },
                         minzoom: 20, // Adjust zoom levels accordingly
                         maxzoom: 23
+                    });
+                    map.addLayer({
+                        id: `dataset-symbol4`,
+                        type: 'symbol',
+                        source: 'mapbox-dataset',
+                        layout: {
+                            'text-field': ['get', 'block1'],
+                            'text-size': 20,
+                            'text-offset': [0, 0.0] // Adjust offsets for each symbol layer
+                        },
+                        paint: {
+                            'text-color': 'black'
+                        },
+                        minzoom: 15, // Adjust zoom levels accordingly
+                        maxzoom: 17
                     });
 
                     ['', 'name', 'Title'].forEach((property, index) => {
