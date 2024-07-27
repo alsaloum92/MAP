@@ -1,79 +1,153 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>خارطة مشاريع فالك العقارية</title>
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <style>
         body {
             margin: 0;
-            padding: 0;
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            direction: rtl;
         }
 
         #map {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 100%;
+            flex: 1;
         }
 
-        #floating-box {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #ffffffe6;
-            padding: 10px;
-            border-radius: 10px;
+        #sidebar {
+            width: 300px;
+            margin-top: 80px;
+            background-color: #fff;
+            padding: 20px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
             z-index: 1;
-            text-align: center;
-            width: 300px;
+            overflow-y: auto;
+            flex-shrink: 0;
             font-size: 14px;
             color: #333333;
+            position: relative;
             display: flex;
-            align-items: right;
-            justify-content: space-between;
             flex-direction: column;
+            gap: 10px;
+            transition: transform 0.3s ease, height 0.3s ease;
         }
 
-        .status-indicator {
-            display: inline-block;
-            padding: 5px 10px;
-            background-color: green;
-            color: #ffffff;
+        .drag-handle {
+            width: 50px;
+            height: 10px;
+            background-color: #ccc;
             border-radius: 5px;
-            font-size: 12px;
+            margin: 0 auto;
+            cursor: pointer;
             text-align: center;
-            width: 60px;
+        }
+
+        .drag-handle img {
+            width: 0px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .button {
+            padding: 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .button img {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-primary {
+            background-color: #198754;
+            color: white;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-secondary {
+            background-color: #CFA37A;
+            color: black;
+            width: calc(33.33% - 10px);
+            display: flex;
+            justify-content: center;
+        }
+
+        .details-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .details-container div {
+            background-color: #f4f4f9;
+            border-radius: 5px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .details-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .details-subtitle {
+            color: #6c757d;
+            margin-bottom: 20px;
         }
 
         .details {
-            flex-grow: 1;
-            padding-bottom: 10px;
-            text-align: right;
+            background-color: #CFA37A;
+            text-align: center;
+            padding: 10px;
         }
 
-        .details strong {
-            color: #CFA37A;
-        }
-
-        .details-price {
-            color: blue;
+        #message {
+            text-align: center;
             font-size: 18px;
+            margin-top: 50px;
+        }
+
+        #contact-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: auto;
+            /* Move to bottom */
+        }
+
+        #contact-box img {
+            margin-left: 10px;
+        }
+
+        #contact-box a {
+            text-decoration: none;
+            color: #198754;
+            font-size: 14px;
         }
 
         #project-dropdown {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
             z-index: 3;
             background-color: rgba(255, 255, 255, 0.9);
             padding: 10px;
@@ -82,6 +156,10 @@
             font-size: 18px;
             text-align: right;
             width: 150px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 20px;
         }
 
         #logo {
@@ -93,31 +171,6 @@
             background-color: rgb(255, 255, 255);
             width: 60px;
             height: auto;
-        }
-
-        .centered-text {
-            text-align: center;
-        }
-
-        .invisible {
-            visibility: hidden;
-        }
-
-        .contact-box {
-            display: flex;
-            align-items: center;
-            margin-top: 5px;
-        }
-
-        .contact-box img {
-            margin-right: 10px;
-            margin-left: 10px;
-        }
-
-        .contact-box a {
-            text-decoration: none;
-            color: #CFA37A;
-            font-size: 12px;
         }
 
         #loading-screen {
@@ -137,6 +190,19 @@
             width: 150px;
             height: auto;
         }
+
+        @media(max-width: 768px) {
+            #sidebar {
+                width: 100%;
+                max-height: none;
+                position: absolute;
+                bottom: 0;
+                top: auto;
+                left: 0;
+                right: 0;
+                transform: translateY(calc(100% - 40px));
+            }
+        }
     </style>
 </head>
 
@@ -146,32 +212,90 @@
     </div>
 
     <img id="logo" src="https://falek.sa/wp-content/uploads/2023/01/شعار-فالك-مفرغ-2@2x-8.png" alt="Logo">
-    <div id="floating-box">
-        <div class="status-indicator invisible"></div>
-        <div class="details centered-text">أنقر على القطعة المراد عرض تفاصيلها</div>
-        <div class="contact-box">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2048px-WhatsApp.svg.png" alt="WhatsApp" width="24" height="24">
-            <a href="https://wa.me/966547719991" target="_blank">مهتم بالشراء تواصل معنا</a>
-        </div>
-    </div>
     <select id="project-dropdown">
         <option value="">أختر أحد مشاريعنا</option>
         <option value="project1">مشروع الخزامى - بريدة</option>
         <option value="project3">مشروع واحة الخير - المدينة المنورة</option>
     </select>
     <div id="map"></div>
+    <div id="sidebar">
+        <div class="drag-handle">
+            <img src="https://img.icons8.com/ios-glyphs/30/null/expand.png" alt="Drag Handle">
+        </div>
+        <div id="message">أنقر على القطعة المراد عرض تفاصيلها</div>
+        <div class="details-title" style="display: none;"></div>
+        <div class="details-subtitle" style="display: none;"></div>
+        <div class="button-container" style="display: none;">
+            <button class="button btn-secondary" id="open-on-map"><img src="https://img.icons8.com/ios-glyphs/30/null/marker.png" alt="Map Icon"> فتح على الخارطة</button>
+            <button class="button btn-secondary" id="share-land"><img src="https://img.icons8.com/ios-glyphs/30/null/share.png" alt="Share Icon"> مشاركة الأرض</button>
+            <button class="button btn-secondary"><img src="https://img.icons8.com/ios-glyphs/30/null/star.png" alt="Favorite Icon"> إضافة للمفضلة</button>
+        </div>
+        <button class="button btn-primary" style="display: none;"></button>
+        <div class="details-container" style="display: none;">
+            <div>
+                رقم القطعة<br />
+                522/1
+            </div>
+            <div>
+                رقم البلوك<br />
+                29
+            </div>
+            <div>
+                رقم المخطط<br />
+                3119
+            </div>
+        </div>
+        <div class="details" style="display: none;">
+            إجمالي المساحة<br />
+            713.5 م²
+        </div>
+        <div id="contact-box" style="display: none;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2048px-WhatsApp.svg.png" alt="WhatsApp" width="24" height="24">
+            <a href="https://wa.me/966547719991" target="_blank">مهتم بالشراء تواصل معنا</a>
+        </div>
+    </div>
 
     <script>
-        const floatingBox = document.getElementById('floating-box');
-        const statusIndicator = document.querySelector('.status-indicator');
-        const details = document.querySelector('.details');
+        const sidebar = document.getElementById('sidebar');
+        const dragHandle = document.querySelector('.drag-handle');
+        const message = document.getElementById('message');
         const projectDropdown = document.getElementById('project-dropdown');
         const loadingScreen = document.getElementById('loading-screen');
+        const shareLandBtn = document.getElementById('share-land');
+
+        const detailsTitle = document.querySelector('.details-title');
+        const detailsSubtitle = document.querySelector('.details-subtitle');
+        const buttonContainer = document.querySelector('.button-container');
+        const btnPrimary = document.querySelector('.btn-primary');
+        const detailsContainer = document.querySelector('.details-container');
+        const details = document.querySelector('.details');
+        const contactBox = document.getElementById('contact-box');
+        const openOnMapBtn = document.getElementById('open-on-map');
+
+        let startY, startHeight;
+        let selectedPolygonCoordinates = null;
+        let selectedPolygonProperties = null;
+
+        dragHandle.addEventListener('mousedown', (e) => {
+            startY = e.clientY;
+            startHeight = parseInt(document.defaultView.getComputedStyle(sidebar).height, 10);
+            document.documentElement.addEventListener('mousemove', onMouseMove);
+            document.documentElement.addEventListener('mouseup', onMouseUp);
+        });
+
+        function onMouseMove(e) {
+            sidebar.style.height = `${startHeight - (e.clientY - startY)}px`;
+        }
+
+        function onMouseUp() {
+            document.documentElement.removeEventListener('mousemove', onMouseMove);
+            document.documentElement.removeEventListener('mouseup', onMouseUp);
+        }
 
         const projectCoordinates = {
-            'project1': [43.936768, 26.347163],  // Replace with actual coordinates for project 1
-            'project2': [44.010858, 26.340546],  // Replace with actual coordinates for project 2
-            'project3': [39.600575, 24.363737]   // Replace with actual coordinates for project 3
+            'project1': [43.936768, 26.347163],
+            'project2': [44.010858, 26.340546],
+            'project3': [39.600575, 24.363737]
         };
 
         projectDropdown.addEventListener('change', (event) => {
@@ -184,16 +308,54 @@
             }
         });
 
+        openOnMapBtn.addEventListener('click', () => {
+            if (selectedPolygonCoordinates) {
+                const googleMapUrl = `https://www.google.com/maps?q=${selectedPolygonCoordinates[1]},${selectedPolygonCoordinates[0]}`;
+                window.open(googleMapUrl, '_blank');
+            }
+        });
+
+        shareLandBtn.addEventListener('click', createPDF);
+
+        function createPDF() {
+            if (!selectedPolygonProperties) return;
+
+            const { Lname, block, use, areaSize, status1 } = selectedPolygonProperties;
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+
+            // Set up the logo image at the top
+            const img = new Image();
+            img.src = 'https://falek.sa/wp-content/uploads/2023/01/شعار-فالك-مفرغ-2@2x-8.png';
+            pdf.addImage(img, 'PNG', 10, 10, 50, 20);
+
+            pdf.setFontSize(20);
+            pdf.text('تقرير فالك العقاري', pdf.internal.pageSize.getWidth() / 2, 40, { align: 'center' });
+
+            pdf.setFontSize(12);
+            pdf.text(`الاستخدام: ${use}`, 30, 50, { align: 'right' });
+            pdf.text(`رقم المخطط: ${block}`, 30, 60, { align: 'right' });
+            pdf.text(`عدد القطع: ${Lname}`, 30, 70, { align: 'right' });
+            pdf.text(`إجمالي المساحة: ${areaSize} م²`, 30, 80, { align: 'right' });
+
+            const [longitude, latitude] = selectedPolygonCoordinates;
+            pdf.text(`الإحداثيات: (${latitude.toFixed(6)}, ${longitude.toFixed(6)})`, 30, 90, { align: 'right' });
+
+            pdf.save('report.pdf');
+        }
+
         mapboxgl.accessToken = 'pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw';
         mapboxgl.setRTLTextPlugin(
-        'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
-        null,
-        true // Lazy load the plugin
-    );
+            'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
+            null,
+            true
+        );
+
         const map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/falekrealestate/clyx2kgu9009m01nuauz45xzv',
-            zoom: 7,
+            zoom: 15,
             center: [43.936768, 26.347163],
             projection: 'globe'
         });
@@ -208,221 +370,197 @@
                 loadingScreen.style.display = 'none';
             }, 2000);
 
-            // Fetch dataset from Mapbox API for project 1 (الخزامى)
-            fetch('https://api.mapbox.com/datasets/v1/falekrealestate/clynbl8ph0oo61mo626c0whc3/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw')
-                .then(response => response.json())
-                .then(data => {
-                    map.addSource('mapbox-dataset', {
-                        type: 'geojson',
-                        data: data
-                    });
+            // Local data
+            map.addSource('Bland-data', {
+                type: 'geojson',
+                data: 'data/Bland.geojson'
+            });
 
-                    map.addLayer({
-                        id: 'dataset-fill',
-                        type: 'fill',
-                        source: 'mapbox-dataset',
-                        paint: {
-                            'fill-color': [
-                                'match',
-                                ['get', 'status1'],
-                                'متاح', '#c2d257',
-                                'مباع', '#7e74b5',
-                                'مرفق', 'grey',
-                                '#c2d257' // Default value
-                            ],
-                            'fill-opacity': 0.8
-                        }
-                    });
+            map.addLayer({
+                id: 'Bland-fill',
+                type: 'fill',
+                source: 'Bland-data',
+                paint: {
+                    'fill-color': [
+                        'match',
+                        ['get', 'status1'],
+                        'متاح', '#c2d257',
+                        'مباع', '#7e74b5',
+                        'مرفق', 'grey',
+                        '#c2d257'
+                    ],
+                    'fill-opacity': 0.8
+                }
+            });
 
-                    map.addLayer({
-                        id: 'dataset-line',
-                        type: 'line',
-                        source: 'mapbox-dataset',
-                        paint: {
-                            'line-color': '#fff',
-                            'line-width': 1
-                        }
-                    });
+            map.addLayer({
+                id: 'Bland-line',
+                type: 'line',
+                source: 'Bland-data',
+                paint: {
+                    'line-color': '#fff',
+                    'line-width': 1
+                }
+            });
 
-                    map.addLayer({
-                        id: `dataset-symbol`,
-                        type: 'symbol',
-                        source: 'mapbox-dataset',
-                        layout: {
-                            'text-field': ['get', 'SM Title'],
-                            'text-size': 16,
-                            'text-offset': [0, 0.0] // Adjust offsets for each symbol layer
-                        },
-                        paint: {
-                            'text-color': 'black'
-                        },
-                        minzoom: 20, // Adjust zoom levels accordingly
-                        maxzoom: 23
-                    });
-                    map.addLayer({
-                        id: `dataset-symbol4`,
-                        type: 'symbol',
-                        source: 'mapbox-dataset',
-                        layout: {
-                            'text-field': ['get', 'block1'],
-                            'text-size': 20,
-                            'text-offset': [0, 0.0] // Adjust offsets for each symbol layer
-                        },
-                        paint: {
-                            'text-color': 'black'
-                        },
-                        minzoom: 15, // Adjust zoom levels accordingly
-                        maxzoom: 17
-                    });
+            map.addLayer({
+                id: `dataset-symbol2`,
+                type: 'symbol',
+                source: 'Bland-data',
+                layout: {
+                    'text-field': ['get', 'SM Title'],
+                    'text-size': 16,
+                    'text-offset': [0, 0.0] // Adjust offsets for each symbol layer
+                },
+                paint: {
+                    'text-color': 'black'
+                },
+                minzoom: 20, // Adjust zoom levels accordingly
+                maxzoom: 23
+            });
 
-                    ['', 'name', 'Title'].forEach((property, index) => {
-                        map.addLayer({
-                            id: `dataset-symbol2${index}`,
-                            type: 'symbol',
-                            source: 'mapbox-dataset',
-                            layout: {
-                                'text-field': ['get', property],
-                                'text-size': 20,
-                                'text-offset': [0, -0.8 + 0.8 * index] // Adjust offsets for each symbol layer
-                            },
-                            paint: {
-                                'text-color': index === 2 ? 'white' : 'black'
-                            },
-                            minzoom: index == 2 ? 19 : 17, // Adjust zoom levels accordingly
-                            maxzoom: 23
-                        });
-                    });
 
-                })
-                .catch(err => console.error('Error fetching dataset:', err));
+            ['', 'name', 'Title'].forEach((properties, index) => {
+                map.addLayer({
+                    id: `dataset-symbol3${index}`,
+                    type: 'symbol',
+                    source: 'Bland-data',
+                    layout: {
+                        'text-field': ['get', properties],
+                        'text-size': 20,
+                        'text-offset': [0, -0.8 + 0.8 * index] // Adjust offsets for each symbol layer
+                    },
+                    paint: {
+                        'text-color': index === 2 ? 'white' : 'black'
+                    },
+                    minzoom: index == 2 ? 19 : 17, // Adjust zoom levels accordingly
+                    maxzoom: 23
+                });
 
-            // Fetch dataset from Mapbox API for project 3 (واحة الخير)
-            fetch('https://api.mapbox.com/datasets/v1/falekrealestate/clynbo6o30ost1to6dro14z5g/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw')
-                .then(response => response.json())
-                .then(data => {
-                    map.addSource('mapbox-dataset2', {
-                        type: 'geojson',
-                        data: data
-                    });
-
-                    map.addLayer({
-                        id: 'dataset-fill2',
-                        type: 'fill',
-                        source: 'mapbox-dataset2',
-                        paint: {
-                            'fill-color': [
-                                'match',
-                                ['get', 'status1'],
-                                'متاح', '#c2d257',
-                                'مباع', '#7e74b5',
-                                'مرفق', '#7e74b5',
-                                '#c2d257' // Default value
-                            ],
-                            'fill-opacity': 0.8
-                        }
-                    });
-
-                    map.addLayer({
-                        id: 'dataset-line2',
-                        type: 'line',
-                        source: 'mapbox-dataset2',
-                        paint: {
-                            'line-color': '#fff',
-                            'line-width': 1
-                        }
-                    });
-
-                    map.addLayer({
-                        id: `dataset-symbol2`,
-                        type: 'symbol',
-                        source: 'mapbox-dataset2',
-                        layout: {
-                            'text-field': ['get', 'SM Title'],
-                            'text-size': 16,
-                            'text-offset': [0, 0.0] // Adjust offsets for each symbol layer
-                        },
-                        paint: {
-                            'text-color': 'black'
-                        },
-                        minzoom: 20, // Adjust zoom levels accordingly
-                        maxzoom: 23
-                    });
-
-                    ['', 'name', 'Title'].forEach((property, index) => {
-                        map.addLayer({
-                            id: `dataset-symbol3${index}`,
-                            type: 'symbol',
-                            source: 'mapbox-dataset2',
-                            layout: {
-                                'text-field': ['get', property],
-                                'text-size': 20,
-                                'text-offset': [0, -0.8 + 0.8 * index] // Adjust offsets for each symbol layer
-                            },
-                            paint: {
-                                'text-color': index === 2 ? 'white' : 'black'
-                            },
-                            minzoom: index == 2 ? 19 : 17, // Adjust zoom levels accordingly
-                            maxzoom: 23
-                        });
-                    });
-
-                })
-                .catch(err => console.error('Error fetching dataset:', err));
+            });
+            // Local data 2
+            map.addSource('linedata-data', {
+                type: 'geojson',
+                data: 'data/linedata.geojson'
+            });
+            map.addLayer({
+                id: `linedata-symbol`,
+                type: 'symbol',
+                source: 'linedata-data',
+                layout: {
+                    'text-field': ['get', 'SM Title'],
+                    'text-size': 16,
+                    'text-offset': [0, 0.0] // Adjust offsets for each symbol layer
+                },
+                paint: {
+                    'text-color': 'black'
+                },
+                minzoom: 20, // Adjust zoom levels accordingly
+                maxzoom: 23
+            });
 
             map.on('click', (e) => {
                 const features = map.queryRenderedFeatures(e.point, {
-                    layers: ['dataset-fill', 'dataset-fill2']
+                    layers: ['Bland-fill']
                 });
 
                 if (features.length) {
                     const feature = features[0];
-                    const { SHAPE_Area, use, status1, price, block } = feature.properties;
+                    const { SHAPE_Area, use, status1, price, block, Lname, areaSize, area, rigon } = feature.properties;
 
-                    // Update the floating box details
-                    details.classList.remove('centered-text');
-                    statusIndicator.classList.remove('invisible');
-                    details.innerHTML = `
-                        <strong>إستخدام الأرض:</strong> ${use}<br/>
-                        <strong>البلوك رقم:</strong> ${block}<br/>
-                    `;
+                    selectedPolygonProperties = feature.properties;
 
-                    // Determine the background color based on the status1 value
-                    const statusColor = status1 === 'متاح' ? 'green' : 'red';
-                    statusIndicator.textContent = status1;
-                    statusIndicator.style.backgroundColor = statusColor;
+                    detailsTitle.textContent = `القطعة رقم  ${Lname}`;
+                    detailsSubtitle.textContent = `الاستخدام:  ${use}`;
+                    document.querySelector('.details-container div:nth-child(1)').innerHTML = `رقم القطعة<br />${Lname}`;
+                    document.querySelector('.details-container div:nth-child(2)').innerHTML = `رقم البلوك<br />${block}`;
+                    document.querySelector('.details-container div:nth-child(3)').innerHTML = `رقم المخطط<br />${block}`;
+                    details.innerHTML = `إجمالي المساحة<br />${areaSize} م²`;
+
+                    // Set btn-primary value and background color based on status1
+                    btnPrimary.textContent = status1;
+                    if (status1 === 'متاح') {
+                        btnPrimary.style.backgroundColor = 'green';
+                    } else if (status1 === 'مباع') {
+                        btnPrimary.style.backgroundColor = 'red';
+                    } else if (status1 === 'مرفق') {
+                        btnPrimary.style.backgroundColor = 'grey';
+                    }
 
                     const coordinates = feature.geometry.coordinates;
-                    const center = getPolygonCenter(coordinates);
+                    selectedPolygonCoordinates = getPolygonCenter(coordinates); // Store coordinates in a variable
 
-                    map.flyTo({
-                        center: center,
-                        zoom: 20
-                    });
-                } else {
-                    resetFloatingBox();
+                        map.flyTo({
+                            center: selectedPolygonCoordinates,
+                            zoom: 20
+                        });
+
+                        // Show the details and hide the message
+                        message.style.display = 'none';
+                        detailsTitle.style.display = 'block';
+                        detailsSubtitle.style.display = 'block';
+                        buttonContainer.style.display = 'flex';
+                        btnPrimary.style.display = 'flex';
+                        detailsContainer.style.display = 'grid';
+                        details.style.display = 'block';
+                        contactBox.style.display = 'flex';
+
+                        // Slide up the sidebar on click
+                        if (window.innerWidth <= 768) {
+                            sidebar.style.transform = 'translateY(0)';
+                            sidebar.style.height = 'auto';  // Adjust height if needed
+                        }
+                    } else {
+                        resetSidebar();
+                    }
+                });
+
+                function getPolygonCenter(coordinates) {
+                    const bounds = new mapboxgl.LngLatBounds();
+                    coordinates[0].forEach(coord => bounds.extend(coord));
+                    return bounds.getCenter();
                 }
+
+                function resetSidebar() {
+                    message.style.display = 'block';
+                    detailsTitle.style.display = 'none';
+                    detailsSubtitle.style.display = 'none';
+                    buttonContainer.style.display = 'none';
+                    btnPrimary.style.display = 'none';
+                    detailsContainer.style.display = 'none';
+                    details.style.display = 'none';
+                    contactBox.style.display = 'none';
+
+                    // Collapse the sidebar on reset
+                    if (window.innerWidth <= 768) {
+                        sidebar.style.transform = 'translateY(calc(100% - 40px))';
+                    }
+                }
+
+                map.on('mouseenter', 'Bland-fill', () => {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+
+                map.on('mouseleave', 'Bland-fill', () => {
+                    map.getCanvas().style.cursor = '';
+                });
+
+                window.addEventListener('resize', handleResize);
+
+                function handleResize() {
+                    if (window.innerWidth <= 768) {
+                        sidebar.style.setProperty('--full-height', sidebar.scrollHeight + 'px');
+                        sidebar.style.height = '200px';
+                        sidebar.style.transform = 'translateY(calc(100% - 40px))';
+                    } else {
+                        sidebar.style.setProperty('--full-height', 'auto');
+                        sidebar.style.height = '';
+                        sidebar.style.transform = 'translateY(0)';
+                    }
+                }
+
+                handleResize();
             });
-
-            function resetFloatingBox() {
-                statusIndicator.classList.add('invisible');
-                details.classList.add('centered-text');
-                details.innerHTML = 'أنقر على القطعة المراد عرض تفاصيلها';
-            }
-
-            map.on('mouseenter', 'dataset-fill', () => {
-                map.getCanvas().style.cursor = 'pointer';
-            });
-
-            map.on('mouseleave', 'dataset-fill', () => {
-                map.getCanvas().style.cursor = '';
-            });
-
-            function getPolygonCenter(coordinates) {
-                const bounds = new mapboxgl.LngLatBounds();
-                coordinates[0].forEach(coord => bounds.extend(coord));
-                return bounds.getCenter();
-            }
-        });
     </script>
 </body>
 
