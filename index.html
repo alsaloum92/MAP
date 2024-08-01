@@ -216,7 +216,6 @@
     <img id="logo" src="https://falek.sa/wp-content/uploads/2023/01/شعار-فالك-مفرغ-2@2x-8.png" alt="Logo">
     <select id="project-dropdown">
         <option value="">أختر أحد مشاريعنا</option>
-        <option value="project1">مشروع الخزامى - بريدة</option>
         <option value="project3">مشروع واحة الخير - المدينة المنورة</option>
     </select>
     <div id="map"></div>
@@ -296,10 +295,12 @@
             document.documentElement.removeEventListener('mouseup', onMouseUp);
         }
 
+
+
+        // إضافة احداثية المشروع 
         const projectCoordinates = {
-            'project1': [43.936768, 26.347163],
-            'project2': [44.010858, 26.340546],
-            'project3': [39.600575, 24.363737]
+            'project3': [39.600575, 24.363737] //(واحة الخير)
+           
         };
 
         projectDropdown.addEventListener('change', (event) => {
@@ -336,7 +337,9 @@
             container: 'map',
             style: 'mapbox://styles/falekrealestate/clyx2kgu9009m01nuauz45xzv',
             zoom: 15,
-            center: [43.936768, 26.347163],
+            center: [39.600469, 24.363016],//24.363016, 39.600469
+
+
             projection: 'globe'
         });
 
@@ -350,172 +353,103 @@
                 loadingScreen.style.display = 'none';
             }, 2000);
 
-            // Local data
-            map.addSource('Bland-data', {
-                type: 'geojson',
-                data: 'data/Bland.geojson'
-            });
-
-            map.addLayer({
-                id: 'Bland-fill',
-                type: 'fill',
-                source: 'Bland-data',
-                paint: {
-                    'fill-color': [
-                        'match',
-                        ['get', 'status1'],
-                        'متاح', '#c2d257',
-                        'مباع', '#7e74b5',
-                        'مرفق', 'grey',
-                        '#c2d257'
-                    ],
-                    'fill-opacity': 0.8
+            const fetchDataset = async (url) => {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Fetching dataset failed: ${response.statusText}`);
                 }
-            });
+                return response.json();
+            };
 
-            map.addLayer({
-                id: 'Bland-line',
-                type: 'line',
-                source: 'Bland-data',
-                paint: {
-                    'line-color': '#fff',
-                    'line-width': 1
-                }
-            });
+            const urls = [
+                'https://api.mapbox.com/datasets/v1/falekrealestate/clz9tfjl12c4k1tsc46ahxz6y/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw',
+                'https://api.mapbox.com/datasets/v1/falekrealestate/clz9t2eev2bdj1uqjhpa3ba4n/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw',
+                'https://api.mapbox.com/datasets/v1/falekrealestate/clz9u5d882bht1vo2y3qciue1/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw'
+            ];
 
-            map.addLayer({
-                id: `dataset-symbol2`,
-                type: 'symbol',
-                source: 'Bland-data',
-                layout: {
-                    'text-field': ['get', 'SM Title'],
-                    'text-size': 16,
-                    'text-offset': [0, 0.0] // Adjust offsets for each symbol layer
-                },
-                paint: {
-                    'text-color': 'black'
-                },
-                minzoom: 20, // Adjust zoom levels accordingly
-                maxzoom: 23
-            });
+            Promise.all(urls.map(fetchDataset))
+                .then((datasets) => {
+                    // Combine features into one dataset
+                    const mergedGeoJSON = {
+                        type: "FeatureCollection",
+                        features: datasets.flatMap(dataset => dataset.features)
+                    };
 
+                    map.addSource('merged-dataset', {
+                        type: 'geojson',
+                        data: mergedGeoJSON
+                    });
 
-            ['', 'name', 'Title'].forEach((properties, index) => {
-                map.addLayer({
-                    id: `dataset-symbol3${index}`,
-                    type: 'symbol',
-                    source: 'Bland-data',
-                    layout: {
-                        'text-field': ['get', properties],
-                        'text-size': 20,
-                        'text-offset': [0, -0.8 + 0.8 * index] // Adjust offsets for each symbol layer
-                    },
-                    paint: {
-                        'text-color': index === 2 ? 'white' : 'black'
-                    },
-                    minzoom: index == 2 ? 19 : 17, // Adjust zoom levels accordingly
-                    maxzoom: 23
-                });
+                    // Add the fill layer for the first dataset's features
+                    map.addLayer({
+                        id: 'med-fill',
+                        type: 'fill',
+                        source: 'merged-dataset',
+                        //filter: ['has', 'status1'], // Add a filter to show only features with 'status1'
+                        paint: {
+                            'fill-color': [
+                                'match',
+                                ['get', 'status1'],
+                                'متاح', '#7DA683',
+                                'مباع', '#AB0000',
+                                'مرفق', 'grey',
+                                '#7DA683'
+                            ],
+                            'fill-opacity': 0.8
+                        }
+                    });
 
-            });
-            // Local data 2
-            map.addSource('linedata-data', {
-                type: 'geojson',
-                data: 'data/linedata.geojson'
-            });
-            map.addLayer({
-                id: `linedata-symbol`,
-                type: 'symbol',
-                source: 'linedata-data',
-                layout: {
-                    'text-field': ['get', 'SM Title'],
-                    'text-size': 16,
-                    'text-offset': [0, 0.0] // Adjust offsets for each symbol layer
-                },
-                paint: {
-                    'text-color': 'black'
-                },
-                minzoom: 20, // Adjust zoom levels accordingly
-                maxzoom: 23
-            });
-             // Local data 3 )(واحة الخير)
-             map.addSource('land-data', {
-                type: 'geojson',
-                data: 'data/land.geojson'
-            });
+                    // Add the line layer for the first dataset's features
+                    map.addLayer({
+                        id: 'med-line',
+                        type: 'line',
+                        source: 'merged-dataset',
+                        paint: {
+                            'line-color': '#fff',
+                            'line-width': 1
+                        }
+                    });
 
-             map.addLayer({
-                id: 'land-fill',
-                type: 'fill',
-                source: 'land-data',
-                paint: {
-                    'fill-color': [
-                        'match',
-                        ['get', 'status1'],
-                        'متاح', 'green',
-                        'مباع', 'red',
-                        'مرفق', 'grey',
-                        'green'
-                    ],
-                    'fill-opacity': 0.8
-                }
-            });
+                    // Add the symbol layer for the second dataset's features
+                    map.addLayer({
+                        id: 'med2-symbol',
+                        type: 'symbol',
+                        source: 'merged-dataset',
+                        layout: {
+                            'text-field': ['get', 'name'],
+                            'text-size': 14,
+                            'text-offset': [0, 0.0]
+                        },
+                        paint: {
+                            'text-color': 'black'
+                        },
+                        minzoom: 16,
+                        maxzoom: 23
+                    });
 
-            map.addLayer({
-                id: 'land-line',
-                type: 'line',
-                source: 'land-data',
-                paint: {
-                    'line-color': '#fff',
-                    'line-width': 1
-                }
-            });
+                     // Add the symbol layer for the second dataset's features
+                     map.addLayer({
+                        id: 'med3-symbol',
+                        type: 'symbol',
+                        source: 'merged-dataset',
+                        layout: {
+                            'text-field': ['get', 'Title'],
+                            'text-size': 14,
+                            'text-offset': [0, 0.0]
+                        },
+                        paint: {
+                            'text-color': 'white'
+                        },
+                        minzoom: 19,
+                        maxzoom: 23
+                    });
 
-             // Local data 3 )(واحة الخير) المساحات
-             map.addSource('k.areasize-data', {
-                type: 'geojson',
-                data: 'data/k.areasize.geojson'
-            });
-                map.addLayer({
-                id: `k.areasize-symbol`,
-                type: 'symbol',
-                source: 'k.areasize-data',
-                layout: {
-                    'text-field': ['get', 'Title'],
-                    'text-size': 16,
-                    'text-offset': [0, 0.0] // Adjust offsets for each symbol layer
-                },
-                paint: {
-                    'text-color': 'white'
-                },
-                minzoom: 19, // Adjust zoom levels accordingly
-                maxzoom: 23
-            });
+                }).catch(err => console.error('Error fetching datasets:', err));
 
-             // Local data 3 )(واحة الخير) أرقام القطع
-             map.addSource('k.name-data', {
-                type: 'geojson',
-                data: 'data/k.name.geojson'
-            });
-                map.addLayer({
-                id: `k.name-data-symbol`,
-                type: 'symbol',
-                source: 'k.name-data',
-                layout: {
-                    'text-field': ['get', 'name'],
-                    'text-size': 16,
-                    'text-offset': [0, 0.0] // Adjust offsets for each symbol layer
-                },
-                paint: {
-                    'text-color': 'black'
-                },
-                minzoom: 17, // Adjust zoom levels accordingly
-                maxzoom: 23
-            });
 
             map.on('click', (e) => {
                 const features = map.queryRenderedFeatures(e.point, {
-                    layers: ['Bland-fill', "land-fill"]
+                    layers: ["med-fill"]
                 });
 
                 if (features.length) {
@@ -591,11 +525,11 @@
                 }
             }
 
-            map.on('mouseenter', 'Bland-fill', () => {
+            map.on('mouseenter', 'med-fill', () => {
                 map.getCanvas().style.cursor = 'pointer';
             });
 
-            map.on('mouseleave', 'Bland-fill', () => {
+            map.on('mouseleave', 'med-fill', () => {
                 map.getCanvas().style.cursor = '';
             });
 
