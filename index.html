@@ -56,6 +56,21 @@
             width: 0px;
         }
 
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #333333;
+        }
+
+        .close-button:hover {
+            color: #ff0000;
+        }
+
         .button-container {
             display: flex;
             justify-content: space-between;
@@ -89,7 +104,7 @@
         .btn-secondary {
             background-color: #CFA37A;
             color: black;
-            width: calc(50% - 10px);
+            width: calc(50% - 5px);
             display: flex;
             justify-content: center;
         }
@@ -97,7 +112,7 @@
         .details-container {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
+            gap: 5px;
             align-items: center;
         }
 
@@ -223,6 +238,7 @@
         <div class="drag-handle">
             <img src="https://img.icons8.com/ios-glyphs/30/null/expand.png" alt="Drag Handle">
         </div>
+        <button id="close-sidebar" class="close-button">&times;</button>
         <div id="message">أنقر على القطعة المراد عرض تفاصيلها</div>
         <div class="details-title" style="display: none;"></div>
         <div class="details-subtitle" style="display: none;"></div>
@@ -261,6 +277,7 @@
     <script>
         const sidebar = document.getElementById('sidebar');
         const dragHandle = document.querySelector('.drag-handle');
+        const closeButton = document.getElementById('close-sidebar');
         const message = document.getElementById('message');
         const projectDropdown = document.getElementById('project-dropdown');
         const loadingScreen = document.getElementById('loading-screen');
@@ -295,12 +312,21 @@
             document.documentElement.removeEventListener('mouseup', onMouseUp);
         }
 
+        closeButton.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                sidebar.style.transform = 'translateY(calc(100% - 40px))';
+            } else {
+                sidebar.style.transform = 'translateX(-100%)'; // Optionally hide the sidebar differently on larger screens
+            }
+        });
+
+
 
 
         // إضافة احداثية المشروع 
         const projectCoordinates = {
             'project3': [39.600575, 24.363737] //(واحة الخير)
-           
+
         };
 
         projectDropdown.addEventListener('change', (event) => {
@@ -428,8 +454,8 @@
                         maxzoom: 23
                     });
 
-                     // Add the symbol layer for the second dataset's features
-                     map.addLayer({
+                    // Add the symbol layer for the second dataset's features
+                    map.addLayer({
                         id: 'med3-symbol',
                         type: 'symbol',
                         source: 'merged-dataset',
@@ -445,8 +471,8 @@
                         maxzoom: 23
                     });
 
-                     // Add the symbol layer for the second dataset's features
-                     map.addLayer({
+                    // Add the symbol layer for the second dataset's features
+                    map.addLayer({
                         id: 'med4-symbol',
                         type: 'symbol',
                         source: 'merged-dataset',
