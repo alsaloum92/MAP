@@ -26,7 +26,7 @@
         #sidebar {
             width: 300px;
             margin-top: 80px;
-            background-color: #fff;
+            background-color: #f1f1f1e0;
             padding: 20px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
             z-index: 1;
@@ -38,7 +38,7 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 5px;
             transition: transform 0.3s ease, height 0.3s ease;
         }
 
@@ -59,19 +59,19 @@
         .button-container {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         .button {
             padding: 10px;
-            font-size: 14px;
+            font-size: 12px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 3px;
         }
 
         .button img {
@@ -89,7 +89,7 @@
         .btn-secondary {
             background-color: #CFA37A;
             color: black;
-            width: calc(50% - 10px);
+            width: calc(50% - 5px);
             display: flex;
             justify-content: center;
         }
@@ -97,7 +97,7 @@
         .details-container {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
+            gap: 5px;
             align-items: center;
         }
 
@@ -105,7 +105,7 @@
             background-color: #f4f4f9;
             border-radius: 5px;
             text-align: right;
-            padding: 10px;
+            padding: 5px;
         }
 
         .details-title {
@@ -121,7 +121,7 @@
         .details {
             background-color: #CFA37A;
             text-align: center;
-            padding: 10px;
+            padding: 5px;
         }
 
         #message {
@@ -195,7 +195,7 @@
         @media(max-width: 600px) {
             #sidebar {
                 width: auto;
-                max-height: none;
+                max-height: 30%;
                 position: absolute;
                 bottom: 0;
                 top: auto;
@@ -364,7 +364,8 @@
             const urls = [
                 'https://api.mapbox.com/datasets/v1/falekrealestate/clz9tfjl12c4k1tsc46ahxz6y/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw',
                 'https://api.mapbox.com/datasets/v1/falekrealestate/clz9t2eev2bdj1uqjhpa3ba4n/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw',
-                'https://api.mapbox.com/datasets/v1/falekrealestate/clz9u5d882bht1vo2y3qciue1/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw'
+                'https://api.mapbox.com/datasets/v1/falekrealestate/clz9u5d882bht1vo2y3qciue1/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw',
+                'https://api.mapbox.com/datasets/v1/falekrealestate/clz9v952p2cnd1tscqq3101nj/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw'
             ];
 
             Promise.all(urls.map(fetchDataset))
@@ -444,6 +445,23 @@
                         maxzoom: 23
                     });
 
+                     // Add the symbol layer for the second dataset's features
+                     map.addLayer({
+                        id: 'med4-symbol',
+                        type: 'symbol',
+                        source: 'merged-dataset',
+                        layout: {
+                            'text-field': ['get', 'SM Title'],
+                            'text-size': 12,
+                            'text-offset': [0, 0.0]
+                        },
+                        paint: {
+                            'text-color': 'black'
+                        },
+                        minzoom: 19,
+                        maxzoom: 23
+                    });
+
                 }).catch(err => console.error('Error fetching datasets:', err));
 
 
@@ -480,7 +498,7 @@
 
                     map.flyTo({
                         center: selectedPolygonCoordinates,
-                        zoom: 20
+                        zoom: 19
                     });
 
                     // Show the details and hide the message
