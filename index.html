@@ -207,7 +207,7 @@
             height: auto;
         }
 
-        @media(max-width: 600px) {
+        @media(max-width: 768px) {
             #sidebar {
                 width: auto;
                 max-height: 40%;
@@ -291,6 +291,16 @@
         const details = document.querySelector('.details');
         const contactBox = document.getElementById('contact-box');
         const openOnMapBtn = document.getElementById('open-on-map');
+        const handleResize = () => {
+            if (window.innerWidth > 769) {
+                closeButton.style.display = 'none';
+            } else {
+                closeButton.style.display = 'block';
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize(); // Call this during the initial load
 
         let startY, startHeight;
         let selectedPolygonCoordinates = null;
@@ -299,6 +309,9 @@
         dragHandle.addEventListener('mousedown', (e) => {
             startY = e.clientY;
             startHeight = parseInt(document.defaultView.getComputedStyle(sidebar).height, 10);
+            if (window.innerWidth <= 769) {
+                closeButton.style.display = 'none';  // Show close button when starting to drag
+            }
             document.documentElement.addEventListener('mousemove', onMouseMove);
             document.documentElement.addEventListener('mouseup', onMouseUp);
         });
@@ -428,15 +441,15 @@
                         maxzoom: 23
                     });
 
-                     // Add the fill layer for the first dataset's features
-                     map.addLayer({
+                    // Add the fill layer for the first dataset's features
+                    map.addLayer({
                         id: 'med1-fill',
                         type: 'fill',
                         source: 'merged-dataset',
                         //filter: ['has', 'status1'], // Add a filter to show only features with 'status1'
                         paint: {
                             'fill-color': '#CFA37A',
-                            'fill-opacity': 1
+                            'fill-opacity': 0.8
                         },
                         minzoom: 10,
                         maxzoom: 16
@@ -519,7 +532,7 @@
                         paint: {
                             'text-color': 'black'
                         },
-                        minzoom: 14,
+                        minzoom: 15,
                         maxzoom: 16
                     });
 
