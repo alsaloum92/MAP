@@ -362,7 +362,7 @@
         const map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/falekrealestate/clyx2kgu9009m01nuauz45xzv',
-            zoom: 16,
+            zoom: 15,
             center: [39.600469, 24.363016],//24.363016, 39.600469
 
 
@@ -424,7 +424,7 @@
                             ],
                             'fill-opacity': 0.8
                         },
-                        minzoom: 18,
+                        minzoom: 16,
                         maxzoom: 23
                     });
 
@@ -439,7 +439,7 @@
                             'fill-opacity': 0.8
                         },
                         minzoom: 10,
-                        maxzoom: 18
+                        maxzoom: 16
                     });
 
                     // Add the line layer for the first dataset's features
@@ -451,7 +451,7 @@
                             'line-color': '#fff',
                             'line-width': 1
                         },
-                        minzoom: 18,
+                        minzoom: 16,
                         maxzoom: 23
                     });
 
@@ -468,7 +468,7 @@
                         paint: {
                             'text-color': 'black'
                         },
-                        minzoom: 18,
+                        minzoom: 16,
                         maxzoom: 23
                     });
 
@@ -513,14 +513,14 @@
                         source: 'merged-dataset',
                         layout: {
                             'text-field': ['get', 'blockNO'],
-                            'text-size': 18,
+                            'text-size': 12,
                             'text-offset': [0, 0.0]
                         },
                         paint: {
                             'text-color': 'black'
                         },
                         minzoom: 15,
-                        maxzoom: 18
+                        maxzoom: 16
                     });
 
                 }).catch(err => console.error('Error fetching datasets:', err));
