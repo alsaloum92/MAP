@@ -1,0 +1,985 @@
+{
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B72"
+      },
+      "geometry": {
+        "coordinates": [
+          39.598017,
+          24.363357
+        ],
+        "type": "Point"
+      },
+      "id": "01eed52c1ba0780f7a0bb2e48b7a3cce"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B57"
+      },
+      "geometry": {
+        "coordinates": [
+          39.602069,
+          24.362886
+        ],
+        "type": "Point"
+      },
+      "id": "042095a0bdf5414d6836df3ca9e066aa"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B21"
+      },
+      "geometry": {
+        "coordinates": [
+          39.602839,
+          24.366658
+        ],
+        "type": "Point"
+      },
+      "id": "18980ac96c92feaa7b6275d828a33c99"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B60"
+      },
+      "geometry": {
+        "coordinates": [
+          39.602144,
+          24.362246
+        ],
+        "type": "Point"
+      },
+      "id": "1aa130e22620070ead45cfb9accdb7cd"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B32"
+      },
+      "geometry": {
+        "coordinates": [
+          39.604499,
+          24.36337
+        ],
+        "type": "Point"
+      },
+      "id": "1d6930cae45d9ed567d0efc9ef18747a"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B64"
+      },
+      "geometry": {
+        "coordinates": [
+          39.602464,
+          24.36122
+        ],
+        "type": "Point"
+      },
+      "id": "1f069b1e3e25e6c04a69f0e1df02a711"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B65"
+      },
+      "geometry": {
+        "coordinates": [
+          39.601637,
+          24.36045
+        ],
+        "type": "Point"
+      },
+      "id": "1f6b7fa9c1a1546c547ca9ac61f10439"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B76"
+      },
+      "geometry": {
+        "coordinates": [
+          39.598867,
+          24.360535
+        ],
+        "type": "Point"
+      },
+      "id": "2026554bc3ed5db8141bdb256cfc3751"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B52"
+      },
+      "geometry": {
+        "coordinates": [
+          39.601691,
+          24.364672
+        ],
+        "type": "Point"
+      },
+      "id": "21cc21caec2b1a5ec5f016a34d2b497f"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B27"
+      },
+      "geometry": {
+        "coordinates": [
+          39.603488,
+          24.365031
+        ],
+        "type": "Point"
+      },
+      "id": "237d6149f6c043eddf218599213a223d"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B58"
+      },
+      "geometry": {
+        "coordinates": [
+          39.601466,
+          24.36259
+        ],
+        "type": "Point"
+      },
+      "id": "23830674d73cc6e14057882cc27e6619"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B28"
+      },
+      "geometry": {
+        "coordinates": [
+          39.604609,
+          24.365598
+        ],
+        "type": "Point"
+      },
+      "id": "253b9afa37eca325efbc41c7b45bfd48"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B55"
+      },
+      "geometry": {
+        "coordinates": [
+          39.601613,
+          24.364064
+        ],
+        "type": "Point"
+      },
+      "id": "285a05c6d95cf33f878587e74defc224"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B56"
+      },
+      "geometry": {
+        "coordinates": [
+          39.601667,
+          24.363392
+        ],
+        "type": "Point"
+      },
+      "id": "2e0687496ce19438122ce63dc38a1330"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B53"
+      },
+      "geometry": {
+        "coordinates": [
+          39.60098,
+          24.364711
+        ],
+        "type": "Point"
+      },
+      "id": "328dcb1a3920f175a46cd892dc443a54"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B22"
+      },
+      "geometry": {
+        "coordinates": [
+          39.603818,
+          24.366275
+        ],
+        "type": "Point"
+      },
+      "id": "33afaae177c6c4c2df3567d58505eb97"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B05"
+      },
+      "geometry": {
+        "coordinates": [
+          39.605267,
+          24.366246
+        ],
+        "type": "Point"
+      },
+      "id": "35dd49307d2bdab18e99b75c9397d81e"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B10"
+      },
+      "geometry": {
+        "coordinates": [
+          39.605849,
+          24.36402
+        ],
+        "type": "Point"
+      },
+      "id": "3cc7f45f18a42f6053d66c0d386bdd86"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B48"
+      },
+      "geometry": {
+        "coordinates": [
+          39.601375,
+          24.365786
+        ],
+        "type": "Point"
+      },
+      "id": "402dba3288aee2df7fb83dace62f4f6b"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B16"
+      },
+      "geometry": {
+        "coordinates": [
+          39.603148,
+          24.369177
+        ],
+        "type": "Point"
+      },
+      "id": "40365f17adaa87e50c6aa716b6cd4187"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B69"
+      },
+      "geometry": {
+        "coordinates": [
+          39.599202,
+          24.363448
+        ],
+        "type": "Point"
+      },
+      "id": "4192aae1a1408de6005d35fa6575dee5"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B20"
+      },
+      "geometry": {
+        "coordinates": [
+          39.604293,
+          24.366957
+        ],
+        "type": "Point"
+      },
+      "id": "41dda7a11c494e04c8fae6a66aac8625"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B17"
+      },
+      "geometry": {
+        "coordinates": [
+          39.602536,
+          24.369048
+        ],
+        "type": "Point"
+      },
+      "id": "43a7fb41689328f8caca4dbfc5c86d6e"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B73"
+      },
+      "geometry": {
+        "coordinates": [
+          39.599677,
+          24.361437
+        ],
+        "type": "Point"
+      },
+      "id": "43aa4bb680cbd13e7f18ed81eb16ed9b"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B30"
+      },
+      "geometry": {
+        "coordinates": [
+          39.605017,
+          24.363834
+        ],
+        "type": "Point"
+      },
+      "id": "46084e16c7cd0e4446dfe58d8230e661"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B51"
+      },
+      "geometry": {
+        "coordinates": [
+          39.601466,
+          24.365288
+        ],
+        "type": "Point"
+      },
+      "id": "46752fa29ccdfaf05ccaa68547f46035"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B33"
+      },
+      "geometry": {
+        "coordinates": [
+          39.60399,
+          24.363252
+        ],
+        "type": "Point"
+      },
+      "id": "4998daba249b0a1dea68868de46106be"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B13"
+      },
+      "geometry": {
+        "coordinates": [
+          39.606152,
+          24.361325
+        ],
+        "type": "Point"
+      },
+      "id": "4a7ea73246e2d4dcc0dbb5263dac9c3b"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B15"
+      },
+      "geometry": {
+        "coordinates": [
+          39.603738,
+          24.36939
+        ],
+        "type": "Point"
+      },
+      "id": "51d5085621664821777f3f411f5a929e"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B68"
+      },
+      "geometry": {
+        "coordinates": [
+          39.598126,
+          24.364965
+        ],
+        "type": "Point"
+      },
+      "id": "52f45865a06bc62be361515c25b2106c"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B02"
+      },
+      "geometry": {
+        "coordinates": [
+          39.604365,
+          24.369979
+        ],
+        "type": "Point"
+      },
+      "id": "571e0c9e83d4ac9424e5fee1a2a6def8"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B45"
+      },
+      "geometry": {
+        "coordinates": [
+          39.601329,
+          24.367052
+        ],
+        "type": "Point"
+      },
+      "id": "5bf0469339ce2e7606e0cf1615b1ddfc"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B70"
+      },
+      "geometry": {
+        "coordinates": [
+          39.598148,
+          24.364007
+        ],
+        "type": "Point"
+      },
+      "id": "6cdbbfe8ceae45c4af624a1df5a8e397"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B14"
+      },
+      "geometry": {
+        "coordinates": [
+          39.603413,
+          24.37002
+        ],
+        "type": "Point"
+      },
+      "id": "6e7ecf2ea82e6f66b4811b7a83ae9775"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B39"
+      },
+      "geometry": {
+        "coordinates": [
+          39.605261,
+          24.361105
+        ],
+        "type": "Point"
+      },
+      "id": "7118c99590637c14d4fcd550c8f8d95b"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B38"
+      },
+      "geometry": {
+        "coordinates": [
+          39.604676,
+          24.361662
+        ],
+        "type": "Point"
+      },
+      "id": "71bade991e91028c14a5d817410d90e4"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B06"
+      },
+      "geometry": {
+        "coordinates": [
+          39.606117,
+          24.365974
+        ],
+        "type": "Point"
+      },
+      "id": "75a80ed738e553b55ccff9257649158f"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B35"
+      },
+      "geometry": {
+        "coordinates": [
+          39.604754,
+          24.362251
+        ],
+        "type": "Point"
+      },
+      "id": "777dbf09f2e38e9f006f6f36556e5c8d"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B23"
+      },
+      "geometry": {
+        "coordinates": [
+          39.603223,
+          24.366148
+        ],
+        "type": "Point"
+      },
+      "id": "77924063f39d242021347693d55c05cb"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B49"
+      },
+      "geometry": {
+        "coordinates": [
+          39.600798,
+          24.365503
+        ],
+        "type": "Point"
+      },
+      "id": "7dad27d9b3815eecaf41822e5d728e77"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B44"
+      },
+      "geometry": {
+        "coordinates": [
+          39.599787,
+          24.366886
+        ],
+        "type": "Point"
+      },
+      "id": "81a959303b9d48f4eb40512256eb1cf7"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B03"
+      },
+      "geometry": {
+        "coordinates": [
+          39.605103,
+          24.367196
+        ],
+        "type": "Point"
+      },
+      "id": "8b52fe0f833f92dfb6c7f2afdf7c7be5"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B62"
+      },
+      "geometry": {
+        "coordinates": [
+          39.601637,
+          24.361826
+        ],
+        "type": "Point"
+      },
+      "id": "8ec54aa4938d835c1c9409da95619306"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B28"
+      },
+      "geometry": {
+        "coordinates": [
+          39.604089,
+          24.365114
+        ],
+        "type": "Point"
+      },
+      "id": "9106f89ef3e08505efc374a0ccd7451e"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B50"
+      },
+      "geometry": {
+        "coordinates": [
+          39.600109,
+          24.365652
+        ],
+        "type": "Point"
+      },
+      "id": "92aceb62978fca0291878f8b51bb8806"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B46"
+      },
+      "geometry": {
+        "coordinates": [
+          39.601498,
+          24.366397
+        ],
+        "type": "Point"
+      },
+      "id": "9a2dcc5dd04e9a7f7622842676fe7fd6"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B67"
+      },
+      "geometry": {
+        "coordinates": [
+          39.598759,
+          24.365371
+        ],
+        "type": "Point"
+      },
+      "id": "a2a64f68ef6cc9375c3f1a08cd7a6f32"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B37"
+      },
+      "geometry": {
+        "coordinates": [
+          39.605269,
+          24.362722
+        ],
+        "type": "Point"
+      },
+      "id": "a3d17c13c6507911f58361b2b52a054a"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B74"
+      },
+      "geometry": {
+        "coordinates": [
+          39.598891,
+          24.361992
+        ],
+        "type": "Point"
+      },
+      "id": "a68d68a8ddd8cdcf407944f7427eaacc"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B25"
+      },
+      "geometry": {
+        "coordinates": [
+          39.603354,
+          24.365662
+        ],
+        "type": "Point"
+      },
+      "id": "a6bf405b5bb7f5f69109970146187f84"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B29"
+      },
+      "geometry": {
+        "coordinates": [
+          39.603759,
+          24.364477
+        ],
+        "type": "Point"
+      },
+      "id": "ad47bdfe1aed884a041dfb0f54905080"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B08"
+      },
+      "geometry": {
+        "coordinates": [
+          39.60631,
+          24.364958
+        ],
+        "type": "Point"
+      },
+      "id": "af1291e504b7d2329c47ff985975ad88"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B75"
+      },
+      "geometry": {
+        "coordinates": [
+          39.598741,
+          24.361149
+        ],
+        "type": "Point"
+      },
+      "id": "b5b463d7d7d03cc2655d6e6fd01feaf7"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B66"
+      },
+      "geometry": {
+        "coordinates": [
+          39.602485,
+          24.360042
+        ],
+        "type": "Point"
+      },
+      "id": "b8432669cb6190af441e047be129524a"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B12"
+      },
+      "geometry": {
+        "coordinates": [
+          39.606125,
+          24.362903
+        ],
+        "type": "Point"
+      },
+      "id": "bb8030f4b32c34cc765c18a4f5d090a1"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B63"
+      },
+      "geometry": {
+        "coordinates": [
+          39.601093,
+          24.361427
+        ],
+        "type": "Point"
+      },
+      "id": "c4c9cd5097897494e2f57c2be0796b6f"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B07"
+      },
+      "geometry": {
+        "coordinates": [
+          39.605473,
+          24.365503
+        ],
+        "type": "Point"
+      },
+      "id": "c6041f3a64438f00dcd4fa1f42a12387"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B18"
+      },
+      "geometry": {
+        "coordinates": [
+          39.604011,
+          24.368176
+        ],
+        "type": "Point"
+      },
+      "id": "c78f4f74585fdc96f86b2b4d7a620c3f"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B59"
+      },
+      "geometry": {
+        "coordinates": [
+          39.600827,
+          24.362537
+        ],
+        "type": "Point"
+      },
+      "id": "c99fc411f77219bdd6f0253d737f8bc1"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B61"
+      },
+      "geometry": {
+        "coordinates": [
+          39.602346,
+          24.361789
+        ],
+        "type": "Point"
+      },
+      "id": "d00564da09e0904015d2b8d7f799ee59"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B19"
+      },
+      "geometry": {
+        "coordinates": [
+          39.6027,
+          24.367321
+        ],
+        "type": "Point"
+      },
+      "id": "d18f49383cfa653ded679c62a8459c0d"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B11"
+      },
+      "geometry": {
+        "coordinates": [
+          39.606785,
+          24.363138
+        ],
+        "type": "Point"
+      },
+      "id": "d335a84ab1ec5384551fd94f06629203"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B40"
+      },
+      "geometry": {
+        "coordinates": [
+          39.604389,
+          24.360985
+        ],
+        "type": "Point"
+      },
+      "id": "d52b57671416c75082a50799f3cf159c"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B36"
+      },
+      "geometry": {
+        "coordinates": [
+          39.604124,
+          24.362129
+        ],
+        "type": "Point"
+      },
+      "id": "de9858c0581d0724cc75d45c30e2841d"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B09"
+      },
+      "geometry": {
+        "coordinates": [
+          39.606414,
+          24.364288
+        ],
+        "type": "Point"
+      },
+      "id": "e125bfc3220f75c790dd59826dec170f"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B04"
+      },
+      "geometry": {
+        "coordinates": [
+          39.605696,
+          24.367044
+        ],
+        "type": "Point"
+      },
+      "id": "e1677ddd889d8aa09fd525c2356fee92"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B54"
+      },
+      "geometry": {
+        "coordinates": [
+          39.600422,
+          24.364308
+        ],
+        "type": "Point"
+      },
+      "id": "e9691da4edccf93cbb87afa3bddec10f"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B41"
+      },
+      "geometry": {
+        "coordinates": [
+          39.604419,
+          24.360511
+        ],
+        "type": "Point"
+      },
+      "id": "ed28dd8d735fcbc8cf376231b084f495"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B31"
+      },
+      "geometry": {
+        "coordinates": [
+          39.603842,
+          24.363805
+        ],
+        "type": "Point"
+      },
+      "id": "fa31ed428a4802d187555c5e586e2f92"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "SM Title": "B71"
+      },
+      "geometry": {
+        "coordinates": [
+          39.598655,
+          24.362984
+        ],
+        "type": "Point"
+      },
+      "id": "ff5fa52b2d1f18196c124fac0c40e83d"
+    }
+  ],
+  "type": "FeatureCollection"
+}
