@@ -472,9 +472,9 @@
                                 'متاح', '#7DA683',
                                 'مباع', '#AB0000',
                                 'مرفق', 'grey',
-                                '#00FFFFFF'
+                                '#7DA683'
                             ],
-                            'fill-opacity': 0.8
+                            'fill-opacity': 0.6
                         },
                         minzoom: 15,
                         maxzoom: 23
@@ -492,12 +492,13 @@
                                 ['==', ['get', 'status1'], 'غير متاح'], '#FFFFFF',
                                 // Check if status1 is 'مباع' then fill with red
                                 ['==', ['get', 'status1'], 'مباع'], '#AB0000',
+                                ['==', ['get', 'status1'], 'مرفق'], 'grey',
                                 // Check if use is 'تجاري' and status1 is not 'غير متاح' or 'مباع'
                                 ['==', ['get', 'use'], 'تجاري'], '#A8A38B',
                                 // Default fill color
                                 '#7DA683'
                             ],
-                            'fill-opacity': 0.8
+                            'fill-opacity': 0.6
                         },
                         minzoom: 15,
                         maxzoom: 23
@@ -603,7 +604,7 @@
 
             map.on('click', (e) => {
                 const features = map.queryRenderedFeatures(e.point, {
-                    layers: ["med-fill"]
+                    layers: ["med-fill","med2-fill"]
                 });
 
                 if (features.length) {
@@ -626,6 +627,8 @@
                     } else if (status1 === 'مباع') {
                         btnPrimary.style.backgroundColor = 'red';
                     } else if (status1 === 'مرفق') {
+                        btnPrimary.style.backgroundColor = 'grey';
+                    } else if (status1 === 'غير متاح') {
                         btnPrimary.style.backgroundColor = 'grey';
                     }
 
