@@ -24,7 +24,7 @@
         }
 
         #sidebar {
-            width: 300px;
+            width: 350px;
             margin-top: 80px;
             background-color: #f1f1f1e0;
             padding: 20px;
@@ -167,7 +167,7 @@
             z-index: 3;
             background-color: rgba(255, 255, 255, 0.9);
             padding: 10px;
-            border-radius: 15px;
+            border-radius: 5px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
             font-size: 14px;
             text-align: right;
@@ -219,6 +219,24 @@
                 transform: translateY(calc(100% - 40px));
             }
         }
+
+        /* Full screen control button */
+        #fullscreen-btn {
+            position: absolute;
+            top: 100px;
+            right: 10px;
+            background-color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+
+        #fullscreen-btn img {
+            width: 9px;
+            height: 10px;
+        }
     </style>
 </head>
 
@@ -234,6 +252,8 @@
         <option value="project3">مشروع واحة الخير - المدينة المنورة</option>
     </select>
     <div id="map"></div>
+    <button id="fullscreen-btn"><img src="https://img.icons8.com/material-outlined/24/000000/full-screen.png"
+            alt="Fullscreen Icon"></button>
     <div id="sidebar">
         <div class="drag-handle">
             <img src="https://img.icons8.com/ios-glyphs/30/null/expand.png" alt="Drag Handle">
@@ -244,7 +264,7 @@
         <div class="details-subtitle" style="display: none;"></div>
         <div class="button-container" style="display: none;">
             <button class="button btn-secondary" id="open-on-map"><img
-                    src="https://img.icons8.com/ios-glyphs/30/null/marker.png" alt="Map Icon"> فتح على الخارطة</button>
+                    src="https://img.icons8.com/ios-glyphs/30/null/marker.png" alt="Map Icon"> فتح على خرائط قوقل</button>
             <button class="button btn-secondary" id="share-land"><img
                     src="https://img.icons8.com/ios-glyphs/30/null/share.png" alt="Share Icon"> مشاركة الأرض</button>
         </div>
@@ -291,6 +311,7 @@
         const details = document.querySelector('.details');
         const contactBox = document.getElementById('contact-box');
         const openOnMapBtn = document.getElementById('open-on-map');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
         const handleResize = () => {
             if (window.innerWidth > 769) {
                 closeButton.style.display = 'none';
@@ -354,18 +375,28 @@
 
         openOnMapBtn.addEventListener('click', () => {
             if (selectedPolygonCoordinates) {
-                const { coordinates0, coordinates1 } = selectedPolygonCoordinates;
-                const googleMapUrl = `https://maps.google.com?q=${selectedPolygonCoordinates}`;
+                const googleMapUrl = `https://maps.google.com?q=${selectedPolygonCoordinates.lat},${selectedPolygonCoordinates.lng}`;
                 window.open(googleMapUrl, '_blank');
             }
         });
         shareLandBtn.addEventListener('click', () => {
-            window.print();
+            document.execCommand('print');
+        });
+
+        // Full screen functionality
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
         });
 
 
 
-        mapboxgl.accessToken = 'pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw';
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g';
         mapboxgl.setRTLTextPlugin(
             'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
             null,
@@ -401,10 +432,10 @@
             };
 
             const urls = [
-                'https://api.mapbox.com/datasets/v1/falekrealestate/clz9tfjl12c4k1tsc46ahxz6y/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw',
-                'https://api.mapbox.com/datasets/v1/falekrealestate/clz9t2eev2bdj1uqjhpa3ba4n/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw',
-                'https://api.mapbox.com/datasets/v1/falekrealestate/clz9u5d882bht1vo2y3qciue1/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw',
-                'https://api.mapbox.com/datasets/v1/falekrealestate/clzesmh9327n31treuyyt306n/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsd3o5b29mNzA1azcycXNldmtyMWwxZGsifQ.Qs9IsjGKXf7cnNuhwx3aYw'
+                'https://api.mapbox.com/datasets/v1/falekrealestate/clz9tfjl12c4k1tsc46ahxz6y/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g',
+                'https://api.mapbox.com/datasets/v1/falekrealestate/clz9t2eev2bdj1uqjhpa3ba4n/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g',
+                'https://api.mapbox.com/datasets/v1/falekrealestate/clzlnek8w0elq1ms3mzketqz8/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g',
+                'https://api.mapbox.com/datasets/v1/falekrealestate/clzesmh9327n31treuyyt306n/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g'
             ];
 
             Promise.all(urls.map(fetchDataset))
@@ -432,28 +463,48 @@
                                 ['get', 'status1'],
                                 'متاح', '#7DA683',
                                 'مباع', '#AB0000',
+                                'غير متاح', '#FFFFFF',
                                 'مرفق', 'grey',
                                 '#7DA683'
                             ],
                             'fill-opacity': 0.8
                         },
-                        minzoom: 16,
+                        minzoom: 15,
                         maxzoom: 23
                     });
 
                     // Add the fill layer for the first dataset's features
                     map.addLayer({
-                        id: 'med1-fill',
+                        id: 'med2-fill',
                         type: 'fill',
                         source: 'merged-dataset',
-                        //filter: ['has', 'status1'], // Add a filter to show only features with 'status1'
+                        filter: ['has', 'use'], // Add a filter to show only features with 'status1'
                         paint: {
-                            'fill-color': '#CFA37A',
+                            'fill-color': [
+                                'match',
+                                ['get', 'use'],
+                                'تجاري', '#A8A38B',
+                                '#7DA683'
+                            ],
                             'fill-opacity': 0.8
                         },
-                        minzoom: 10,
-                        maxzoom: 16
+                        minzoom: 15,
+                        maxzoom: 23
                     });
+
+                    // Add the fill layer for the first dataset's features
+                   // map.addLayer({
+                    //    id: 'med1-fill',
+                    //    type: 'fill',
+                    //    source: 'merged-dataset',
+                        //filter: ['has', 'status1'], // Add a filter to show only features with 'status1'
+                    //    paint: {
+                    //        'fill-color': '#CFA37A',
+                     //       'fill-opacity': 0.8
+                     //   },
+                    //    minzoom: 10,
+                    //    maxzoom: 16
+                   // });
 
                     // Add the line layer for the first dataset's features
                     map.addLayer({
@@ -462,7 +513,7 @@
                         source: 'merged-dataset',
                         paint: {
                             'line-color': '#fff',
-                            'line-width': 1
+                            'line-width': 0.5
                         },
                         minzoom: 16,
                         maxzoom: 23
@@ -475,7 +526,7 @@
                         source: 'merged-dataset',
                         layout: {
                             'text-field': ['get', 'name'],
-                            'text-size': 14,
+                            'text-size': 9,
                             'text-offset': [0, 0.0]
                         },
                         paint: {
@@ -541,7 +592,7 @@
 
             map.on('click', (e) => {
                 const features = map.queryRenderedFeatures(e.point, {
-                    layers: ["med-fill", 'med1-fill']
+                    layers: ["med-fill"]
                 });
 
                 if (features.length) {
