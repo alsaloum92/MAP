@@ -264,7 +264,8 @@
         <div class="details-subtitle" style="display: none;"></div>
         <div class="button-container" style="display: none;">
             <button class="button btn-secondary" id="open-on-map"><img
-                    src="https://img.icons8.com/ios-glyphs/30/null/marker.png" alt="Map Icon"> فتح على خرائط قوقل</button>
+                    src="https://img.icons8.com/ios-glyphs/30/null/marker.png" alt="Map Icon"> فتح على خرائط
+                قوقل</button>
             <button class="button btn-secondary" id="share-land"><img
                     src="https://img.icons8.com/ios-glyphs/30/null/share.png" alt="Share Icon"> مشاركة الأرض</button>
         </div>
@@ -431,11 +432,18 @@
                 return response.json();
             };
 
+            // const urls = [
+            //    'https://api.mapbox.com/datasets/v1/falekrealestate/clz9tfjl12c4k1tsc46ahxz6y/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g',
+            //    'https://api.mapbox.com/datasets/v1/falekrealestate/clz9t2eev2bdj1uqjhpa3ba4n/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g',
+            //    'https://api.mapbox.com/datasets/v1/falekrealestate/clzlnek8w0elq1ms3mzketqz8/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g',
+            //    'https://api.mapbox.com/datasets/v1/falekrealestate/clzesmh9327n31treuyyt306n/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g'
+            // ];
+
             const urls = [
-                'https://api.mapbox.com/datasets/v1/falekrealestate/clz9tfjl12c4k1tsc46ahxz6y/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g',
-                'https://api.mapbox.com/datasets/v1/falekrealestate/clz9t2eev2bdj1uqjhpa3ba4n/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g',
-                'https://api.mapbox.com/datasets/v1/falekrealestate/clzlnek8w0elq1ms3mzketqz8/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g',
-                'https://api.mapbox.com/datasets/v1/falekrealestate/clzesmh9327n31treuyyt306n/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g'
+                'https://raw.githubusercontent.com/alsaloum92/our-project-falek/main/data/%D9%88%D8%A7%D8%AD%D8%A9%20%D8%A7%D9%84%D8%AE%D9%8A%D8%B1%20-%201%20(1).geojson',
+                'https://raw.githubusercontent.com/alsaloum92/our-project-falek/main/data/%D9%88%D8%A7%D8%AD%D8%A9%20%D8%A7%D9%84%D8%AE%D9%8A%D8%B1%20-%202.geojson',
+                'https://raw.githubusercontent.com/alsaloum92/our-project-falek/main/data/%D9%88%D8%A7%D8%AD%D8%A9%20%D8%A7%D9%84%D8%AE%D9%8A%D8%B1%20-%203.geojson',
+                'https://raw.githubusercontent.com/alsaloum92/our-project-falek/main/data/%D8%A7%D9%84%D8%A3%D8%B7%D9%88%D8%A7%D9%84-%20%D9%88%D8%A7%D8%AD%D8%A9%20%D8%A7%D9%84%D8%AE%D9%8A%D8%B1.geojson'
             ];
 
             Promise.all(urls.map(fetchDataset))
@@ -456,16 +464,15 @@
                         id: 'med-fill',
                         type: 'fill',
                         source: 'merged-dataset',
-                        //filter: ['has', 'status1'], // Add a filter to show only features with 'status1'
                         paint: {
                             'fill-color': [
                                 'match',
                                 ['get', 'status1'],
+                                'غير متاح', '#FFFFFF',
                                 'متاح', '#7DA683',
                                 'مباع', '#AB0000',
-                                'غير متاح', '#FFFFFF',
                                 'مرفق', 'grey',
-                                '#7DA683'
+                                '#00FFFFFF'
                             ],
                             'fill-opacity': 0.8
                         },
@@ -473,17 +480,21 @@
                         maxzoom: 23
                     });
 
-                    // Add the fill layer for the first dataset's features
+                    // Add conditional fill layer
                     map.addLayer({
                         id: 'med2-fill',
                         type: 'fill',
                         source: 'merged-dataset',
-                        filter: ['has', 'use'], // Add a filter to show only features with 'status1'
                         paint: {
                             'fill-color': [
-                                'match',
-                                ['get', 'use'],
-                                'تجاري', '#A8A38B',
+                                'case',
+                                // Check if status1 is 'غير متاح' and fill with white
+                                ['==', ['get', 'status1'], 'غير متاح'], '#FFFFFF',
+                                // Check if status1 is 'مباع' then fill with red
+                                ['==', ['get', 'status1'], 'مباع'], '#AB0000',
+                                // Check if use is 'تجاري' and status1 is not 'غير متاح' or 'مباع'
+                                ['==', ['get', 'use'], 'تجاري'], '#A8A38B',
+                                // Default fill color
                                 '#7DA683'
                             ],
                             'fill-opacity': 0.8
@@ -493,18 +504,18 @@
                     });
 
                     // Add the fill layer for the first dataset's features
-                   // map.addLayer({
+                    // map.addLayer({
                     //    id: 'med1-fill',
                     //    type: 'fill',
                     //    source: 'merged-dataset',
-                        //filter: ['has', 'status1'], // Add a filter to show only features with 'status1'
+                    //filter: ['has', 'status1'], // Add a filter to show only features with 'status1'
                     //    paint: {
                     //        'fill-color': '#CFA37A',
-                     //       'fill-opacity': 0.8
-                     //   },
+                    //       'fill-opacity': 0.8
+                    //   },
                     //    minzoom: 10,
                     //    maxzoom: 16
-                   // });
+                    // });
 
                     // Add the line layer for the first dataset's features
                     map.addLayer({
