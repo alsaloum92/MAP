@@ -237,6 +237,37 @@
             width: 9px;
             height: 10px;
         }
+
+        #legend {
+            z-index: 3;
+            background-color: rgba(255, 255, 255, 0.507);
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            text-align: right;
+            font-size: 9px;
+            width: fit-content;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 75px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 10%;
+            display: inline-block;
+        }
+
     </style>
 </head>
 
@@ -252,6 +283,28 @@
         <option value="project1">مشروع واحة الخير - المدينة المنورة</option>
         <option value="project2">مشروع غرناطة - بريدة</option>
     </select>
+    <div id="legend">
+        <div class="legend-item">
+            <span>    حالة الأرض:</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: #7DA683;"></span>
+            <span>متاح</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: #AB0000;"></span>
+            <span>مباع</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: rgb(255, 255, 255);"></span>
+            <span>غير متاح</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: #A8A38B;"></span>
+            <span>تجاري</span>
+        </div>
+    </div>
+
     <div id="map"></div>
     <button id="fullscreen-btn"><img src="https://img.icons8.com/material-outlined/24/000000/full-screen.png"
             alt="Fullscreen Icon"></button>
