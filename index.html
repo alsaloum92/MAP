@@ -452,16 +452,7 @@
 
 
 
-        //mapboxgl.accessToken = 'pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g';
-        fetch('/mapbox-data')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Use the data in your application
-                // Process and use the data received from the server
-            })
-            .catch(error => {
-                console.error('Error fetching Mapbox data:', error);
-            });
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g';
         mapboxgl.setRTLTextPlugin(
             'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
             null,
