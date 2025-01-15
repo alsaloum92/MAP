@@ -733,7 +733,7 @@
 
             map.on('click', (e) => {
                 const features = map.queryRenderedFeatures(e.point, {
-                    layers: ["med-fill","med2-fill"]
+                    layers: ["med-fill","med2-fill","csv-polygons-fill"]
                 });
 
                 if (features.length) {
