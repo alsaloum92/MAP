@@ -661,51 +661,49 @@
                         maxzoom: 16
                     });
 
-               // Fetch and process the CSV from Google Sheets
-    fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vTIODfsCCIIGMWjs_eiRsjpUkdBPpPwJEVVtMnFbBz3o2llFHBuW3VjmTRDsNaOTRX9yPlrkWTxRPAz/pub?output=csv")
-    .then(resp => resp.text())
-    .then(response => {
-        csv().fromString(response).then(rows => {
-            console.log(rows); // Logging for debugging purposes
+               function fetchCsv(url) {
+    return fetch(url)
+        .then(resp => resp.text())
+        .then(response => csv().fromString(response));
+}
 
-            // Add points as markers
-            let points = rows.filter(row => row.latitude !== "" && row.longitude !== "");
+Promise.all([
+    fetchCsv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTIODfsCCIIGMWjs_eiRsjpUkdBPpPwJEVVtMnFbBz3o2llFHBuW3VjmTRDsNaOTRX9yPlrkWTxRPAz/pub?output=csv"),
+    fetchCsv("https://link-to-second-csv"),
+    // add more URLs as needed
+]).then(dataSets => {
+    // This contains an array of arrays, where each inner array is the rows from one CSV
+    let allFeatures = [];
 
-            points.forEach(point => {
-                new mapboxgl.Marker()
-                    .setLngLat([parseFloat(point.longitude), parseFloat(point.latitude)])
-                    .addTo(map);
-            });
-
-            // Convert CSV polygons to GeoJSON and add to map
-            let polygons = rows.filter(row => row.polygon !== "");
-
-            let polyFeatureCollection = {
-                type: "FeatureCollection",
-                features: polygons.map(polygon => {
-                    let coordinates = [];
-                    let splitArray = polygon.polygon.split('],[');
-                    let splitWithExtraCharactersRemoved = splitArray.map(item => item.replace('[', '').replace(']', ''));
-                    coordinates = splitWithExtraCharactersRemoved.map(coordSet => {
-                        let splitCoords = coordSet.split(',');
-                        return [parseFloat(splitCoords[0]), parseFloat(splitCoords[1])];
-                    });
-                    return {
-                        type: "Feature",
-                        properties: polygon,
-                        geometry: {
-                            type: "Polygon",
-                            coordinates: [coordinates]
-                        }
-                    };
-                })
+    dataSets.forEach(rows => {
+        // Assuming that each CSV has the same data structure
+        let features = rows.map(row => {
+            let coordinates = []; // Extract and parse coordinates if necessary
+            // Similar parsing logic for points and polygons
+            return {
+                type: "Feature",
+                properties: row,
+                geometry: {
+                    type: "Polygon",
+                    coordinates: [coordinates]
+                }
             };
+        });
 
-            // Add polygons to map
-            map.addSource('csv-polygons', {
-                type: 'geojson',
-                data: polyFeatureCollection
-            });
+        allFeatures = allFeatures.concat(features);
+    });
+
+    // Create a single GeoJSON FeatureCollection from all features
+    let combinedFeatureCollection = {
+        type: "FeatureCollection",
+        features: allFeatures
+    };
+
+    // Add the combined data to the map
+    map.addSource('merged-data', {
+        type: 'geojson',
+        data: combinedFeatureCollection
+    });
 
             map.addLayer({
                 id: 'csv-polygons-fill',
