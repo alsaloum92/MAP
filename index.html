@@ -707,6 +707,22 @@
                 data: polyFeatureCollection
             });
 
+             map.addLayer({
+                        id: 'csv-polygons-symbol',
+                        type: 'symbol',
+                        source: 'csv-polygons',
+                        layout: {
+                            'text-field': ['get', 'Lname'],
+                            'text-size': 14,
+                            'text-offset': [0, 0.0]
+                        },
+                        paint: {
+                            'text-color': 'white'
+                        },
+                        minzoom: 19,
+                        maxzoom: 23
+                    });
+
             map.addLayer({
                 id: 'csv-polygons-fill',
                 type: 'fill',
@@ -754,8 +770,8 @@
                 type: 'line',
                 source: 'csv-polygons',
                 paint: {
-                    'line-color': '#333333',
-                    'line-width': 1
+                    'line-color': '#fff',
+                    'line-width': 0.6
                 }
             });
         });
