@@ -773,6 +773,21 @@
                         minzoom: 18,
                         maxzoom: 24
                     });
+            map.addLayer({
+                        id: 'csv-polygons-symbol2',
+                        type: 'symbol',
+                        source: 'csv-polygons',
+                        layout: {
+                            'text-field': ['get', 'areaSize'],
+                            'text-size': 16,
+                            'text-offset': [0, 1.0]
+                        },
+                        paint: {
+                            'text-color': 'black'
+                        },
+                        minzoom: 18,
+                        maxzoom: 24
+                    });
         });
     }).catch(err => console.error('Error fetching or parsing CSV:', err));
 });
