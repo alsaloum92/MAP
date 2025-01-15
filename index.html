@@ -669,7 +669,7 @@
 
 Promise.all([
     fetchCsv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTIODfsCCIIGMWjs_eiRsjpUkdBPpPwJEVVtMnFbBz3o2llFHBuW3VjmTRDsNaOTRX9yPlrkWTxRPAz/pub?output=csv"),
-    fetchCsv("https://link-to-second-csv"),
+    fetchCsv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_Bnbumqncjbr9LiVc82iTpRPEGN66AX5407-vFvWaw029NgTqIpg6EKz-fgxbAl02pzkbp6nKrABz/pub?output=csv"),
     // add more URLs as needed
 ]).then(dataSets => {
     // This contains an array of arrays, where each inner array is the rows from one CSV
@@ -700,7 +700,7 @@ Promise.all([
     };
 
     // Add the combined data to the map
-    map.addSource('merged-data', {
+    map.addSource('merged-data1', {
         type: 'geojson',
         data: combinedFeatureCollection
     });
@@ -708,7 +708,7 @@ Promise.all([
             map.addLayer({
                 id: 'csv-polygons-fill',
                 type: 'fill',
-                source: 'csv-polygons',
+                source: 'merged-data1',
                 paint: {
                             'fill-color': [
                                 'match',
@@ -727,7 +727,7 @@ Promise.all([
              map.addLayer({
                         id: 'csv-polygons-fill2',
                         type: 'fill',
-                        source: 'csv-polygons',
+                        source: 'merged-data1',
                         paint: {
                             'fill-color': [
                                 'case',
@@ -750,7 +750,7 @@ Promise.all([
             map.addLayer({
                 id: 'csv-polygons-line',
                 type: 'line',
-                source: 'csv-polygons',
+                source: 'merged-data1',
                 paint: {
                     'line-color': '#fff',
                     'line-width': 0.6
@@ -759,7 +759,7 @@ Promise.all([
              map.addLayer({
                         id: 'csv-polygons-symbol',
                         type: 'symbol',
-                        source: 'csv-polygons',
+                        source: 'merged-data1',
                         layout: {
                             'text-field': ['get', 'name'],
                             'text-size': 16,
@@ -774,7 +774,7 @@ Promise.all([
             map.addLayer({
                         id: 'csv-polygons-symbol2',
                         type: 'symbol',
-                        source: 'csv-polygons',
+                        source: 'merged-data1',
                         layout: {
                             'text-field': ['get', 'areaSize'],
                             'text-size': 14,
