@@ -717,7 +717,7 @@
                 type: 'fill',
                 source: 'csv-polygons',
                 paint: {
-                            'fill-color': [
+                    'fill-color': [
                                 'match',
                                 ['get', 'status1'],
                                 'غير متاح', '#FFFFFF',
@@ -747,7 +747,7 @@
 
             map.on('click', (e) => {
                 const features = map.queryRenderedFeatures(e.point, {
-                    layers: ["med-fill","med2-fill"]
+                    layers: ["med-fill","med2-fill","csv-polygons-fill"]
                 });
 
                 if (features.length) {
