@@ -726,6 +726,28 @@
                         minzoom: 10,
                         maxzoom: 23
                     });
+             map.addLayer({
+                        id: 'csv-polygons-fill2',
+                        type: 'fill',
+                        source: 'csv-polygons',
+                        paint: {
+                            'fill-color': [
+                                'case',
+                                // Check if status1 is 'غير متاح' and fill with white
+                                ['==', ['get', 'status1'], 'غير متاح'], '#FFFFFF',
+                                // Check if status1 is 'مباع' then fill with red
+                                ['==', ['get', 'status1'], 'مباع'], '#AB0000',
+                                ['==', ['get', 'status1'], 'مرفق'], 'grey',
+                                // Check if use is 'تجاري' and status1 is not 'غير متاح' or 'مباع'
+                                ['==', ['get', 'use'], 'تجاري'], '#A8A38B',
+                                // Default fill color
+                                '#7DA683'
+                            ],
+                            'fill-opacity': 0.6
+                        },
+                        minzoom: 10,
+                        maxzoom: 23
+                    });
 
             map.addLayer({
                 id: 'csv-polygons-line',
@@ -743,7 +765,7 @@
 
             map.on('click', (e) => {
                 const features = map.queryRenderedFeatures(e.point, {
-                    layers: ["med-fill","med2-fill","csv-polygons-fill"]
+                    layers: ["med-fill","med2-fill","csv-polygons-fill","csv-polygons-fill2"]
                 });
 
                 if (features.length) {
