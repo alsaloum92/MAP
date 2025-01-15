@@ -661,7 +661,74 @@
                         maxzoom: 16
                     });
 
-                }).catch(err => console.error('Error fetching datasets:', err));
+               // Fetch and process the CSV from Google Sheets
+    fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vTIODfsCCIIGMWjs_eiRsjpUkdBPpPwJEVVtMnFbBz3o2llFHBuW3VjmTRDsNaOTRX9yPlrkWTxRPAz/pub?output=csv")
+    .then(resp => resp.text())
+    .then(response => {
+        csv().fromString(response).then(rows => {
+            console.log(rows); // Logging for debugging purposes
+
+            // Add points as markers
+            let points = rows.filter(row => row.latitude !== "" && row.longitude !== "");
+
+            points.forEach(point => {
+                new mapboxgl.Marker()
+                    .setLngLat([parseFloat(point.longitude), parseFloat(point.latitude)])
+                    .addTo(map);
+            });
+
+            // Convert CSV polygons to GeoJSON and add to map
+            let polygons = rows.filter(row => row.polygon !== "");
+
+            let polyFeatureCollection = {
+                type: "FeatureCollection",
+                features: polygons.map(polygon => {
+                    let coordinates = [];
+                    let splitArray = polygon.polygon.split('],[');
+                    let splitWithExtraCharactersRemoved = splitArray.map(item => item.replace('[', '').replace(']', ''));
+                    coordinates = splitWithExtraCharactersRemoved.map(coordSet => {
+                        let splitCoords = coordSet.split(',');
+                        return [parseFloat(splitCoords[0]), parseFloat(splitCoords[1])];
+                    });
+                    return {
+                        type: "Feature",
+                        properties: polygon,
+                        geometry: {
+                            type: "Polygon",
+                            coordinates: [coordinates]
+                        }
+                    };
+                })
+            };
+
+            // Add polygons to map
+            map.addSource('csv-polygons', {
+                type: 'geojson',
+                data: polyFeatureCollection
+            });
+
+            map.addLayer({
+                id: 'csv-polygons-fill',
+                type: 'fill',
+                source: 'csv-polygons',
+                paint: {
+                    'fill-color': '#888888',
+                    'fill-opacity': 0.5
+                }
+            });
+
+            map.addLayer({
+                id: 'csv-polygons-line',
+                type: 'line',
+                source: 'csv-polygons',
+                paint: {
+                    'line-color': '#333333',
+                    'line-width': 1
+                }
+            });
+        });
+    }).catch(err => console.error('Error fetching or parsing CSV:', err));
+});
 
 
             map.on('click', (e) => {
