@@ -717,10 +717,20 @@
                 type: 'fill',
                 source: 'csv-polygons',
                 paint: {
-                    'fill-color': '#888888',
-                    'fill-opacity': 0.5
-                }
-            });
+                            'fill-color': [
+                                'match',
+                                ['get', 'status1'],
+                                'غير متاح', '#FFFFFF',
+                                'متاح', '#7DA683',
+                                'مباع', '#AB0000',
+                                'مرفق', 'grey',
+                                '#7DA683'
+                            ],
+                            'fill-opacity': 0.6
+                        },
+                        minzoom: 10,
+                        maxzoom: 23
+                    });
 
             map.addLayer({
                 id: 'csv-polygons-line',
