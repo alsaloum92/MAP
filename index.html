@@ -661,54 +661,56 @@
                         maxzoom: 16
                     });
 
-               function fetchCsv(url) {
-    return fetch(url)
-        .then(resp => resp.text())
-        .then(response => csv().fromString(response));
-}
+                // Fetch and process the CSV from Google Sheets
+    fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vTIODfsCCIIGMWjs_eiRsjpUkdBPpPwJEVVtMnFbBz3o2llFHBuW3VjmTRDsNaOTRX9yPlrkWTxRPAz/pub?output=csv")
+    .then(resp => resp.text())
+    .then(response => {
+        csv().fromString(response).then(rows => {
+            console.log(rows); // Logging for debugging purposes
 
-Promise.all([
-    fetchCsv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTIODfsCCIIGMWjs_eiRsjpUkdBPpPwJEVVtMnFbBz3o2llFHBuW3VjmTRDsNaOTRX9yPlrkWTxRPAz/pub?output=csv"),
-    fetchCsv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_Bnbumqncjbr9LiVc82iTpRPEGN66AX5407-vFvWaw029NgTqIpg6EKz-fgxbAl02pzkbp6nKrABz/pub?output=csv"),
-    // add more URLs as needed
-]).then(dataSets => {
-    // This contains an array of arrays, where each inner array is the rows from one CSV
-    let allFeatures = [];
+            // Add points as markers
+            let points = rows.filter(row => row.latitude !== "" && row.longitude !== "");
 
-    dataSets.forEach(rows => {
-        // Assuming that each CSV has the same data structure
-        let features = rows.map(row => {
-            let coordinates = []; // Extract and parse coordinates if necessary
-            // Similar parsing logic for points and polygons
-            return {
-                type: "Feature",
-                properties: row,
-                geometry: {
-                    type: "Polygon",
-                    coordinates: [coordinates]
-                }
+            points.forEach(point => {
+                new mapboxgl.Marker()
+                    .setLngLat([parseFloat(point.longitude), parseFloat(point.latitude)])
+                    .addTo(map);
+            });
+
+            // Convert CSV polygons to GeoJSON and add to map
+            let polygons = rows.filter(row => row.polygon !== "");
+
+            let polyFeatureCollection = {
+                type: "FeatureCollection",
+                features: polygons.map(polygon => {
+                    let coordinates = [];
+                    let splitArray = polygon.polygon.split('],[');
+                    let splitWithExtraCharactersRemoved = splitArray.map(item => item.replace('[', '').replace(']', ''));
+                    coordinates = splitWithExtraCharactersRemoved.map(coordSet => {
+                        let splitCoords = coordSet.split(',');
+                        return [parseFloat(splitCoords[0]), parseFloat(splitCoords[1])];
+                    });
+                    return {
+                        type: "Feature",
+                        properties: polygon,
+                        geometry: {
+                            type: "Polygon",
+                            coordinates: [coordinates]
+                        }
+                    };
+                })
             };
-        });
 
-        allFeatures = allFeatures.concat(features);
-    });
-
-    // Create a single GeoJSON FeatureCollection from all features
-    let combinedFeatureCollection = {
-        type: "FeatureCollection",
-        features: allFeatures
-    };
-
-    // Add the combined data to the map
-    map.addSource('merged-data1', {
-        type: 'geojson',
-        data: combinedFeatureCollection
-    });
+            // Add polygons to map
+            map.addSource('csv-polygons', {
+                type: 'geojson',
+                data: polyFeatureCollection
+            });
 
             map.addLayer({
                 id: 'csv-polygons-fill',
                 type: 'fill',
-                source: 'merged-data1',
+                source: 'csv-polygons',
                 paint: {
                             'fill-color': [
                                 'match',
@@ -727,7 +729,7 @@ Promise.all([
              map.addLayer({
                         id: 'csv-polygons-fill2',
                         type: 'fill',
-                        source: 'merged-data1',
+                        source: 'csv-polygons',
                         paint: {
                             'fill-color': [
                                 'case',
@@ -750,31 +752,16 @@ Promise.all([
             map.addLayer({
                 id: 'csv-polygons-line',
                 type: 'line',
-                source: 'merged-data1',
+                source: 'csv-polygons',
                 paint: {
                     'line-color': '#fff',
                     'line-width': 0.6
                 }
             });
-             map.addLayer({
-                        id: 'csv-polygons-symbol',
-                        type: 'symbol',
-                        source: 'merged-data1',
-                        layout: {
-                            'text-field': ['get', 'name'],
-                            'text-size': 16,
-                            'text-offset': [0, 0.0]
-                        },
-                        paint: {
-                            'text-color': 'white'
-                        },
-                        minzoom: 18,
-                        maxzoom: 24
-                    });
             map.addLayer({
                         id: 'csv-polygons-symbol2',
                         type: 'symbol',
-                        source: 'merged-data1',
+                        source: 'csv-polygons',
                         layout: {
                             'text-field': ['get', 'areaSize'],
                             'text-size': 14,
@@ -787,6 +774,67 @@ Promise.all([
                         maxzoom: 24
                     });
         });
+
+        // Fetch and process the CSV from Google Sheets2
+    fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vT_Bnbumqncjbr9LiVc82iTpRPEGN66AX5407-vFvWaw029NgTqIpg6EKz-fgxbAl02pzkbp6nKrABz/pub?output=csv")
+    .then(resp => resp.text())
+    .then(response => {
+        csv().fromString(response).then(rows => {
+            console.log(rows); // Logging for debugging purposes
+
+            // Add points as markers
+            let points = rows.filter(row => row.latitude !== "" && row.longitude !== "");
+
+            points.forEach(point => {
+                new mapboxgl.Marker()
+                    .setLngLat([parseFloat(point.longitude), parseFloat(point.latitude)])
+                    .addTo(map);
+            });
+
+            // Convert CSV polygons to GeoJSON and add to map
+            let polygons = rows.filter(row => row.polygon !== "");
+
+            let polyFeatureCollection = {
+                type: "FeatureCollection",
+                features: polygons.map(polygon => {
+                    let coordinates = [];
+                    let splitArray = polygon.polygon.split('],[');
+                    let splitWithExtraCharactersRemoved = splitArray.map(item => item.replace('[', '').replace(']', ''));
+                    coordinates = splitWithExtraCharactersRemoved.map(coordSet => {
+                        let splitCoords = coordSet.split(',');
+                        return [parseFloat(splitCoords[0]), parseFloat(splitCoords[1])];
+                    });
+                    return {
+                        type: "Feature",
+                        properties: polygon,
+                        geometry: {
+                            type: "Polygon",
+                            coordinates: [coordinates]
+                        }
+                    };
+                })
+            };
+
+            // Add polygons to map
+            map.addSource('csv-polygons2', {
+                type: 'geojson',
+                data: polyFeatureCollection
+            });
+             map.addLayer({
+                        id: 'csv-polygons-symbol',
+                        type: 'symbol',
+                        source: 'csv-polygons2',
+                        layout: {
+                            'text-field': ['get', 'name'],
+                            'text-size': 16,
+                            'text-offset': [0, 0.0]
+                        },
+                        paint: {
+                            'text-color': 'white'
+                        },
+                        minzoom: 18,
+                        maxzoom: 24
+                    });
     }).catch(err => console.error('Error fetching or parsing CSV:', err));
 });
 
