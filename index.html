@@ -351,540 +351,477 @@
     </div>
 
     <script>
- const sidebar = document.getElementById('sidebar');
-        const dragHandle = document.querySelector('.drag-handle');
-        const closeButton = document.getElementById('close-sidebar');
-        const message = document.getElementById('message');
-        const projectDropdown = document.getElementById('project-dropdown');
-        const loadingScreen = document.getElementById('loading-screen');
-        const shareLandBtn = document.getElementById('share-land');
-
-        const detailsTitle = document.querySelector('.details-title');
-        const detailsSubtitle = document.querySelector('.details-subtitle');
-        const buttonContainer = document.querySelector('.button-container');
-        const btnPrimary = document.querySelector('.btn-primary');
-        const detailsContainer = document.querySelector('.details-container');
-        const details = document.querySelector('.details');
-        const contactBox = document.getElementById('contact-box');
-        const openOnMapBtn = document.getElementById('open-on-map');
-        const fullscreenBtn = document.getElementById('fullscreen-btn');
-        const handleResize = () => {
-            if (window.innerWidth > 769) {
-                closeButton.style.display = 'none';
-            } else {
-                closeButton.style.display = 'block';
-            }
-        };
-
-        window.addEventListener('resize', handleResize);
-        handleResize(); // Call this during the initial load
-
-        let startY, startHeight;
-        let selectedPolygonCoordinates = null;
-        let selectedPolygonProperties = null;
-
-        dragHandle.addEventListener('mousedown', (e) => {
-            startY = e.clientY;
-            startHeight = parseInt(document.defaultView.getComputedStyle(sidebar).height, 10);
-            if (window.innerWidth <= 769) {
-                closeButton.style.display = 'none';  // Show close button when starting to drag
-            }
-            document.documentElement.addEventListener('mousemove', onMouseMove);
-            document.documentElement.addEventListener('mouseup', onMouseUp);
-        });
-
-        function onMouseMove(e) {
-            sidebar.style.height = `${startHeight - (e.clientY - startY)}px`;
-        }
-
-        function onMouseUp() {
-            document.documentElement.removeEventListener('mousemove', onMouseMove);
-            document.documentElement.removeEventListener('mouseup', onMouseUp);
-        }
-
-        closeButton.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                sidebar.style.transform = 'translateY(calc(100% - 40px))';
-            } else {
-                sidebar.style.transform = 'translateX(-100%)'; // Optionally hide the sidebar differently on larger screens
-            }
-        });
-
-
-
-
-        // إضافة احداثية المشروع 
-        const projectCoordinates = {
-            'project1': [39.600575, 24.363737], //(واحة الخير)26.340192, 44.010154
-            'project2': [44.010154, 26.340192] // (غرناطة) 26.340192, 44.010154
-
-        };
-
-        projectDropdown.addEventListener('change', (event) => {
-            const selectedProject = event.target.value;
-            if (projectCoordinates[selectedProject]) {
-                map.flyTo({
-                    center: projectCoordinates[selectedProject],
-                    zoom: 15
-                });
-            }
-        });
-
-        openOnMapBtn.addEventListener('click', () => {
-            if (selectedPolygonCoordinates) {
-                const googleMapUrl = `https://maps.google.com?q=${selectedPolygonCoordinates.lat},${selectedPolygonCoordinates.lng}`;
-                window.open(googleMapUrl, '_blank');
-            }
-        });
-        shareLandBtn.addEventListener('click', () => {
-            document.execCommand('print');
-        });
-
-        // Full screen functionality
-        fullscreenBtn.addEventListener('click', () => {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
+ function _0x17a3(_0x4e2531, _0xb5fe46) {
+    const _0x538e64 = _0x28b9();
+    return _0x17a3 = function(_0x2f124b, _0x250592) {
+        _0x2f124b = _0x2f124b - 0x118;
+        let _0x38193f = _0x538e64[_0x2f124b];
+        if (_0x17a3['szBgcM'] === undefined) {
+            var _0x39fce6 = function(_0x491b3d) {
+                const _0xf016df = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';
+                let _0x5c12de = '',
+                    _0x5103b2 = '',
+                    _0x589460 = _0x5c12de + _0x39fce6;
+                for (let _0x21be3e = 0x0, _0xe0b6f7, _0x17a3db, _0x205e4f = 0x0; _0x17a3db = _0x491b3d['charAt'](_0x205e4f++); ~_0x17a3db && (_0xe0b6f7 = _0x21be3e % 0x4 ? _0xe0b6f7 * 0x40 + _0x17a3db : _0x17a3db, _0x21be3e++ % 0x4) ? _0x5c12de += _0x589460['charCodeAt'](_0x205e4f + 0xa) - 0xa !== 0x0 ? String['fromCharCode'](0xff & _0xe0b6f7 >> (-0x2 * _0x21be3e & 0x6)) : _0x21be3e : 0x0) {
+                    _0x17a3db = _0xf016df['indexOf'](_0x17a3db);
                 }
-            }
-        });
-
-
-
-        mapboxgl.accessToken = 'pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g';
-        mapboxgl.setRTLTextPlugin(
-            'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
-            null,
-            true
-        );
-
-        const map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/falekrealestate/clyx2kgu9009m01nuauz45xzv',
-            zoom: 6,
-            center: [41.742957, 25.435011],//25.435011, 41.742957
-
-
-            projection: 'globe'
-        });
-
-        map.addControl(new mapboxgl.NavigationControl());
-
-        map.on('load', () => {
-            map.setFog({});
-
-            // Hide loading screen after 2 seconds
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-            }, 2000);
-
-            const fetchDataset = async (url) => {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`Fetching dataset failed: ${response.statusText}`);
+                for (let _0x5e98eb = 0x0, _0x23e740 = _0x5c12de['length']; _0x5e98eb < _0x23e740; _0x5e98eb++) {
+                    _0x5103b2 += '%' + ('00' + _0x5c12de['charCodeAt'](_0x5e98eb)['toString'](0x10))['slice'](-0x2);
                 }
-                return response.json();
+                return decodeURIComponent(_0x5103b2);
             };
-
-            // const urls = [
-            //    'https://api.mapbox.com/datasets/v1/falekrealestate/clz9tfjl12c4k1tsc46ahxz6y/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g',
-            //    'https://api.mapbox.com/datasets/v1/falekrealestate/clz9t2eev2bdj1uqjhpa3ba4n/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g',
-            //    'https://api.mapbox.com/datasets/v1/falekrealestate/clzlnek8w0elq1ms3mzketqz8/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g',
-            //    'https://api.mapbox.com/datasets/v1/falekrealestate/clzesmh9327n31treuyyt306n/features?access_token=pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g'
-            // ];
-
-            const urls = [
-              //  'https://raw.githubusercontent.com/alsaloum92/our-project-falek/main/data/%D9%88%D8%A7%D8%AD%D8%A9%20%D8%A7%D9%84%D8%AE%D9%8A%D8%B1%20-%201%20(2).geojson',
-               // 'https://raw.githubusercontent.com/alsaloum92/our-project-falek/main/data/%D9%88%D8%A7%D8%AD%D8%A9%20%D8%A7%D9%84%D8%AE%D9%8A%D8%B1%20-%202.geojson',
-               // 'https://raw.githubusercontent.com/alsaloum92/our-project-falek/main/data/%D9%88%D8%A7%D8%AD%D8%A9%20%D8%A7%D9%84%D8%AE%D9%8A%D8%B1%20-%203.geojson',
-               // 'https://raw.githubusercontent.com/alsaloum92/our-project-falek/main/data/%D8%A3%D8%B1%D9%82%D8%A7%D9%85%20%D8%A7%D9%84%D8%A8%D9%84%D9%88%D9%83%D8%A7%D8%AA%20(1).geojson',
-               // 'https://raw.githubusercontent.com/alsaloum92/our-project-falek/main/data/%D8%A7%D9%84%D8%A3%D8%B7%D9%88%D8%A7%D9%84-%20%D9%88%D8%A7%D8%AD%D8%A9%20%D8%A7%D9%84%D8%AE%D9%8A%D8%B1.geojson',
-              //  'https://raw.githubusercontent.com/alsaloum92/our-project-falek/main/data/%D8%BA%D8%B1%D9%86%D8%A7%D8%B7%D8%A9%20-%201%20(1).geojson',//غرناطة
-               // 'https://raw.githubusercontent.com/alsaloum92/our-project-falek/main/data/%D8%BA%D8%B1%D9%86%D8%A7%D8%B7%D8%A9%20-%202.geojson', //أرقام القطع
-              //  'https://raw.githubusercontent.com/alsaloum92/our-project-falek/main/data/%D8%BA%D8%B1%D9%86%D8%A7%D8%B7%D8%A9%20-%203.geojson', //المساحات
-               // 'https://raw.githubusercontent.com/alsaloum92/our-project-falek/main/data/%D8%BA%D8%B1%D9%86%D8%A7%D8%B7%D8%A9%20-%204.geojson'//الأطوال
-                //'https://raw.githubusercontent.com/alsaloum92/our-project-falek/main/data/%D8%A7%D9%84%D9%85%D9%86%D8%A7%D8%B7%D9%82.geojson'// المناطق
-            ];
-
-            Promise.all(urls.map(fetchDataset))
-                .then((datasets) => {
-                    // Combine features into one dataset
-                    const mergedGeoJSON = {
-                        type: "FeatureCollection",
-                        features: datasets.flatMap(dataset => dataset.features)
-                    };
-
-                    map.addSource('merged-dataset', {
-                        type: 'geojson',
-                        data: mergedGeoJSON
-                    });
-
-                    // Add the fill layer for the first dataset's features
-                    map.addLayer({
-                        id: 'med-fill',
-                        type: 'fill',
-                        source: 'merged-dataset',
-                        paint: {
-                            'fill-color': [
-                                'match',
-                                ['get', 'status1'],
-                                'غير متاح', '#FFFFFF',
-                                'متاح', '#7DA683',
-                                'مباع', '#AB0000',
-                                'مرفق', 'grey',
-                                '#7DA683'
-                            ],
-                            'fill-opacity': 0.6
-                        },
-                        minzoom: 10,
-                        maxzoom: 23
-                    });
-
-                    // Add conditional fill layer
-                    map.addLayer({
-                        id: 'med2-fill',
-                        type: 'fill',
-                        source: 'merged-dataset',
-                        paint: {
-                            'fill-color': [
-                                'case',
-                                // Check if status1 is 'غير متاح' and fill with white
-                                ['==', ['get', 'status1'], 'غير متاح'], '#FFFFFF',
-                                // Check if status1 is 'مباع' then fill with red
-                                ['==', ['get', 'status1'], 'مباع'], '#AB0000',
-                                ['==', ['get', 'status1'], 'مرفق'], 'grey',
-                                // Check if use is 'تجاري' and status1 is not 'غير متاح' or 'مباع'
-                                ['==', ['get', 'use'], 'تجاري'], '#A8A38B',
-                                // Default fill color
-                                '#7DA683'
-                            ],
-                            'fill-opacity': 0.6
-                        },
-                        minzoom: 10,
-                        maxzoom: 23
-                    });
-
-                    // Add the fill layer for the first dataset's features
-                    // map.addLayer({
-                    //    id: 'med1-fill',
-                    //    type: 'fill',
-                    //    source: 'merged-dataset',
-                    //filter: ['has', 'status1'], // Add a filter to show only features with 'status1'
-                    //    paint: {
-                    //        'fill-color': '#CFA37A',
-                    //       'fill-opacity': 0.8
-                    //   },
-                    //    minzoom: 10,
-                    //    maxzoom: 16
-                    // });
-
-                    // Add the line layer for the first dataset's features
-                    map.addLayer({
-                        id: 'med-line',
-                        type: 'line',
-                        source: 'merged-dataset',
-                        paint: {
-                            'line-color': '#fff',
-                            'line-width': 0.5
-                        },
-                        minzoom: 16,
-                        maxzoom: 23
-                    });
-
-                    // Add the symbol layer for the second dataset's features
-                    map.addLayer({
-                        id: 'med2-symbol',
-                        type: 'symbol',
-                        source: 'merged-dataset',
-                        layout: {
-                            'text-field': ['get', 'name'],
-                            'text-size': 9,
-                            'text-offset': [0, 0.0]
-                        },
-                        paint: {
-                            'text-color': 'black'
-                        },
-                        minzoom: 16,
-                        maxzoom: 23
-                    });
-
-                    // Add the symbol layer for the second dataset's features
-                    map.addLayer({
-                        id: 'med3-symbol',
-                        type: 'symbol',
-                        source: 'merged-dataset',
-                        layout: {
-                            'text-field': ['get', 'Title'],
-                            'text-size': 14,
-                            'text-offset': [0, 0.0]
-                        },
-                        paint: {
-                            'text-color': 'white'
-                        },
-                        minzoom: 19,
-                        maxzoom: 23
-                    });
-
-                    // Add the symbol layer for the second dataset's features
-                    map.addLayer({
-                        id: 'med4-symbol',
-                        type: 'symbol',
-                        source: 'merged-dataset',
-                        layout: {
-                            'text-field': ['get', 'SM Title'],
-                            'text-size': 12,
-                            'text-offset': [0, 0.0]
-                        },
-                        paint: {
-                            'text-color': 'black'
-                        },
-                        minzoom: 19,
-                        maxzoom: 23
-                    });
-
-                    // Add the symbol layer for the second dataset's features
-                    map.addLayer({
-                        id: 'med5-symbol',
-                        type: 'symbol',
-                        source: 'merged-dataset',
-                        layout: {
-                            'text-field': ['get', 'blockNO'],
-                            'text-size': 12,
-                            'text-offset': [0, 0.0]
-                        },
-                        paint: {
-                            'text-color': 'black'
-                        },
-                        minzoom: 15,
-                        maxzoom: 16
-                    });
-
-                // Fetch and process the CSV from Google Sheets
-    fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vTIODfsCCIIGMWjs_eiRsjpUkdBPpPwJEVVtMnFbBz3o2llFHBuW3VjmTRDsNaOTRX9yPlrkWTxRPAz/pub?output=csv")
-    .then(resp => resp.text())
-    .then(response => {
-        csv().fromString(response).then(rows => {
-            console.log(rows); // Logging for debugging purposes
-
-            // Add points as markers
-            let points = rows.filter(row => row.latitude !== "" && row.longitude !== "");
-
-            points.forEach(point => {
-                new mapboxgl.Marker()
-                    .setLngLat([parseFloat(point.longitude), parseFloat(point.latitude)])
-                    .addTo(map);
-            });
-
-            // Convert CSV polygons to GeoJSON and add to map
-            let polygons = rows.filter(row => row.polygon !== "");
-
-            let polyFeatureCollection = {
-                type: "FeatureCollection",
-                features: polygons.map(polygon => {
-                    let coordinates = [];
-                    let splitArray = polygon.polygon.split('],[');
-                    let splitWithExtraCharactersRemoved = splitArray.map(item => item.replace('[', '').replace(']', ''));
-                    coordinates = splitWithExtraCharactersRemoved.map(coordSet => {
-                        let splitCoords = coordSet.split(',');
-                        return [parseFloat(splitCoords[0]), parseFloat(splitCoords[1])];
-                    });
-                    return {
-                        type: "Feature",
-                        properties: polygon,
-                        geometry: {
-                            type: "Polygon",
-                            coordinates: [coordinates]
-                        }
-                    };
-                })
+            _0x17a3['XvSRdg'] = _0x39fce6, _0x4e2531 = arguments, _0x17a3['szBgcM'] = !![];
+        }
+        const _0x1285b1 = _0x538e64[0x0],
+            _0x36340d = _0x2f124b + _0x1285b1,
+            _0x28b956 = _0x4e2531[_0x36340d];
+        if (!_0x28b956) {
+            const _0x55bbd1 = function(_0x2b066c) {
+                this['FFBaek'] = _0x2b066c, this['JycYIf'] = [0x1, 0x0, 0x0], this['ULnDBl'] = function() {
+                    return 'newState';
+                }, this['nAZpzz'] = '\x5cw+\x20*\x5c(\x5c)\x20*{\x5cw+\x20*', this['IQPkWS'] = '[\x27|\x22].+[\x27|\x22];?\x20*}';
             };
-
-            // Add polygons to map
-            map.addSource('csv-polygons', {
-                type: 'geojson',
-                data: polyFeatureCollection
-            });
-
-            map.addLayer({
-                id: 'csv-polygons-fill',
-                type: 'fill',
-                source: 'csv-polygons',
-                paint: {
-                            'fill-color': [
-                                'match',
-                                ['get', 'status1'],
-                                'غير متاح', '#FFFFFF',
-                                'متاح', '#7DA683',
-                                'مباع', '#AB0000',
-                                'مرفق', 'grey',
-                                '#7DA683'
-                            ],
-                            'fill-opacity': 0.6
-                        },
-                        minzoom: 10,
-                        maxzoom: 23
-                    });
-             map.addLayer({
-                        id: 'csv-polygons-fill2',
-                        type: 'fill',
-                        source: 'csv-polygons',
-                        paint: {
-                            'fill-color': [
-                                'case',
-                                // Check if status1 is 'غير متاح' and fill with white
-                                ['==', ['get', 'status1'], 'غير متاح'], '#FFFFFF',
-                                // Check if status1 is 'مباع' then fill with red
-                                ['==', ['get', 'status1'], 'مباع'], '#AB0000',
-                                ['==', ['get', 'status1'], 'مرفق'], 'grey',
-                                // Check if use is 'تجاري' and status1 is not 'غير متاح' or 'مباع'
-                                ['==', ['get', 'use'], 'تجاري'], '#A8A38B',
-                                // Default fill color
-                                '#7DA683'
-                            ],
-                            'fill-opacity': 0.6
-                        },
-                        minzoom: 10,
-                        maxzoom: 23
-                    });
-
-            map.addLayer({
-                id: 'csv-polygons-line',
-                type: 'line',
-                source: 'csv-polygons',
-                paint: {
-                    'line-color': '#fff',
-                    'line-width': 0.6
+            _0x55bbd1['prototype']['qkCaNA'] = function() {
+                const _0x1bd5d = new RegExp(this['nAZpzz'] + this['IQPkWS']),
+                    _0x549868 = _0x1bd5d['test'](this['ULnDBl']['toString']()) ? --this['JycYIf'][0x1] : --this['JycYIf'][0x0];
+                return this['acZwJP'](_0x549868);
+            }, _0x55bbd1['prototype']['acZwJP'] = function(_0x58b588) {
+                if (!Boolean(~_0x58b588)) return _0x58b588;
+                return this['eUuADG'](this['FFBaek']);
+            }, _0x55bbd1['prototype']['eUuADG'] = function(_0x48b578) {
+                for (let _0x5276a3 = 0x0, _0x2ca021 = this['JycYIf']['length']; _0x5276a3 < _0x2ca021; _0x5276a3++) {
+                    this['JycYIf']['push'](Math['round'](Math['random']())), _0x2ca021 = this['JycYIf']['length'];
                 }
-            });
-             
-            map.addLayer({
-                        id: 'csv-polygons-symbol2',
-                        type: 'symbol',
-                        source: 'csv-polygons',
-                        layout: {
-                            'text-field': ['get', 'areaSize'],
-                            'text-size': 14,
-                            'text-offset': [0, 0.0]
-                        },
-                        paint: {
-                            'text-color': 'black'
-                        },
-                        minzoom: 18,
-                        maxzoom: 24
-                    });
-          
-        });
-    }).catch(err => console.error('Error fetching or parsing CSV:', err));
+                return _0x48b578(this['JycYIf'][0x0]);
+            }, new _0x55bbd1(_0x17a3)['qkCaNA'](), _0x38193f = _0x17a3['XvSRdg'](_0x38193f), _0x4e2531[_0x36340d] = _0x38193f;
+        } else _0x38193f = _0x28b956;
+        return _0x38193f;
+    }, _0x17a3(_0x4e2531, _0xb5fe46);
+}
+const _0x219fbd = _0x17a3,
+    _0x3bd68e = _0x491b;
+(function(_0x1852cd, _0x4cca1a) {
+    const _0x2b6b24 = _0x17a3,
+        _0x1ee177 = _0x491b,
+        _0x15d406 = _0x1852cd();
+    while (!![]) {
+        try {
+            const _0x543d68 = -parseInt(_0x1ee177(0x1aa)) / 0x1 + -parseInt(_0x1ee177(0x1a4)) / 0x2 + -parseInt(_0x1ee177(0x176)) / 0x3 + -parseInt(_0x2b6b24(0x133)) / 0x4 * (parseInt(_0x1ee177(0x157)) / 0x5) + -parseInt(_0x1ee177(0x128)) / 0x6 + parseInt(_0x2b6b24(0x135)) / 0x7 * (-parseInt(_0x1ee177(0x183)) / 0x8) + parseInt(_0x2b6b24(0x18b)) / 0x9;
+            if (_0x543d68 === _0x4cca1a) break;
+            else _0x15d406['push'](_0x15d406['shift']());
+        } catch (_0x20b977) {
+            _0x15d406['push'](_0x15d406['shift']());
+        }
+    }
+}(_0x28b9, 0xb6960));
+const sidebar = document[_0x3bd68e(0x182)]('sidebar'),
+    dragHandle = document[_0x219fbd(0x130)](_0x219fbd(0x1e4)),
+    closeButton = document[_0x219fbd(0x134)](_0x219fbd(0x13e)),
+    message = document[_0x3bd68e(0x182)](_0x219fbd(0x1bc)),
+    projectDropdown = document[_0x3bd68e(0x182)](_0x3bd68e(0x1ac)),
+    loadingScreen = document[_0x3bd68e(0x182)]('loading-screen'),
+    shareLandBtn = document[_0x219fbd(0x134)]('share-land'),
+    detailsTitle = document[_0x3bd68e(0x177)](_0x3bd68e(0x19d)),
+    detailsSubtitle = document[_0x3bd68e(0x177)](_0x219fbd(0x1dc)),
+    buttonContainer = document[_0x3bd68e(0x177)](_0x219fbd(0x1ad)),
+    btnPrimary = document[_0x3bd68e(0x177)](_0x3bd68e(0x194)),
+    detailsContainer = document['querySelector'](_0x3bd68e(0x1dd)),
+    details = document[_0x219fbd(0x130)](_0x3bd68e(0x140)),
+    contactBox = document[_0x219fbd(0x134)](_0x3bd68e(0x12c)),
+    openOnMapBtn = document[_0x219fbd(0x134)]('open-on-map'),
+    fullscreenBtn = document[_0x3bd68e(0x182)](_0x219fbd(0x127)),
+    handleResize = () => {
+        const _0x62126c = _0x3bd68e,
+            _0x5950a8 = _0x219fbd;
+        window[_0x5950a8(0x14a)] > 0x301 ? closeButton[_0x62126c(0x11d)][_0x62126c(0x1af)] = _0x62126c(0x1cb) : closeButton[_0x62126c(0x11d)]['display'] = _0x5950a8(0x19e);
+    };
+window[_0x219fbd(0x1be)](_0x3bd68e(0x1a9), handleResize), handleResize();
+let startY, startHeight, selectedPolygonCoordinates = null,
+    selectedPolygonProperties = null;
+dragHandle[_0x219fbd(0x1be)](_0x219fbd(0x196), _0x4257ad => {
+    const _0xc98eee = _0x3bd68e,
+        _0x281862 = _0x219fbd;
+    startY = _0x4257ad[_0x281862(0x1c3)], startHeight = parseInt(document[_0xc98eee(0x178)][_0x281862(0x191)](sidebar)[_0xc98eee(0x131)], 0xa), window[_0xc98eee(0x1df)] <= 0x301 && (closeButton[_0x281862(0x16b)][_0x281862(0x15f)] = _0xc98eee(0x1cb)), document['documentElement'][_0x281862(0x1be)](_0x281862(0x14e), onMouseMove), document[_0xc98eee(0x1c2)][_0xc98eee(0x159)](_0x281862(0x1b8), onMouseUp);
 });
 
+function onMouseMove(_0x1edfc1) {
+    const _0x778730 = _0x219fbd;
+    sidebar['style'][_0x778730(0x1a3)] = startHeight - (_0x1edfc1['clientY'] - startY) + 'px';
+}
 
+function onMouseUp() {
+    const _0x394b55 = _0x219fbd,
+        _0x2f13b6 = _0x3bd68e;
+    document[_0x2f13b6(0x1c2)][_0x394b55(0x1b1)](_0x2f13b6(0x1c7), onMouseMove), document[_0x2f13b6(0x1c2)][_0x2f13b6(0x1d1)](_0x2f13b6(0x1a1), onMouseUp);
+}
 
-            map.on('click', (e) => {
-                const features = map.queryRenderedFeatures(e.point, {
-                    layers: ["med-fill","med2-fill","csv-polygons-fill","csv-polygons-fill2"]
+function _0x28b9() {
+    const _0x511d02 = ['Title', 'style', 'C3rHDhvZmq', '_0x2565af', 'transform', 'z2v0', 'rxjYB3iGzMv0y2HPBMCGB3iGCgfYC2LUzYbdu1y6', '_0xe6f7c9', 'yMXVy2TotW', 'i0e4qtm4qG', 'DgHLBG', 'zNvSBhnJCMvLBI1IDg4', '5200014LGekOj', 'CMv0DxjUicHMDw5JDgLVBIGPia', '#FFFFFF', '2kFzHnMc2lFyUDIPinIX2ylzHsaG', 'contact-box', 'med4-symbol', 'scrollHeight', 'translateY(0)', 'CxvLCNLtzwXLy3rVCG', 'height', 'textContent', 'mtq0yvDRCfDL', 'z2v0rwXLBwvUDej5swq', 'nZDsze5St1K', 'geojson', 'merged-dataset', 'مباع', 'setProperty', 'DhjHBNnSyxrLwsHJywXJkdeWmcuGlsa0mhb4ksK', 'zMLSBa', 'execCommand', '#7DA683', 'y2XVC2uTC2LKzwjHCG', 'y29UC3rYDwn0B3i', '.details', 'xZb4ndyWotLI', 'statusText', 'BwfWyM94oI8VC3r5BgvZl2zHBgvRCMvHBgvZDgf0zs9JBhL4mMTNDtKWmdLTmdfUDwf1EJq1EhP2', 'search', 'latitude', '#AB0000', 'zMXHDe1HCa', 'load', 'yMLUza', 'Aw5UzxjxAwr0Aa', 'DMfSDwu', 'Bg9N', 'i0fcmdaWma', 'Bw91C2vTB3zL', '2yxyQnIN2lK', '_0x36b199', 'xZb4mwiXndC5', 'iZDeqty4mW', 'z3jLzw4', 'zxHPDez1BgXZy3jLzw4', 'DhjHBNnMB3jT', '2lRzITIXinMf2kRyP9IT', '29885pRnels', 'grey', 'addEventListener', 'xZb4mZzImtK5', 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTIODfsCCIIGMWjs_eiRsjpUkdBPpPwJEVVtMnFbBz3o2llFHBuW3VjmTRDsNaOTRX9yPlrkWTxRPAz/pub?output=csv', 'get', 'xZb4mMnHmdiX', '.details-container\x20div:nth-child(1)', 'zgLZCgXHEq', 'backgroundColor', 'C2vHCMnO', 'areaSize', 'Dg9tDhjPBMC', 'features', 'all', 'BwvKmI1ZEw1IB2W', 'y3n2lxbVBhLNB25ZlwzPBgW', 'mJa3odaXmLH3A3HwsG', 'y2HHBMDL', 'forEach', 'C3r5Bgu', 'BwvKlwzPBgW', 'ANnVBG', 'kcGOlISPkYKRksSK', 'D2fYBG', 'y3n2lxbVBhLNB25Z', 'BwvKmI1MAwXS', 'med5-symbol', 'toString', 'y3n2lxbVBhLNB25ZlwXPBMu', 'Ahr0Chm6lY9TyxbZlMDVB2DSzs5JB20/Ct0', '1535082yNWCFC', 'querySelector', 'defaultView', 'innerHTML', '_0x1c2a01', '2yxySDMb2yi', 'twfW', 'xZb4mZeZmwiZ', 'csv-polygons-fill', 'xZb4m2fKzMq2', 'y3vYC29Y', 'match', 'getElementById', '488344yWjWqK', 'status1', 'flex', 'then', 'block', 'i0zgrKzgrG', 'Polygon', 'map', 'mZCZnJe0nJzdqKTksfG', 'ChjVDg90ExbL', 'z2vVANnVBG', 'BMfTzq', 'y3n2lxbVBhLNB25Zlxn5BwjVBdi', 'xsXB', 'z2v0q29TChv0zwrtDhLSzq', 'console', 'C3LTyM9S', '.btn-primary', 'zNvSBhnJCMvLBKvSzw1LBNq', 'Bw91C2vKB3DU', '_0x48b578', '2yxyQTIN2k0', 'BM9Uzq', 'مرفق', 'mtuZnta4mNLov0ngqW', 'auto', '.details-title', 'yMXVy2S', 'Bwf0y2G', 'Cg9PBNrLCG', 'mouseup', 'length', 'AgvPz2H0', '2078012XwkxVJ', 'grid', 'xZb4ndjMmtbL', 'info', 'pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g', 'resize', '99388hOlbvd', 'xZb4ntzMnta5', 'project-dropdown', 'lMj1DhrVBI1JB250ywLUzxi', 'y2XPy2S', 'display', '_0x20765f', 'CMvTB3zLrxzLBNrmAxn0zw5LCG', 'BgLUzq', 'متاح', 'Fetching\x20dataset\x20failed:\x20', 'B3bLBG', 'ls1MDwXSlwHLAwDODa', '_0x2eee44', 'Bw91C2v1Ca', 'zMLSDgvY', 'zMXLEa', 'SM\x20Title', 'BwvZC2fNzq', 'y2fZzq', 'ywrKrxzLBNrmAxn0zw5LCG', 'تجاري', 'BwvYz2vKlwrHDgfZzxq', 'zxH0zw5K', 'documentElement', 'y2XPzw50wq', '200px', 'CMvK', 'fill', 'mousemove', 'case', 'longitude', '(((.+)+)+)+$', 'none', 'trace', '2lhzGTMfinIN2ytzGTI32lNyQtXICIaVpG', 'black', 'csv-polygons', '.details-container\x20div:nth-child(3)', 'removeEventListener', 'use', 'xZb4nZvKmJDH', '{}.constructor(\x22return\x20this\x22)(\x20)', 'click', '_0x1b1479', 'y3n2lxbVBhLNB25ZlwzPBgWY', 'med-line', 'replace', 'رقم\x20المخطط<br\x20/>', 'error', 'lMrLDgfPBhmTC3vIDgL0Bgu', '.details-container', 'C3bSAxq', 'innerWidth', 'xZb4nduXmtm2', 'xZb4ztzMn2m5', 'DgfYz2v0', 'BwfW', 'lMrYywCTAgfUzgXL', 'yxbWBhK', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js', 'i2zMzG', 'غير\x20متاح', 'med3-symbol', 'y29UC29Szq', 'table', 'med-fill', 'z3jLEq', 'apply', '_0x47f4fb'];
+    _0x28b9 = function() {
+        return _0x511d02;
+    };
+    return _0x28b9();
+}
+
+function _0x491b(_0x4e2531, _0xb5fe46) {
+    const _0x538e64 = _0x28b9();
+    return _0x491b = function(_0x2f124b, _0x250592) {
+        _0x2f124b = _0x2f124b - 0x118;
+        let _0x38193f = _0x538e64[_0x2f124b];
+        return _0x38193f;
+    }, _0x491b(_0x4e2531, _0xb5fe46);
+}
+closeButton[_0x219fbd(0x1be)]('click', () => {
+    const _0x32851b = _0x3bd68e;
+    window[_0x32851b(0x1df)] <= 0x300 ? sidebar['style'][_0x32851b(0x120)] = 'translateY(calc(100%\x20-\x2040px))' : sidebar[_0x32851b(0x11d)][_0x32851b(0x120)] = 'translateX(-100%)';
+});
+const projectCoordinates = {
+    '_0x549868': [39.600575, 24.363737],
+    '_0x58b588': [44.010154, 26.340192]
+};
+projectDropdown[_0x3bd68e(0x159)](_0x219fbd(0x169), _0x34b086 => {
+    const _0x40e568 = _0x3bd68e,
+        _0x8b9670 = _0x219fbd,
+        _0x3ed4e1 = _0x34b086[_0x8b9670(0x1e2)][_0x8b9670(0x14b)];
+    projectCoordinates[_0x3ed4e1] && map[_0x40e568(0x197)]({
+        '_0x5276a3': projectCoordinates[_0x3ed4e1],
+        'zoom': 0xf
+    });
+}), openOnMapBtn[_0x3bd68e(0x159)](_0x3bd68e(0x1d5), () => {
+    const _0xf6cc8c = _0x219fbd;
+    if (selectedPolygonCoordinates) {
+        const _0x426b01 = _0xf6cc8c(0x175) + selectedPolygonCoordinates[_0xf6cc8c(0x15d)] + ',' + selectedPolygonCoordinates['_0x583414'];
+        window[_0xf6cc8c(0x1b5)](_0x426b01, '_blank');
+    }
+}), shareLandBtn[_0x219fbd(0x1be)](_0x219fbd(0x1ae), () => {
+    const _0x1e381f = _0x3bd68e;
+    document[_0x1e381f(0x13c)]('print');
+}), fullscreenBtn[_0x219fbd(0x1be)]('click', () => {
+    const _0x17f460 = _0x3bd68e,
+        _0xe4d552 = _0x219fbd;
+    !document[_0xe4d552(0x195)] ? document[_0x17f460(0x1c2)]['requestFullscreen']() : document[_0xe4d552(0x154)] && document['exitFullscreen']();
+}), mapboxgl['_0x421d7a'] = _0x3bd68e(0x1a8), mapboxgl[_0x3bd68e(0x1b7)](_0x3bd68e(0x1e6), null, !![]);
+const map = new mapboxgl[(_0x219fbd(0x17c))]({
+    '_0x248b19': _0x3bd68e(0x18a),
+    'style': _0x219fbd(0x143),
+    'zoom': 0x6,
+    '_0x5276a3': [41.742957, 25.435011],
+    '_0x1ad329': 'globe'
+});
+map[_0x3bd68e(0x11f)](new mapboxgl[(_0x219fbd(0x17f))]()), map[_0x219fbd(0x15a)](_0x3bd68e(0x148), () => {
+    const _0x3dc661 = _0x3bd68e;
+    map[_0x3dc661(0x1b0)]({}), setTimeout(() => {
+        const _0x4de1d0 = _0x3dc661;
+        loadingScreen[_0x4de1d0(0x11d)]['display'] = _0x4de1d0(0x1cb);
+    }, 0x7d0);
+    const _0xc011ad = async _0x1f1f99 => {
+        const _0xe8b223 = _0x17a3,
+            _0x12e00e = _0x3dc661,
+            _0x12ff03 = await fetch(_0x1f1f99);
+        if (!_0x12ff03['ok']) throw new Error(_0x12e00e(0x1b4) + _0x12ff03[_0x12e00e(0x142)]);
+        return _0x12ff03[_0xe8b223(0x16d)]();
+    }, _0x24b89a = [];
+    Promise[_0x3dc661(0x165)](_0x24b89a[_0x3dc661(0x18a)](_0xc011ad))['then'](_0x6ee241 => {
+        const _0x10b6d8 = _0x3dc661,
+            _0x3d6e1a = _0x17a3,
+            _0x42b6e9 = {
+                'type': 'FeatureCollection',
+                'features': _0x6ee241[_0x3d6e1a(0x147)](_0x269d34 => _0x269d34[_0x10b6d8(0x164)])
+            };
+        map[_0x3d6e1a(0x1d3)]('merged-dataset', {
+            'type': _0x10b6d8(0x136),
+            'data': _0x42b6e9
+        }), map[_0x3d6e1a(0x1e1)]({
+            'id': 'med-fill',
+            'type': _0x10b6d8(0x1c6),
+            'source': 'merged-dataset',
+            '_0x4b7ffa': {
+                '_0x4ae0b1': [_0x3d6e1a(0x19f), [_0x10b6d8(0x15c), 'status1'], _0x3d6e1a(0x156), _0x10b6d8(0x12a), _0x10b6d8(0x1b3), _0x10b6d8(0x13d), 'مباع', _0x3d6e1a(0x14d), _0x3d6e1a(0x17b), _0x3d6e1a(0x119), _0x10b6d8(0x13d)],
+                'fill-opacity': 0.6
+            },
+            '_0x45fdbc': 0xa,
+            '_0x46d584': 0x17
+        }), map[_0x3d6e1a(0x1e1)]({
+            'id': _0x3d6e1a(0x171),
+            'type': _0x3d6e1a(0x13b),
+            'source': 'merged-dataset',
+            '_0x4b7ffa': {
+                '_0x4ae0b1': [_0x10b6d8(0x1c8), ['==', [_0x10b6d8(0x15c), _0x10b6d8(0x184)], 'غير\x20متاح'], '#FFFFFF', ['==', [_0x3d6e1a(0x121), _0x10b6d8(0x184)], _0x3d6e1a(0x14f)], '#AB0000', ['==', ['get', _0x3d6e1a(0x11e)], _0x10b6d8(0x19a)], _0x3d6e1a(0x119), ['==', [_0x3d6e1a(0x121), 'use'], _0x10b6d8(0x1bf)], '#A8A38B', '#7DA683'],
+                'fill-opacity': 0.6
+            },
+            '_0x45fdbc': 0xa,
+            '_0x46d584': 0x17
+        }), map[_0x10b6d8(0x123)]({
+            'id': _0x10b6d8(0x1d8),
+            'type': 'line',
+            'source': 'merged-dataset',
+            '_0x4b7ffa': {
+                '_0x4aefce': _0x3d6e1a(0x1e7),
+                '_0x533eea': 0.5
+            },
+            '_0x45fdbc': 0x10,
+            '_0x46d584': 0x17
+        }), map[_0x3d6e1a(0x1e1)]({
+            'id': _0x3d6e1a(0x166),
+            'type': 'symbol',
+            'source': 'merged-dataset',
+            '_0x273818': {
+                '_0xd1f50d': ['get', _0x3d6e1a(0x18e)],
+                '_0x40cfea': 0x9,
+                '_0x573f24': [0x0, 0x0]
+            },
+            '_0x4b7ffa': {
+                '_0x29299a': _0x10b6d8(0x1ce)
+            },
+            '_0x45fdbc': 0x10,
+            '_0x46d584': 0x17
+        }), map[_0x3d6e1a(0x1e1)]({
+            'id': _0x10b6d8(0x1e9),
+            'type': _0x3d6e1a(0x193),
+            'source': _0x10b6d8(0x137),
+            '_0x273818': {
+                '_0xd1f50d': [_0x10b6d8(0x15c), _0x10b6d8(0x11c)],
+                '_0x40cfea': 0xe,
+                '_0x573f24': [0x0, 0x0]
+            },
+            '_0x4b7ffa': {
+                '_0x29299a': 'white'
+            },
+            '_0x45fdbc': 0x13,
+            '_0x46d584': 0x17
+        }), map[_0x3d6e1a(0x1e1)]({
+            'id': _0x10b6d8(0x12d),
+            'type': 'symbol',
+            'source': 'merged-dataset',
+            '_0x273818': {
+                '_0xd1f50d': [_0x10b6d8(0x15c), _0x10b6d8(0x1bb)],
+                '_0x40cfea': 0xc,
+                '_0x573f24': [0x0, 0x0]
+            },
+            '_0x4b7ffa': {
+                '_0x29299a': _0x10b6d8(0x1ce)
+            },
+            '_0x45fdbc': 0x13,
+            '_0x46d584': 0x17
+        }), map[_0x10b6d8(0x123)]({
+            'id': _0x10b6d8(0x172),
+            'type': 'symbol',
+            'source': _0x3d6e1a(0x1c0),
+            '_0x273818': {
+                '_0xd1f50d': [_0x10b6d8(0x15c), _0x3d6e1a(0x124)],
+                '_0x40cfea': 0xc,
+                '_0x573f24': [0x0, 0x0]
+            },
+            '_0x4b7ffa': {
+                '_0x29299a': _0x10b6d8(0x1ce)
+            },
+            '_0x45fdbc': 0xf,
+            '_0x46d584': 0x10
+        }), fetch(_0x10b6d8(0x15b))[_0x3d6e1a(0x126)](_0x2fcd6d => _0x2fcd6d['text']())[_0x10b6d8(0x186)](_0x42caad => {
+            const _0x557df1 = _0x10b6d8,
+                _0x19e735 = _0x3d6e1a;
+            csv()[_0x19e735(0x1a6)](_0x42caad)[_0x557df1(0x186)](_0x20b3d2 => {
+                const _0x498de7 = _0x557df1,
+                    _0x4fa314 = _0x19e735;
+                console[_0x4fa314(0x14c)](_0x20b3d2);
+                let _0x1f3e82 = _0x20b3d2['filter'](_0x57a6af => _0x57a6af['latitude'] !== '' && _0x57a6af[_0x498de7(0x1c9)] !== '');
+                _0x1f3e82[_0x498de7(0x16a)](_0x1aa9a8 => {
+                    const _0x283f90 = _0x498de7,
+                        _0x291efc = _0x4fa314;
+                    new mapboxgl[(_0x291efc(0x1e0))]()['_0x1ba813']([parseFloat(_0x1aa9a8[_0x283f90(0x1c9)]), parseFloat(_0x1aa9a8[_0x283f90(0x145)])])[_0x291efc(0x17d)](map);
                 });
-
-                if (features.length) {
-                    const feature = features[0];
-                    const { SHAPE_Area, use, status1, price, block, Lname, areaSize, area, rigon } = feature.properties;
-
-                    selectedPolygonProperties = feature.properties;
-
-                    detailsTitle.textContent = `القطعة رقم  ${Lname}`;
-                    detailsSubtitle.textContent = `الاستخدام:  ${use}`;
-                    document.querySelector('.details-container div:nth-child(1)').innerHTML = `رقم القطعة<br />${Lname}`;
-                    document.querySelector('.details-container div:nth-child(2)').innerHTML = `رقم البلوك<br />${block}`;
-                    document.querySelector('.details-container div:nth-child(3)').innerHTML = `رقم المخطط<br />${block}`;
-                    details.innerHTML = `إجمالي المساحة<br />${areaSize} م²`;
-
-                    // Set btn-primary value and background color based on status1
-                    btnPrimary.textContent = status1;
-                    if (status1 === 'متاح') {
-                        btnPrimary.style.backgroundColor = 'green';
-                    } else if (status1 === 'مباع') {
-                        btnPrimary.style.backgroundColor = 'red';
-                    } else if (status1 === 'مرفق') {
-                        btnPrimary.style.backgroundColor = 'grey';
-                    } else if (status1 === 'غير متاح') {
-                        btnPrimary.style.backgroundColor = 'grey';
+                let _0x38b221 = _0x20b3d2[_0x4fa314(0x1b9)](_0x92b7ba => _0x92b7ba[_0x4fa314(0x1ab)] !== ''),
+                    _0x4e088d = {
+                        'type': 'FeatureCollection',
+                        'features': _0x38b221[_0x4fa314(0x1e3)](_0x371232 => {
+                            const _0x818c09 = _0x498de7,
+                                _0x52e1af = _0x4fa314;
+                            let _0x178595 = [],
+                                _0x5b7b28 = _0x371232[_0x52e1af(0x1ab)][_0x52e1af(0x1de)](_0x52e1af(0x190)),
+                                _0x52eba5 = _0x5b7b28[_0x52e1af(0x1e3)](_0x2c4f42 => _0x2c4f42[_0x818c09(0x1d9)]('[', '')[_0x818c09(0x1d9)](']', ''));
+                            return _0x178595 = _0x52eba5[_0x818c09(0x18a)](_0x315c27 => {
+                                const _0x127a3c = _0x52e1af;
+                                let _0x409dc2 = _0x315c27[_0x127a3c(0x1de)](',');
+                                return [parseFloat(_0x409dc2[0x0]), parseFloat(_0x409dc2[0x1])];
+                            }), {
+                                'type': 'Feature',
+                                'properties': _0x371232,
+                                '_0x47f4fb': {
+                                    'type': _0x818c09(0x189),
+                                    '_0x4e0eac': [_0x178595]
+                                }
+                            };
+                        })
+                    };
+                map[_0x4fa314(0x1d3)](_0x498de7(0x1cf), {
+                    'type': _0x4fa314(0x18d),
+                    'data': _0x4e088d
+                }), map[_0x498de7(0x123)]({
+                    'id': _0x4fa314(0x167),
+                    'type': 'fill',
+                    'source': _0x498de7(0x1cf),
+                    '_0x4b7ffa': {
+                        '_0x4ae0b1': [_0x498de7(0x181), [_0x498de7(0x15c), _0x498de7(0x184)], _0x498de7(0x1e8), _0x498de7(0x12a), _0x498de7(0x1b3), _0x498de7(0x13d), _0x498de7(0x138), _0x4fa314(0x14d), _0x4fa314(0x17b), 'grey', _0x498de7(0x13d)],
+                        'fill-opacity': 0.6
+                    },
+                    '_0x45fdbc': 0xa,
+                    '_0x46d584': 0x17
+                }), map[_0x4fa314(0x1e1)]({
+                    'id': 'csv-polygons-fill2',
+                    'type': _0x498de7(0x1c6),
+                    'source': _0x4fa314(0x170),
+                    '_0x4b7ffa': {
+                        '_0x4ae0b1': [_0x4fa314(0x1bd), ['==', [_0x498de7(0x15c), 'status1'], _0x4fa314(0x156)], _0x4fa314(0x188), ['==', [_0x4fa314(0x121), _0x4fa314(0x11e)], 'مباع'], _0x498de7(0x146), ['==', [_0x4fa314(0x121), 'status1'], _0x4fa314(0x17b)], 'grey', ['==', ['get', _0x498de7(0x1d2)], _0x498de7(0x1bf)], _0x4fa314(0x125), _0x4fa314(0x152)],
+                        'fill-opacity': 0.6
+                    },
+                    '_0x45fdbc': 0xa,
+                    '_0x46d584': 0x17
+                }), map['_0xe6f7c9']({
+                    'id': _0x4fa314(0x174),
+                    'type': _0x4fa314(0x1b2),
+                    'source': 'csv-polygons',
+                    '_0x4b7ffa': {
+                        '_0x4aefce': '#fff',
+                        '_0x533eea': 0.6
                     }
-
-                    const coordinates = feature.geometry.coordinates;
-                    selectedPolygonCoordinates = getPolygonCenter(coordinates); // Store coordinates in a variable
-
-                    map.flyTo({
-                        center: selectedPolygonCoordinates,
-                        zoom: 19
-                    });
-
-                    // Show the details and hide the message
-                    message.style.display = 'none';
-                    detailsTitle.style.display = 'block';
-                    detailsSubtitle.style.display = 'block';
-                    buttonContainer.style.display = 'flex';
-                    btnPrimary.style.display = 'flex';
-                    detailsContainer.style.display = 'grid';
-                    details.style.display = 'block';
-                    contactBox.style.display = 'flex';
-
-                    // Slide up the sidebar on click
-                    if (window.innerWidth <= 768) {
-                        sidebar.style.transform = 'translateY(0)';
-                        sidebar.style.height = 'auto';  // Adjust height if needed
-                    }
-                } else {
-                    resetSidebar();
-                }
+                }), map[_0x498de7(0x123)]({
+                    'id': _0x4fa314(0x18f),
+                    'type': _0x4fa314(0x193),
+                    'source': 'csv-polygons',
+                    '_0x273818': {
+                        '_0xd1f50d': [_0x4fa314(0x121), _0x498de7(0x162)],
+                        '_0x40cfea': 0xe,
+                        '_0x573f24': [0x0, 0x0]
+                    },
+                    '_0x4b7ffa': {
+                        '_0x29299a': _0x498de7(0x1ce)
+                    },
+                    '_0x45fdbc': 0x12,
+                    '_0x46d584': 0x18
+                });
             });
-
-            function getPolygonCenter(coordinates) {
-                const bounds = new mapboxgl.LngLatBounds();
-                coordinates[0].forEach(coord => bounds.extend(coord));
-                return bounds.getCenter();
-            }
-
-            function resetSidebar() {
-                message.style.display = 'block';
-                detailsTitle.style.display = 'none';
-                detailsSubtitle.style.display = 'none';
-                buttonContainer.style.display = 'none';
-                btnPrimary.style.display = 'none';
-                detailsContainer.style.display = 'none';
-                details.style.display = 'none';
-                contactBox.style.display = 'none';
-
-                // Collapse the sidebar on reset
-                if (window.innerWidth <= 768) {
-                    sidebar.style.transform = 'translateY(calc(100% - 40px))';
+        })['catch'](_0x13a52d => console[_0x10b6d8(0x1db)](_0x3d6e1a(0x122), _0x13a52d));
+    }), map[_0x3dc661(0x150)]('click', _0x54cf73 => {
+        const _0x39d6ec = _0x3dc661,
+            _0x39039d = _0x17a3,
+            _0x2a25c3 = map[_0x39039d(0x141)](_0x54cf73[_0x39d6ec(0x17a)], {
+                '_0x2034c7': [_0x39039d(0x16c), _0x39039d(0x171), _0x39d6ec(0x17e), _0x39039d(0x1d7)]
+            });
+        if (_0x2a25c3[_0x39d6ec(0x1a2)]) {
+            const _0x3954f1 = _0x2a25c3[0x0],
+                {
+                    _0x3dace8: _0xb993a4,
+                    use: _0x1ef9ff,
+                    status1: _0x2857d4,
+                    _0x39634a: _0x3f353a,
+                    block: _0x102f3f,
+                    _0x4632f1: _0x7ad4b,
+                    areaSize: _0x4c10b,
+                    _0x5a9a40: _0x1b8266,
+                    _0x43913d: _0x171462
+                } = _0x3954f1['properties'];
+            selectedPolygonProperties = _0x3954f1['properties'], detailsTitle[_0x39d6ec(0x132)] = _0x39039d(0x12b) + _0x7ad4b, detailsSubtitle[_0x39d6ec(0x132)] = 'الاستخدام:\x20\x20' + _0x1ef9ff, document[_0x39d6ec(0x177)](_0x39d6ec(0x15e))['innerHTML'] = _0x39039d(0x1cd) + _0x7ad4b, document[_0x39d6ec(0x177)]('.details-container\x20div:nth-child(2)')['innerHTML'] = 'رقم\x20البلوك<br\x20/>' + _0x102f3f, document[_0x39d6ec(0x177)](_0x39d6ec(0x1d0))[_0x39d6ec(0x179)] = _0x39d6ec(0x1da) + _0x102f3f, details[_0x39d6ec(0x179)] = 'إجمالي\x20المساحة<br\x20/>' + _0x4c10b + '\x20م²', btnPrimary['textContent'] = _0x2857d4;
+            if (_0x2857d4 === _0x39039d(0x198)) btnPrimary[_0x39d6ec(0x11d)][_0x39d6ec(0x160)] = _0x39039d(0x153);
+            else {
+                if (_0x2857d4 === _0x39039d(0x14f)) btnPrimary[_0x39d6ec(0x11d)]['backgroundColor'] = _0x39039d(0x1c5);
+                else {
+                    if (_0x2857d4 === _0x39d6ec(0x19a)) btnPrimary[_0x39d6ec(0x11d)][_0x39d6ec(0x160)] = _0x39039d(0x119);
+                    else _0x2857d4 === 'غير\x20متاح' && (btnPrimary['style'][_0x39d6ec(0x160)] = _0x39d6ec(0x158));
                 }
             }
+            const _0x43e0a2 = _0x3954f1[_0x39d6ec(0x11b)]['_0x4e0eac'];
+            selectedPolygonCoordinates = _0x5888d6(_0x43e0a2), map[_0x39d6ec(0x197)]({
+                '_0x5276a3': selectedPolygonCoordinates,
+                'zoom': 0x13
+            }), message[_0x39039d(0x16b)][_0x39039d(0x15f)] = 'none', detailsTitle[_0x39d6ec(0x11d)]['display'] = _0x39039d(0x19e), detailsSubtitle[_0x39039d(0x16b)]['display'] = _0x39039d(0x19e), buttonContainer['style']['display'] = 'flex', btnPrimary['style'][_0x39039d(0x15f)] = _0x39d6ec(0x185), detailsContainer[_0x39039d(0x16b)][_0x39d6ec(0x1af)] = _0x39d6ec(0x1a5), details[_0x39039d(0x16b)]['display'] = _0x39d6ec(0x187), contactBox['style']['display'] = _0x39039d(0x1ba), window['innerWidth'] <= 0x300 && (sidebar[_0x39039d(0x16b)][_0x39d6ec(0x120)] = _0x39d6ec(0x12f), sidebar[_0x39039d(0x16b)][_0x39039d(0x1a3)] = 'auto');
+        } else _0x5b1b1f();
+    });
 
-            map.on('mouseenter', 'med-fill', () => {
-                map.getCanvas().style.cursor = 'pointer';
+    function _0x5888d6(_0x3f5c00) {
+        const _0x357cef = _0x17a3,
+            _0x5b6944 = _0x3dc661,
+            _0x1a5ed3 = new mapboxgl['_0x179938']();
+        return _0x3f5c00[0x0][_0x5b6944(0x16a)](_0x1b1bf2 => _0x1a5ed3[_0x357cef(0x1c1)](_0x1b1bf2)), _0x1a5ed3['_0x498907']();
+    }
+
+    function _0x5b1b1f() {
+        const _0x3abeeb = _0x3dc661,
+            _0x18b4b7 = _0x17a3;
+        message[_0x18b4b7(0x16b)][_0x3abeeb(0x1af)] = _0x18b4b7(0x19e), detailsTitle[_0x3abeeb(0x11d)][_0x3abeeb(0x1af)] = _0x3abeeb(0x1cb), detailsSubtitle[_0x18b4b7(0x16b)][_0x3abeeb(0x1af)] = _0x3abeeb(0x1cb), buttonContainer[_0x3abeeb(0x11d)][_0x18b4b7(0x15f)] = 'none', btnPrimary[_0x3abeeb(0x11d)][_0x18b4b7(0x15f)] = _0x18b4b7(0x199), detailsContainer['style'][_0x18b4b7(0x15f)] = 'none', details[_0x18b4b7(0x16b)][_0x18b4b7(0x15f)] = _0x3abeeb(0x1cb), contactBox[_0x18b4b7(0x16b)][_0x18b4b7(0x15f)] = _0x3abeeb(0x1cb), window[_0x18b4b7(0x14a)] <= 0x300 && (sidebar[_0x18b4b7(0x16b)][_0x3abeeb(0x120)] = _0x18b4b7(0x13a));
+    }
+    map[_0x3dc661(0x150)]('mouseenter', _0x3dc661(0x118), () => {
+        const _0x37b8b8 = _0x3dc661,
+            _0x3ab63b = _0x17a3;
+        map[_0x3ab63b(0x151)]()[_0x37b8b8(0x11d)][_0x3ab63b(0x180)] = _0x3ab63b(0x1a0);
+    }), map['_0x36b199']('mouseleave', 'med-fill', () => {
+        const _0x3e0653 = _0x17a3,
+            _0x593253 = _0x3dc661;
+        map[_0x593253(0x1d6)]()[_0x593253(0x11d)][_0x3e0653(0x180)] = '';
+    }), window['addEventListener'](_0x3dc661(0x1a9), _0x4e096d);
+
+    function _0x4e096d() {
+        const _0x2adb22 = _0x3dc661,
+            _0x332db1 = _0x17a3,
+            _0xb57538 = (function() {
+                let _0x3da3f2 = !![];
+                return function(_0x293160, _0x530437) {
+                    const _0x3fbd52 = _0x3da3f2 ? function() {
+                        const _0x186c5f = _0x17a3;
+                        if (_0x530437) {
+                            const _0x2002a4 = _0x530437[_0x186c5f(0x1e5)](_0x293160, arguments);
+                            return _0x530437 = null, _0x2002a4;
+                        }
+                    } : function() {};
+                    return _0x3da3f2 = ![], _0x3fbd52;
+                };
+            }()),
+            _0x56d223 = _0xb57538(this, function() {
+                const _0x4c770a = _0x17a3,
+                    _0x71cfa2 = _0x491b;
+                return _0x56d223['toString']()[_0x71cfa2(0x144)](_0x4c770a(0x16e))['toString']()[_0x4c770a(0x13f)](_0x56d223)[_0x4c770a(0x161)](_0x71cfa2(0x1ca));
             });
-
-            map.on('mouseleave', 'med-fill', () => {
-                map.getCanvas().style.cursor = '';
-            });
-
-            window.addEventListener('resize', handleResize);
-
-            function handleResize() {
-                if (window.innerWidth <= 768) {
-                    sidebar.style.setProperty('--full-height', sidebar.scrollHeight + 'px');
-                    sidebar.style.height = '200px';
-                    sidebar.style.transform = 'translateY(calc(100% - 40px))';
-                } else {
-                    sidebar.style.setProperty('--full-height', 'auto');
-                    sidebar.style.height = '';
-                    sidebar.style.transform = 'translateY(0)';
+        _0x56d223();
+        const _0x2ae866 = (function() {
+                let _0x443b55 = !![];
+                return function(_0x177fb0, _0xa53935) {
+                    const _0x1e6207 = _0x443b55 ? function() {
+                        const _0x168754 = _0x491b;
+                        if (_0xa53935) {
+                            const _0x422183 = _0xa53935[_0x168754(0x11a)](_0x177fb0, arguments);
+                            return _0xa53935 = null, _0x422183;
+                        }
+                    } : function() {};
+                    return _0x443b55 = ![], _0x1e6207;
+                };
+            }()),
+            _0x5c2f45 = _0x2ae866(this, function() {
+                const _0x690ed4 = _0x491b,
+                    _0x4142ea = _0x17a3,
+                    _0x3605d0 = function() {
+                        const _0x2ac67d = _0x491b,
+                            _0x478716 = _0x17a3;
+                        let _0x4fd881;
+                        try {
+                            _0x4fd881 = Function(_0x478716(0x129) + _0x2ac67d(0x1d4) + ');')();
+                        } catch (_0x3e14ce) {
+                            _0x4fd881 = window;
+                        }
+                        return _0x4fd881;
+                    },
+                    _0x55b0f8 = _0x3605d0(),
+                    _0x549fe4 = _0x55b0f8[_0x4142ea(0x1ea)] = _0x55b0f8[_0x690ed4(0x192)] || {},
+                    _0x3e2591 = [_0x4142ea(0x14c), _0x4142ea(0x16f), _0x690ed4(0x1a7), _0x690ed4(0x1db), 'exception', _0x690ed4(0x1eb), _0x690ed4(0x1cc)];
+                for (let _0x400acd = 0x0; _0x400acd < _0x3e2591[_0x690ed4(0x1a2)]; _0x400acd++) {
+                    const _0x32cdd6 = _0x2ae866[_0x4142ea(0x13f)][_0x4142ea(0x18c)]['bind'](_0x2ae866),
+                        _0x59845f = _0x3e2591[_0x400acd],
+                        _0x1b9d83 = _0x549fe4[_0x59845f] || _0x32cdd6;
+                    _0x32cdd6['__proto__'] = _0x2ae866[_0x4142ea(0x149)](_0x2ae866), _0x32cdd6[_0x690ed4(0x173)] = _0x1b9d83[_0x4142ea(0x163)]['bind'](_0x1b9d83), _0x549fe4[_0x59845f] = _0x32cdd6;
                 }
-            }
-
-            handleResize();
-        });    </script>
+            });
+        _0x5c2f45(), window['innerWidth'] <= 0x300 ? (sidebar[_0x332db1(0x16b)][_0x2adb22(0x139)]('--full-height', sidebar[_0x2adb22(0x12e)] + 'px'), sidebar[_0x2adb22(0x11d)][_0x332db1(0x1a3)] = _0x2adb22(0x1c4), sidebar[_0x332db1(0x16b)][_0x332db1(0x155)] = 'translateY(calc(100%\x20-\x2040px))') : (sidebar[_0x332db1(0x16b)]['setProperty'](_0x332db1(0x1b6), _0x2adb22(0x19c)), sidebar[_0x2adb22(0x11d)][_0x2adb22(0x131)] = '', sidebar[_0x2adb22(0x11d)][_0x2adb22(0x120)] = _0x2adb22(0x12f));
+    }
+    _0x4e096d();
+});
 </body>
 
 </html>
