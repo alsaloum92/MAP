@@ -6,270 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>خارطة مشاريع فالك العقارية</title>
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js"></script>
     <script src="https://cdn.rawgit.com/Keyang/node-csvtojson/d41f44aa/browser/csvtojson.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/csvtojson@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f9;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-            direction: rtl;
-        }
-
-        #map {
-            flex: 1;
-        }
-
-        #sidebar {
-            width: 350px;
-            margin-top: 80px;
-            background-color: #f1f1f1e1;
-            padding: 20px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-            z-index: 1;
-            overflow-y: auto;
-            flex-shrink: 0;
-            font-size: 12px;
-            text-align: right;
-            color: #333333;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            transition: transform 0.3s ease, height 0.3s ease;
-        }
-
-        .drag-handle {
-            width: 50px;
-            height: 10px;
-            background-color: #ccc;
-            border-radius: 5px;
-            margin: 0 auto;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .drag-handle img {
-            width: 0px;
-        }
-
-        .close-button {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            color: #333333;
-        }
-
-        .close-button:hover {
-            color: #ff000000;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .button {
-            padding: 10px;
-            font-size: 12px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .button img {
-            width: 18px;
-            height: 18px;
-        }
-
-        .btn-primary {
-            background-color: #198754;
-            color: white;
-            width: 100%;
-            justify-content: center;
-        }
-
-        .btn-secondary {
-            background-color: #CFA37A;
-            color: black;
-            width: calc(50% - 5px);
-            display: flex;
-            justify-content: center;
-        }
-
-        .details-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 5px;
-            align-items: center;
-        }
-
-        .details-container div {
-            background-color: #f4f4f9;
-            border-radius: 5px;
-            text-align: right;
-            padding: 5px;
-        }
-
-        .details-title {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .details-subtitle {
-            color: #6c757d;
-            margin-bottom: 20px;
-        }
-
-        .details {
-            background-color: #CFA37A;
-            text-align: center;
-            padding: 5px;
-        }
-
-        #message {
-            text-align: center;
-            font-size: 18px;
-            margin-top: 50px;
-        }
-
-        #contact-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: auto;
-            /* Move to bottom */
-        }
-
-        #contact-box img {
-            margin-left: 10px;
-        }
-
-        #contact-box a {
-            text-decoration: none;
-            color: #198754;
-            font-size: 14px;
-        }
-
-        #project-dropdown {
-            z-index: 3;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-            font-size: 14px;
-            text-align: right;
-            width: 150px;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 20px;
-        }
-
-        #logo {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            border-radius: 5px;
-            z-index: 3;
-            background-color: rgb(255, 255, 255);
-            width: 60px;
-            height: auto;
-        }
-
-        #loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.877);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-
-        #loading-logo {
-            width: 150px;
-            height: auto;
-        }
-
-        @media(max-width: 768px) {
-            #sidebar {
-                width: auto;
-                max-height: 40%;
-                position: absolute;
-                bottom: 0;
-                top: auto;
-                left: 0;
-                right: 0;
-                transform: translateY(calc(100% - 40px));
-            }
-        }
-
-        /* Full screen control button */
-        #fullscreen-btn {
-            position: absolute;
-            top: 100px;
-            right: 10px;
-            background-color: white;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 1000;
-        }
-
-        #fullscreen-btn img {
-            width: 9px;
-            height: 10px;
-        }
-
-        #legend {
-            z-index: 3;
-            background-color: rgba(255, 255, 255, 0.507);
-            padding: 5px;
-            border-radius: 5px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-            text-align: right;
-            font-size: 9px;
-            width: fit-content;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 75px;
-            display: flex;
-            gap: 20px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 10%;
-            display: inline-block;
-        }
-
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/dist/turf.min.js"></script>
 </head>
 
 <body>
@@ -278,15 +20,31 @@
             alt="Loading Logo">
     </div>
 
-    <img id="logo" src="https://falek.sa/wp-content/uploads/2023/01/شعار-فالك-مفرغ-2@2x-8.png" alt="Logo">
-    <select id="project-dropdown">
-        <option value="">أختر أحد مشاريعنا</option>
-        <option value="project1">مشروع واحة الخير - المدينة المنورة</option>
-        <option value="project2">مشروع غرناطة - بريدة</option>
+    <img id="logo" src="https://falek.sa/wp-content/uploads/2023/01/شعار-فالك-مفرغ-2@2x-8.png" alt="Logo" style="cursor: pointer;">
+
+    <!-- Add an accessible label for the region button -->
+    <button id="region-button" aria-label="اختر المنطقة">اختر المنطقة</button>
+
+    <!-- Popup for regions -->
+    <div id="region-popup" class="popup">
+        <div class="popup-content">
+            <button id="close-popup" class="close-button" aria-label="Close">&times;</button>
+            <h3 class="popup-title">اختر المنطقة</h3>
+            <button data-region="madina" class="region-option" aria-label="Region: Madina">منطقة المدينة
+                المنورة</button>
+            <button data-region="qassim" class="region-option" aria-label="Region: Qassim">منطقة القصيم</button>
+        </div>
+    </div>
+
+    <!-- Add title or label to the project dropdown for better accessibility -->
+    <label for="project-dropdown" class="sr-only">اختر أحد المشاريع</label>
+    <select id="project-dropdown" title="Project selection">
+        <option value="">اختر أحد المشاريع</option>
     </select>
+
     <div id="legend">
         <div class="legend-item">
-            <span>    حالة الأرض:</span>
+            <span>حالة الأرض:</span>
         </div>
         <div class="legend-item">
             <span class="legend-color" style="background-color: #7DA683;"></span>
@@ -307,41 +65,36 @@
     </div>
 
     <div id="map"></div>
-    <button id="fullscreen-btn"><img src="https://img.icons8.com/material-outlined/24/000000/full-screen.png"
-            alt="Fullscreen Icon"></button>
+    <button id="fullscreen-btn" aria-label="Toggle fullscreen"><img
+            src="https://img.icons8.com/material-outlined/24/000000/full-screen.png" alt="Fullscreen Icon"></button>
+
     <div id="sidebar">
-        <div class="drag-handle">
+        <div class="drag-handle" aria-label="Drag the sidebar to resize">
             <img src="https://img.icons8.com/ios-glyphs/30/null/expand.png" alt="Drag Handle">
         </div>
-        <button id="close-sidebar" class="close-button">&times;</button>
+        <button id="close-sidebar" class="close-button" aria-label="Close Sidebar">&times;</button>
         <div id="message">أنقر على القطعة المراد عرض تفاصيلها</div>
         <div class="details-title" style="display: none;"></div>
         <div class="details-subtitle" style="display: none;"></div>
         <div class="button-container" style="display: none;">
-            <button class="button btn-secondary" id="open-on-map"><img
+            <button class="button btn-secondary" id="open-on-map" aria-label="Open in Google Maps"><img
                     src="https://img.icons8.com/ios-glyphs/30/null/marker.png" alt="Map Icon"> فتح على خرائط
                 قوقل</button>
-            <button class="button btn-secondary" id="share-land"><img
+            <button class="button btn-secondary" id="share-land" aria-label="Share land details"><img
                     src="https://img.icons8.com/ios-glyphs/30/null/share.png" alt="Share Icon"> مشاركة الأرض</button>
         </div>
-        <button class="button btn-primary" style="display: none;"></button>
+        <button class="button btn-primary" style="display: none;" aria-label="Land status"></button>
         <div class="details-container" style="display: none;">
-            <div>
-                رقم القطعة<br />
-                522/1
-            </div>
-            <div>
-                رقم البلوك<br />
-                29
-            </div>
-            <div>
-                رقم المخطط<br />
-                3119
-            </div>
+            <div>رقم القطعة<br />522/1</div>
+            <div>رقم البلوك<br />29</div>
+            <div>رقم المخطط<br />3119</div>
+        </div>
+        <div id="line-lengths" style="display: none;">
+            <h3>أطوال القطعة</h3>
+            <ul id="lengthList"></ul>
         </div>
         <div class="details" style="display: none;">
-            إجمالي المساحة<br />
-            713.5 م²
+            إجمالي المساحة<br />713.5 
         </div>
         <div id="contact-box" style="display: none;">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2048px-WhatsApp.svg.png"
@@ -350,441 +103,7 @@
         </div>
     </div>
 
-    <script>
- const _0x1ec7e6 = _0x3ffa,
-    _0xc72080 = _0x2782;
-
-function _0x2782(_0x255977, _0x2dbc0b) {
-    const _0x564542 = _0x1100();
-    return _0x2782 = function(_0x416541, _0x121c28) {
-        _0x416541 = _0x416541 - 0x1e9;
-        let _0x11007b = _0x564542[_0x416541];
-        if (_0x2782['KIUZue'] === undefined) {
-            var _0x3ffaa1 = function(_0x558aa8) {
-                const _0x51041c = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';
-                let _0x1e4ff5 = '',
-                    _0x2782c1 = '',
-                    _0x543154 = _0x1e4ff5 + _0x3ffaa1;
-                for (let _0x1aa6ca = 0x0, _0x277de2, _0x3e932b, _0x4b2f27 = 0x0; _0x3e932b = _0x558aa8['charAt'](_0x4b2f27++); ~_0x3e932b && (_0x277de2 = _0x1aa6ca % 0x4 ? _0x277de2 * 0x40 + _0x3e932b : _0x3e932b, _0x1aa6ca++ % 0x4) ? _0x1e4ff5 += _0x543154['charCodeAt'](_0x4b2f27 + 0xa) - 0xa !== 0x0 ? String['fromCharCode'](0xff & _0x277de2 >> (-0x2 * _0x1aa6ca & 0x6)) : _0x1aa6ca : 0x0) {
-                    _0x3e932b = _0x51041c['indexOf'](_0x3e932b);
-                }
-                for (let _0x1c4d31 = 0x0, _0x2f5613 = _0x1e4ff5['length']; _0x1c4d31 < _0x2f5613; _0x1c4d31++) {
-                    _0x2782c1 += '%' + ('00' + _0x1e4ff5['charCodeAt'](_0x1c4d31)['toString'](0x10))['slice'](-0x2);
-                }
-                return decodeURIComponent(_0x2782c1);
-            };
-            _0x2782['tbHNPC'] = _0x3ffaa1, _0x255977 = arguments, _0x2782['KIUZue'] = !![];
-        }
-        const _0x37b7d9 = _0x564542[0x0],
-            _0x3bb573 = _0x416541 + _0x37b7d9,
-            _0x236924 = _0x255977[_0x3bb573];
-        if (!_0x236924) {
-            const _0x39c250 = function(_0x33a399) {
-                this['HikKQb'] = _0x33a399, this['pHfixo'] = [0x1, 0x0, 0x0], this['LcYNQR'] = function() {
-                    return 'newState';
-                }, this['WQJGdo'] = '\x5cw+\x20*\x5c(\x5c)\x20*{\x5cw+\x20*', this['HOieaI'] = '[\x27|\x22].+[\x27|\x22];?\x20*}';
-            };
-            _0x39c250['prototype']['WhnTus'] = function() {
-                const _0x1bf8cf = new RegExp(this['WQJGdo'] + this['HOieaI']),
-                    _0x73a272 = _0x1bf8cf['test'](this['LcYNQR']['toString']()) ? --this['pHfixo'][0x1] : --this['pHfixo'][0x0];
-                return this['DAlvGr'](_0x73a272);
-            }, _0x39c250['prototype']['DAlvGr'] = function(_0x52df62) {
-                if (!Boolean(~_0x52df62)) return _0x52df62;
-                return this['GiCfct'](this['HikKQb']);
-            }, _0x39c250['prototype']['GiCfct'] = function(_0x2a525b) {
-                for (let _0x50d12 = 0x0, _0x378dd8 = this['pHfixo']['length']; _0x50d12 < _0x378dd8; _0x50d12++) {
-                    this['pHfixo']['push'](Math['round'](Math['random']())), _0x378dd8 = this['pHfixo']['length'];
-                }
-                return _0x2a525b(this['pHfixo'][0x0]);
-            }, new _0x39c250(_0x2782)['WhnTus'](), _0x11007b = _0x2782['tbHNPC'](_0x11007b), _0x255977[_0x3bb573] = _0x11007b;
-        } else _0x11007b = _0x236924;
-        return _0x11007b;
-    }, _0x2782(_0x255977, _0x2dbc0b);
-}
-
-function _0x3ffa(_0x255977, _0x2dbc0b) {
-    const _0x564542 = _0x1100();
-    return _0x3ffa = function(_0x416541, _0x121c28) {
-        _0x416541 = _0x416541 - 0x1e9;
-        let _0x11007b = _0x564542[_0x416541];
-        return _0x11007b;
-    }, _0x3ffa(_0x255977, _0x2dbc0b);
-}(function(_0x386ed6, _0x45ae14) {
-    const _0x3ce97c = _0x3ffa,
-        _0x4b6bc2 = _0x2782,
-        _0x2e8d18 = _0x386ed6();
-    while (!![]) {
-        try {
-            const _0xdb3371 = -parseInt(_0x4b6bc2(0x21d)) / 0x1 * (-parseInt(_0x4b6bc2(0x284)) / 0x2) + -parseInt(_0x4b6bc2(0x26f)) / 0x3 + parseInt(_0x4b6bc2(0x263)) / 0x4 * (parseInt(_0x4b6bc2(0x255)) / 0x5) + parseInt(_0x3ce97c(0x28d)) / 0x6 + -parseInt(_0x3ce97c(0x245)) / 0x7 + -parseInt(_0x3ce97c(0x237)) / 0x8 + parseInt(_0x4b6bc2(0x28b)) / 0x9 * (parseInt(_0x3ce97c(0x283)) / 0xa);
-            if (_0xdb3371 === _0x45ae14) break;
-            else _0x2e8d18['push'](_0x2e8d18['shift']());
-        } catch (_0x2bf266) {
-            _0x2e8d18['push'](_0x2e8d18['shift']());
-        }
-    }
-}(_0x1100, 0xf3b1f));
-const sidebar = document[_0xc72080(0x24b)]('sidebar'),
-    dragHandle = document[_0x1ec7e6(0x27f)](_0xc72080(0x1fb)),
-    closeButton = document[_0xc72080(0x24b)](_0xc72080(0x1f6)),
-    message = document[_0x1ec7e6(0x25e)]('message'),
-    projectDropdown = document['getElementById'](_0xc72080(0x230)),
-    loadingScreen = document[_0xc72080(0x24b)](_0x1ec7e6(0x2a8)),
-    shareLandBtn = document[_0xc72080(0x24b)]('share-land'),
-    detailsTitle = document['querySelector'](_0x1ec7e6(0x261)),
-    detailsSubtitle = document[_0xc72080(0x298)](_0x1ec7e6(0x29d)),
-    buttonContainer = document[_0xc72080(0x298)]('.button-container'),
-    btnPrimary = document[_0x1ec7e6(0x27f)](_0x1ec7e6(0x1fe)),
-    detailsContainer = document[_0xc72080(0x298)](_0x1ec7e6(0x257)),
-    details = document[_0x1ec7e6(0x27f)](_0x1ec7e6(0x22f)),
-    contactBox = document[_0x1ec7e6(0x25e)](_0xc72080(0x2ab)),
-    openOnMapBtn = document[_0xc72080(0x24b)](_0xc72080(0x2a2)),
-    fullscreenBtn = document['getElementById'](_0x1ec7e6(0x286)),
-    handleResize = () => {
-        const _0x38a0a6 = _0xc72080,
-            _0x34c738 = _0x1ec7e6;
-        window[_0x34c738(0x27e)] > 0x301 ? closeButton[_0x34c738(0x276)][_0x34c738(0x271)] = _0x38a0a6(0x212) : closeButton[_0x34c738(0x276)][_0x34c738(0x271)] = 'block';
-    };
-window[_0xc72080(0x2a3)]('resize', handleResize), handleResize();
-let startY, startHeight, selectedPolygonCoordinates = null,
-    selectedPolygonProperties = null;
-dragHandle[_0x1ec7e6(0x221)]('mousedown', _0x5905d0 => {
-    const _0x391bd9 = _0xc72080,
-        _0x312231 = _0x1ec7e6;
-    startY = _0x5905d0[_0x312231(0x201)], startHeight = parseInt(document[_0x391bd9(0x25f)]['getComputedStyle'](sidebar)[_0x391bd9(0x200)], 0xa), window[_0x312231(0x27e)] <= 0x301 && (closeButton['style'][_0x391bd9(0x1fc)] = _0x312231(0x294)), document[_0x391bd9(0x1f8)][_0x391bd9(0x2a3)](_0x312231(0x273), onMouseMove), document[_0x312231(0x1f5)][_0x312231(0x221)](_0x312231(0x242), onMouseUp);
-});
-
-function onMouseMove(_0x4346d0) {
-    const _0x5562e7 = _0xc72080,
-        _0x35a9c9 = _0x1ec7e6;
-    sidebar[_0x35a9c9(0x276)][_0x5562e7(0x200)] = startHeight - (_0x4346d0[_0x5562e7(0x22c)] - startY) + 'px';
-}
-
-function onMouseUp() {
-    const _0x1d3fe0 = _0xc72080,
-        _0x22bd1f = _0x1ec7e6;
-    document[_0x22bd1f(0x1f5)][_0x1d3fe0(0x21b)]('mousemove', onMouseMove), document[_0x1d3fe0(0x1f8)][_0x22bd1f(0x202)]('mouseup', onMouseUp);
-}
-closeButton[_0xc72080(0x2a3)]('click', () => {
-    const _0x129181 = _0x1ec7e6,
-        _0x37c0fc = _0xc72080;
-    window[_0x37c0fc(0x27b)] <= 0x300 ? sidebar[_0x37c0fc(0x27c)][_0x37c0fc(0x24f)] = _0x129181(0x267) : sidebar[_0x37c0fc(0x27c)][_0x129181(0x269)] = _0x37c0fc(0x211);
-});
-
-function _0x1100() {
-    const _0x9a47d8 = ['#AB0000', '_0x5432b3', '32Vvcrhc', 'globe', 'y2HHBMDL', 'csv-polygons-line', 'xZb4mZK3zwzL', '2lhzGTMfinIN2ytyQnMe2yJzGZXICIaVpG', 'toString', 'DhjHBNnSyxrLwcGTmtaWjsK', 'BM9Uzq', '_0x49a931', 'D2HPDgu', 'text', '_0x800a18', 'مباع', 'CMvWBgfJzq', 'y3n2lxbVBhLNB25Z', '2kFzHnMc2lFyUDIPinIX2ylzHsaG', 'CMvTB3zLrxzLBNrmAxn0zw5LCG', 'twfW', 'mtnHy0Lpthi', 'ls1MDwXSlwHLAwDODa', 'translateY(0)', 'zxHPDez1BgXZy3jLzw4', 'addEventListener', 'DxnL', 'get', 'z3jPza', 'تجاري', 'lMrLDgfPBhmTy29UDgfPBMvYigrPDJPUDgGTy2HPBgqOmIK', 'Ahr0Chm6lY9KB2nZlMDVB2DSzs5JB20VC3bYzwfKC2HLzxrZl2qVzs8Yuefdwc0XDLrjt0rMC0ndsuLhtvDQC19LAvjZANbvA2rcuhbqD0PfvLz0tw5gyKj6m28YBgXgsej1vZnwAM1uuKrZtMfpvfjyoxLqBhjRv1r4uLbbEI9WDwi/B3v0Chv0pwnZDG', '#FFFFFF', 'xZb4mMe1mJvI', '.details-container\x20div:nth-child(1)', 'DhjHBNnSyxrLwsGWkq', 'y2XPzw50wq', 'مرفق', 'i0fcmdaWma', '.details', 'ChjVAMvJDc1KCM9Wzg93BG', 'xZb4m2uYy2nM', 'med3-symbol', 'yMXVy2S', 'length', 'BwvKlwzPBgW', 'match', '9658544aShAMh', 'longitude', 'ChjVCgvYDgLLCW', 'status1', 'Aw5Uzxjive1m', '_0x846d44', '],[', 'y3n2lxbVBhLNB25Zlxn5BwjVBdi', '2yxyQnIN2lK', 'Dgv4DenVBNrLBNq', 'open', 'mouseup', '_0x416e26', 'Ahr0Chm6lY9HCgKUBwfWyM94lMnVBs9TyxbIB3GTz2WTANmVCgX1z2LUCY9TyxbIB3GTz2WTCNrSlxrLEhqVDJaUmI4Zl21HCgjVEc1NBc1YDgWTDgv4Dc5QCW', '13631380EqubwT', 'z2v0', 'yMXHy2S', 'csv-polygons-fill2', 'zxH0zw5K', 'y2fZzq', 'z2v0rwXLBwvUDej5swq', 'kcGOlISPkYKRksSK', 'i2zMzG', 'xZb4mZyZmdu5', 'DhjHBNnMB3jT', 'zxjYB3i', '_0x1b8668', 'yMXVy2TotW', 'FeatureCollection', '_0x94fb34', 'mtiYnZe5nuT1vNPiuq', '2kFzHnIN2lpyQTIU2k/yP9MfoIaG', '.details-container', 'zNvSBhnJCMvLBKvSzw1LBNq', 'black', 'DgfYz2v0', 'zM9YrwfJAa', 'CMvXDwvZDez1BgXZy3jLzw4', 'innerHTML', 'getElementById', 'zgvMyxvSDfzPzxC', 'symbol', '.details-title', 'forEach', 'mZjwDMnYAgm', 'BwvKmI1ZEw1IB2W', 'BwvKlwXPBMu', 'split', 'translateY(calc(100%\x20-\x2040px))', 'yxbWBhK', 'transform', '_0x17280a', 'إجمالي\x20المساحة<br\x20/>', 'areaSize', 'غير\x20متاح', 'click', 'mJG4ndG3ogf3qKnQsa', 'execCommand', 'display', 'all', 'mousemove', 'xZb4odaWyte4', '_0x52df62', 'style', '2lRzITIXinMf2kRyP9IT', '_0x462d22', 'block', 'iZDeqty4mW', 'Aw5UzxjxAwr0Aa', 'C3r5Bgu', '#A8A38B', 'innerWidth', 'querySelector', 'height', 'BwvYz2vKlwrHDgfZzxq', '2yxyQTIN2k0', '7684450RMEuLx', 'mJm1mZK0y3fPCxLo', '_0x397efe', 'fullscreen-btn', 'y2f0y2G', 'zMvHDhvYzxm', 'Fetching\x20dataset\x20failed:\x20', 'xZb4otrMyJm0', 'oujrwM5crW', '2yxySDMb2yi', '5114646nuVipK', 'map', 'y3n2lxbVBhLNB25ZlwzPBgW', 'csv-polygons-fill', 'backgroundColor', 'BwfW', 'Bgf0Axr1zgu', 'none', 'i0zgrKzgrG', 'xZb4mZnHmZK5', 'line', 'CxvLCNLtzwXLy3rVCG', 'fill', 'grey', '#fff', 'rxjYB3iGzMv0y2HPBMCGB3iGCgfYC2LUzYbdu1y6', '.details-subtitle', 'constructor', 'flex', 'csv-polygons', 'nteXndy0nM51vMLWsW', 'B3bLBI1VBI1Tyxa', 'ywrKrxzLBNrmAxn0zw5LCG', 'merged-dataset', 'pk.eyJ1IjoiZmFsZWtyZWFsZXN0YXRlIiwiYSI6ImNsemxubTBlbTA0ZngyanIzbnB6cHR5NHgifQ.ljdLBjYgHNBLhFVdTtri9g', 'zMLSBa', 'xZb4nZnHmJCY', 'loading-screen', 'C3rHDhvZmq', '.details-container\x20div:nth-child(3)', 'y29UDgfJDc1IB3G', 'zMXHDe1HCa', 'DgHLBG', '_0x50d12', 'replace', 'green', 'y3vYC29Y', 'use', 'BgLUzq', '1227195KuVzHQ', 'then', '\x20م²', 'filter', 'xZb4mZbJmdK0', '#7DA683', 'y2XPy2S', 'documentElement', 'y2XVC2uTC2LKzwjHCG', 'z3jLEq', 'zg9JDw1LBNrfBgvTzw50', 'search', 'xZb4ngm0yJDH', 'lMrYywCTAgfUzgXL', 'zgLZCgXHEq', 'Bg9N', '.btn-primary', 'xZb4mtbJmtjM', 'AgvPz2H0', 'clientY', 'removeEventListener', 'zMLSDgvY', 'med2-fill', 'Bg9Hza', 'geojson', 'yxv0BW'];
-    _0x1100 = function() {
-        return _0x9a47d8;
-    };
-    return _0x1100();
-}
-const projectCoordinates = {
-    '_0x2f5613': [39.600575, 24.363737],
-    '_0x39c250': [44.010154, 26.340192]
-};
-projectDropdown['addEventListener'](_0xc72080(0x20c), _0x1cb904 => {
-    const _0x1872f4 = _0xc72080,
-        _0x1d9e10 = _0x1cb904[_0x1872f4(0x25a)]['value'];
-    projectCoordinates[_0x1d9e10] && map[_0x1872f4(0x296)]({
-        '_0x1bf8cf': projectCoordinates[_0x1d9e10],
-        'zoom': 0xf
-    });
-}), openOnMapBtn['addEventListener'](_0x1ec7e6(0x26e), () => {
-    const _0x3364bd = _0x1ec7e6,
-        _0x3d37de = _0xc72080;
-    if (selectedPolygonCoordinates) {
-        const _0xba3626 = 'https://maps.google.com?q=' + selectedPolygonCoordinates[_0x3d37de(0x2a7)] + ',' + selectedPolygonCoordinates[_0x3364bd(0x275)];
-        window[_0x3364bd(0x241)](_0xba3626, '_blank');
-    }
-}), shareLandBtn[_0xc72080(0x2a3)](_0xc72080(0x1f4), () => {
-    const _0x5a28f0 = _0x1ec7e6;
-    document[_0x5a28f0(0x270)]('print');
-}), fullscreenBtn[_0xc72080(0x2a3)](_0xc72080(0x1f4), () => {
-    const _0x484a56 = _0x1ec7e6,
-        _0x4527a0 = _0xc72080;
-    !document[_0x4527a0(0x258)] ? document[_0x484a56(0x1f5)][_0x4527a0(0x25c)]() : document[_0x4527a0(0x220)] && document[_0x4527a0(0x220)]();
-}), mapboxgl[_0xc72080(0x229)] = _0x1ec7e6(0x2a5), mapboxgl[_0x1ec7e6(0x2ae)](_0xc72080(0x244), null, !![]);
-const map = new mapboxgl[(_0xc72080(0x21c))]({
-    '_0x378dd8': _0xc72080(0x292),
-    'style': 'mapbox://styles/falekrealestate/clyx2kgu9009m01nuauz45xzv',
-    'zoom': 0x6,
-    '_0x1bf8cf': [41.742957, 25.435011],
-    '_0x52b7ea': _0x1ec7e6(0x20b)
-});
-map['_0x1d81fb'](new mapboxgl[(_0x1ec7e6(0x26a))]()), map['_0x397efe'](_0xc72080(0x205), () => {
-    const _0x33a4c3 = _0x1ec7e6,
-        _0x2d910f = _0xc72080;
-    map[_0x2d910f(0x231)]({}), setTimeout(() => {
-        const _0x1b9f64 = _0x2d910f,
-            _0x3e4cac = _0x3ffa;
-        loadingScreen[_0x3e4cac(0x276)]['display'] = _0x1b9f64(0x212);
-    }, 0x7d0);
-    const _0x34ec08 = async _0xa0f60c => {
-        const _0x228664 = _0x3ffa,
-            _0x3094d9 = await fetch(_0xa0f60c);
-        if (!_0x3094d9['ok']) throw new Error(_0x228664(0x289) + _0x3094d9['statusText']);
-        return _0x3094d9['json']();
-    }, _0x251bbc = [];
-    Promise[_0x33a4c3(0x272)](_0x251bbc[_0x2d910f(0x292)](_0x34ec08))[_0x2d910f(0x2ad)](_0x989c56 => {
-        const _0x1c8030 = _0x33a4c3,
-            _0x7f3589 = _0x2d910f,
-            _0x1c0597 = {
-                'type': 'FeatureCollection',
-                'features': _0x989c56[_0x7f3589(0x2ac)](_0x3cc092 => _0x3cc092[_0x7f3589(0x288)])
-            };
-        map[_0x7f3589(0x1ff)](_0x1c8030(0x2a4), {
-            'type': _0x1c8030(0x206),
-            'data': _0x1c0597
-        }), map[_0x7f3589(0x274)]({
-            'id': _0x7f3589(0x235),
-            'type': 'fill',
-            'source': _0x1c8030(0x2a4),
-            '_0x6e58ae': {
-                '_0x5c40c8': [_0x1c8030(0x236), [_0x7f3589(0x246), _0x1c8030(0x23a)], 'غير\x20متاح', _0x7f3589(0x295), 'متاح', _0x7f3589(0x27a), _0x7f3589(0x23f), _0x1c8030(0x208), 'مرفق', _0x1c8030(0x29a), '#7DA683'],
-                'fill-opacity': 0.6
-            },
-            '_0x3f8945': 0xa,
-            '_0x30caae': 0x17
-        }), map['_0x800a18']({
-            'id': _0x1c8030(0x204),
-            'type': 'fill',
-            'source': _0x7f3589(0x281),
-            '_0x6e58ae': {
-                '_0x5c40c8': ['case', ['==', [_0x1c8030(0x223), _0x7f3589(0x2a9)], _0x1c8030(0x26d)], '#FFFFFF', ['==', [_0x1c8030(0x223), _0x1c8030(0x23a)], _0x7f3589(0x23f)], _0x1c8030(0x208), ['==', ['get', _0x7f3589(0x2a9)], _0x1c8030(0x22d)], _0x7f3589(0x1f7), ['==', ['get', _0x7f3589(0x222)], _0x1c8030(0x225)], _0x1c8030(0x27d), _0x1c8030(0x1f3)],
-                'fill-opacity': 0.6
-            },
-            '_0x3f8945': 0xa,
-            '_0x30caae': 0x17
-        }), map[_0x7f3589(0x274)]({
-            'id': _0x7f3589(0x265),
-            'type': _0x1c8030(0x297),
-            'source': 'merged-dataset',
-            '_0x6e58ae': {
-                '_0x7b103e': _0x7f3589(0x24d),
-                '_0x20648a': 0.5
-            },
-            '_0x3f8945': 0x10,
-            '_0x30caae': 0x17
-        }), map['_0x800a18']({
-            'id': _0x7f3589(0x264),
-            'type': 'symbol',
-            'source': 'merged-dataset',
-            '_0xe43056': {
-                '_0x53cd5c': ['get', 'name'],
-                '_0x8a0e97': 0x9,
-                '_0x15242b': [0x0, 0x0]
-            },
-            '_0x6e58ae': {
-                '_0xde22d0': _0x7f3589(0x247)
-            },
-            '_0x3f8945': 0x10,
-            '_0x30caae': 0x17
-        }), map[_0x1c8030(0x216)]({
-            'id': _0x1c8030(0x232),
-            'type': _0x1c8030(0x260),
-            'source': 'merged-dataset',
-            '_0xe43056': {
-                '_0x53cd5c': [_0x7f3589(0x246), 'Title'],
-                '_0x8a0e97': 0xe,
-                '_0x15242b': [0x0, 0x0]
-            },
-            '_0x6e58ae': {
-                '_0xde22d0': _0x7f3589(0x214)
-            },
-            '_0x3f8945': 0x13,
-            '_0x30caae': 0x17
-        }), map[_0x7f3589(0x274)]({
-            'id': 'med4-symbol',
-            'type': _0x1c8030(0x260),
-            'source': _0x7f3589(0x281),
-            '_0xe43056': {
-                '_0x53cd5c': [_0x7f3589(0x246), 'SM\x20Title'],
-                '_0x8a0e97': 0xc,
-                '_0x15242b': [0x0, 0x0]
-            },
-            '_0x6e58ae': {
-                '_0xde22d0': _0x1c8030(0x259)
-            },
-            '_0x3f8945': 0x13,
-            '_0x30caae': 0x17
-        }), map[_0x1c8030(0x216)]({
-            'id': 'med5-symbol',
-            'type': _0x1c8030(0x260),
-            'source': _0x1c8030(0x2a4),
-            '_0xe43056': {
-                '_0x53cd5c': [_0x7f3589(0x246), _0x7f3589(0x252)],
-                '_0x8a0e97': 0xc,
-                '_0x15242b': [0x0, 0x0]
-            },
-            '_0x6e58ae': {
-                '_0xde22d0': 'black'
-            },
-            '_0x3f8945': 0xf,
-            '_0x30caae': 0x10
-        }), fetch(_0x7f3589(0x227))['then'](_0x1989fd => _0x1989fd[_0x1c8030(0x215)]())[_0x1c8030(0x1ef)](_0x3d4b6a => {
-            const _0x5cca22 = _0x7f3589;
-            csv()[_0x5cca22(0x24e)](_0x3d4b6a)[_0x5cca22(0x2ad)](_0x60d082 => {
-                const _0x1343d8 = _0x3ffa,
-                    _0x36e6d7 = _0x5cca22;
-                console[_0x36e6d7(0x1fd)](_0x60d082);
-                let _0x7d5a4f = _0x60d082[_0x1343d8(0x1f1)](_0x4a6c2c => _0x4a6c2c[_0x36e6d7(0x293)] !== '' && _0x4a6c2c['longitude'] !== '');
-                _0x7d5a4f[_0x1343d8(0x262)](_0x226ed3 => {
-                    const _0x59182b = _0x1343d8,
-                        _0x2e94c0 = _0x36e6d7;
-                    new mapboxgl['_0x3d2e47']()[_0x2e94c0(0x1fa)]([parseFloat(_0x226ed3[_0x59182b(0x238)]), parseFloat(_0x226ed3[_0x2e94c0(0x293)])])[_0x59182b(0x243)](map);
-                });
-                let _0x3f35ed = _0x60d082[_0x36e6d7(0x203)](_0x1551dc => _0x1551dc[_0x1343d8(0x254)] !== ''),
-                    _0x5dbe97 = {
-                        'type': _0x1343d8(0x253),
-                        'features': _0x3f35ed[_0x1343d8(0x28e)](_0x1a0339 => {
-                            const _0x5bd696 = _0x1343d8,
-                                _0x124ace = _0x36e6d7;
-                            let _0x4f6d1a = [],
-                                _0x4eef20 = _0x1a0339[_0x124ace(0x28a)][_0x5bd696(0x266)](_0x5bd696(0x23d)),
-                                _0x3fdc28 = _0x4eef20['map'](_0x29400e => _0x29400e[_0x5bd696(0x1e9)]('[', '')[_0x124ace(0x218)](']', ''));
-                            return _0x4f6d1a = _0x3fdc28[_0x124ace(0x292)](_0x21072d => {
-                                let _0x1893a5 = _0x21072d['split'](',');
-                                return [parseFloat(_0x1893a5[0x0]), parseFloat(_0x1893a5[0x1])];
-                            }), {
-                                'type': 'Feature',
-                                'properties': _0x1a0339,
-                                '_0x462d22': {
-                                    'type': 'Polygon',
-                                    '_0x49a931': [_0x4f6d1a]
-                                }
-                            };
-                        })
-                    };
-                map[_0x36e6d7(0x1ff)](_0x1343d8(0x2a0), {
-                    'type': _0x1343d8(0x206),
-                    'data': _0x5dbe97
-                }), map[_0x36e6d7(0x274)]({
-                    'id': _0x1343d8(0x290),
-                    'type': _0x1343d8(0x299),
-                    'source': _0x36e6d7(0x219),
-                    '_0x6e58ae': {
-                        '_0x5c40c8': [_0x1343d8(0x236), [_0x36e6d7(0x246), _0x1343d8(0x23a)], _0x36e6d7(0x277), '#FFFFFF', 'متاح', _0x36e6d7(0x27a), 'مباع', _0x1343d8(0x208), _0x36e6d7(0x28c), _0x1343d8(0x29a), _0x1343d8(0x1f3)],
-                        'fill-opacity': 0.6
-                    },
-                    '_0x3f8945': 0xa,
-                    '_0x30caae': 0x17
-                }), map['_0x800a18']({
-                    'id': _0x1343d8(0x248),
-                    'type': _0x36e6d7(0x2a6),
-                    'source': _0x36e6d7(0x219),
-                    '_0x6e58ae': {
-                        '_0x5c40c8': [_0x36e6d7(0x24a), ['==', [_0x36e6d7(0x246), _0x1343d8(0x23a)], _0x1343d8(0x26d)], _0x1343d8(0x228), ['==', ['get', _0x36e6d7(0x2a9)], 'مباع'], _0x36e6d7(0x22e), ['==', ['get', _0x1343d8(0x23a)], 'مرفق'], 'grey', ['==', [_0x1343d8(0x223), _0x1343d8(0x1ec)], 'تجاري'], '#A8A38B', _0x36e6d7(0x27a)],
-                        'fill-opacity': 0.6
-                    },
-                    '_0x3f8945': 0xa,
-                    '_0x30caae': 0x17
-                }), map[_0x1343d8(0x216)]({
-                    'id': _0x1343d8(0x20d),
-                    'type': _0x36e6d7(0x1ed),
-                    'source': _0x1343d8(0x2a0),
-                    '_0x6e58ae': {
-                        '_0x7b103e': _0x1343d8(0x29b),
-                        '_0x20648a': 0.6
-                    }
-                }), map[_0x36e6d7(0x274)]({
-                    'id': _0x36e6d7(0x23e),
-                    'type': 'symbol',
-                    'source': _0x36e6d7(0x219),
-                    '_0xe43056': {
-                        '_0x53cd5c': [_0x36e6d7(0x246), _0x1343d8(0x26c)],
-                        '_0x8a0e97': 0xe,
-                        '_0x15242b': [0x0, 0x0]
-                    },
-                    '_0x6e58ae': {
-                        '_0xde22d0': _0x1343d8(0x259)
-                    },
-                    '_0x3f8945': 0x12,
-                    '_0x30caae': 0x18
-                });
-            });
-        })[_0x7f3589(0x287)](_0xc8e28d => console[_0x7f3589(0x250)](_0x7f3589(0x29c), _0xc8e28d));
-    }), map[_0x2d910f(0x20e)](_0x2d910f(0x1f4), _0x35fd6b => {
-        const _0x51c13a = _0x2d910f,
-            _0x37027c = _0x33a4c3,
-            _0x443f6e = map[_0x37027c(0x209)](_0x35fd6b[_0x51c13a(0x1f2)], {
-                '_0x21e367': ['med-fill', 'med2-fill', _0x51c13a(0x28f), _0x37027c(0x248)]
-            });
-        if (_0x443f6e[_0x37027c(0x234)]) {
-            const _0x15eae0 = _0x443f6e[0x0],
-                {
-                    _0x36dfe8: _0x543524,
-                    use: _0x3d0b9d,
-                    status1: _0x2203cf,
-                    _0x4c96a9: _0x7af3b,
-                    block: _0x18fce8,
-                    _0x5f44b9: _0x4937bf,
-                    areaSize: _0x2f7bd7,
-                    _0x1a6e3f: _0xb5235a,
-                    _0x57317d: _0x2eb5d3
-                } = _0x15eae0['properties'];
-            selectedPolygonProperties = _0x15eae0[_0x51c13a(0x239)], detailsTitle['textContent'] = _0x51c13a(0x21a) + _0x4937bf, detailsSubtitle['textContent'] = _0x51c13a(0x256) + _0x3d0b9d, document[_0x51c13a(0x298)](_0x37027c(0x22a))[_0x51c13a(0x23b)] = 'رقم\x20القطعة<br\x20/>' + _0x4937bf, document[_0x51c13a(0x298)](_0x51c13a(0x226))[_0x37027c(0x25d)] = _0x51c13a(0x20f) + _0x18fce8, document[_0x37027c(0x27f)](_0x37027c(0x2aa))[_0x51c13a(0x23b)] = 'رقم\x20المخطط<br\x20/>' + _0x18fce8, details[_0x37027c(0x25d)] = _0x37027c(0x26b) + _0x2f7bd7 + _0x37027c(0x1f0), btnPrimary[_0x51c13a(0x240)] = _0x2203cf;
-            if (_0x2203cf === _0x51c13a(0x282)) btnPrimary[_0x37027c(0x276)][_0x37027c(0x291)] = _0x37027c(0x1ea);
-            else {
-                if (_0x2203cf === _0x37027c(0x217)) btnPrimary[_0x37027c(0x276)][_0x37027c(0x291)] = 'red';
-                else {
-                    if (_0x2203cf === _0x51c13a(0x28c)) btnPrimary[_0x37027c(0x276)][_0x37027c(0x291)] = _0x51c13a(0x1f7);
-                    else _0x2203cf === _0x51c13a(0x277) && (btnPrimary[_0x37027c(0x276)]['backgroundColor'] = _0x37027c(0x29a));
-                }
-            }
-            const _0x328f1c = _0x15eae0[_0x37027c(0x278)][_0x37027c(0x213)];
-            selectedPolygonCoordinates = _0x1ce907(_0x328f1c), map['_0x33a399']({
-                '_0x1bf8cf': selectedPolygonCoordinates,
-                'zoom': 0x13
-            }), message[_0x37027c(0x276)][_0x51c13a(0x1fc)] = _0x51c13a(0x212), detailsTitle[_0x51c13a(0x27c)][_0x37027c(0x271)] = _0x37027c(0x279), detailsSubtitle[_0x51c13a(0x27c)][_0x51c13a(0x1fc)] = _0x51c13a(0x233), buttonContainer['style'][_0x37027c(0x271)] = _0x37027c(0x29f), btnPrimary[_0x37027c(0x276)]['display'] = _0x37027c(0x29f), detailsContainer[_0x51c13a(0x27c)][_0x37027c(0x271)] = _0x51c13a(0x224), details[_0x51c13a(0x27c)]['display'] = _0x37027c(0x279), contactBox[_0x37027c(0x276)][_0x51c13a(0x1fc)] = 'flex', window['innerWidth'] <= 0x300 && (sidebar[_0x37027c(0x276)][_0x37027c(0x269)] = _0x51c13a(0x22b), sidebar['style']['height'] = 'auto');
-        } else _0x5409aa();
-    });
-
-    function _0x1ce907(_0x21241e) {
-        const _0x32547a = _0x2d910f,
-            _0x1c8970 = _0x33a4c3,
-            _0x546f23 = new mapboxgl[(_0x1c8970(0x251))]();
-        return _0x21241e[0x0][_0x32547a(0x25b)](_0x4c4d1d => _0x546f23[_0x32547a(0x249)](_0x4c4d1d)), _0x546f23['_0x1a6783']();
-    }
-
-    function _0x5409aa() {
-        const _0x360f37 = _0x33a4c3,
-            _0x1dd6cc = _0x2d910f;
-        message[_0x1dd6cc(0x27c)]['display'] = _0x360f37(0x279), detailsTitle['style']['display'] = 'none', detailsSubtitle[_0x1dd6cc(0x27c)]['display'] = _0x360f37(0x294), buttonContainer[_0x1dd6cc(0x27c)][_0x360f37(0x271)] = _0x360f37(0x294), btnPrimary[_0x360f37(0x276)][_0x360f37(0x271)] = _0x1dd6cc(0x212), detailsContainer[_0x1dd6cc(0x27c)][_0x1dd6cc(0x1fc)] = _0x1dd6cc(0x212), details[_0x1dd6cc(0x27c)][_0x360f37(0x271)] = _0x360f37(0x294), contactBox[_0x360f37(0x276)][_0x1dd6cc(0x1fc)] = _0x1dd6cc(0x212), window[_0x360f37(0x27e)] <= 0x300 && (sidebar[_0x360f37(0x276)][_0x360f37(0x269)] = _0x360f37(0x267));
-    }
-    map['_0x397efe']('mouseenter', 'med-fill', () => {
-        const _0x488927 = _0x33a4c3;
-        map[_0x488927(0x23c)]()['style']['cursor'] = 'pointer';
-    }), map[_0x33a4c3(0x285)]('mouseleave', _0x2d910f(0x235), () => {
-        const _0x4d0dba = _0x2d910f,
-            _0xe29f6e = _0x33a4c3;
-        map[_0xe29f6e(0x23c)]()['style'][_0x4d0dba(0x1eb)] = '';
-    }), window[_0x2d910f(0x2a3)]('resize', _0x178208);
-
-    function _0x178208() {
-        const _0x2427fa = _0x33a4c3,
-            _0x5477a8 = _0x2d910f,
-            _0x313bb7 = (function() {
-                let _0x82f89b = !![];
-                return function(_0x5b627c, _0x50d14c) {
-                    const _0x354f3d = _0x82f89b ? function() {
-                        const _0x543655 = _0x2782;
-                        if (_0x50d14c) {
-                            const _0x1cf7bd = _0x50d14c[_0x543655(0x268)](_0x5b627c, arguments);
-                            return _0x50d14c = null, _0x1cf7bd;
-                        }
-                    } : function() {};
-                    return _0x82f89b = ![], _0x354f3d;
-                };
-            }()),
-            _0x3440cc = _0x313bb7(this, function() {
-                const _0x82d255 = _0x2782,
-                    _0x315f47 = _0x3ffa;
-                return _0x3440cc['toString']()['search']('(((.+)+)+)+$')[_0x315f47(0x210)]()[_0x315f47(0x29e)](_0x3440cc)[_0x315f47(0x1f9)](_0x82d255(0x24c));
-            });
-        _0x3440cc(), window['innerWidth'] <= 0x300 ? (sidebar[_0x5477a8(0x27c)]['setProperty']('--full-height', sidebar['scrollHeight'] + 'px'), sidebar[_0x2427fa(0x276)]['height'] = '200px', sidebar[_0x2427fa(0x276)][_0x2427fa(0x269)] = _0x2427fa(0x267)) : (sidebar[_0x2427fa(0x276)]['setProperty'](_0x5477a8(0x21e), _0x5477a8(0x207)), sidebar[_0x5477a8(0x27c)][_0x2427fa(0x280)] = '', sidebar[_0x5477a8(0x27c)][_0x5477a8(0x24f)] = _0x2427fa(0x21f));
-    }
-    _0x178208();
-});
-        <script>
+    <script src="script.js"></script>
 </body>
 
 </html>
