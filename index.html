@@ -12,6 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/csvtojson@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/dist/turf.min.js"></script>
+    <script type="module" src="csvLinks.js"></script>
+    <script type="module" src="script.js"></script>
 </head>
 
 <body>
@@ -20,7 +22,8 @@
             alt="Loading Logo">
     </div>
 
-    <img id="logo" src="https://falek.sa/wp-content/uploads/2023/01/شعار-فالك-مفرغ-2@2x-8.png" alt="Logo" style="cursor: pointer;">
+    <img id="logo" src="https://falek.sa/wp-content/uploads/2023/01/شعار-فالك-مفرغ-2@2x-8.png" alt="Logo"
+        style="cursor: pointer;">
 
     <!-- Add an accessible label for the region button -->
     <button id="region-button" aria-label="اختر المنطقة">اختر المنطقة</button>
@@ -73,7 +76,10 @@
             <img src="https://img.icons8.com/ios-glyphs/30/null/expand.png" alt="Drag Handle">
         </div>
         <button id="close-sidebar" class="close-button" aria-label="Close Sidebar">&times;</button>
-        <div id="message">أنقر على القطعة المراد عرض تفاصيلها</div>
+        <!-- New Text Element -->
+    <div id="top-text" class="center-text" style="display: none;" > تفاصيل العقار </div>
+        <div id="message">أختر منطقة وحدد مشروع وحدد القطعة المراد عرض تفاصيلها</div>
+        <button class="button btn-primary" style="display: none;" aria-label="Land status"></button>
         <div class="details-title" style="display: none;"></div>
         <div class="details-subtitle" style="display: none;"></div>
         <div class="button-container" style="display: none;">
@@ -83,7 +89,6 @@
             <button class="button btn-secondary" id="share-land" aria-label="Share land details"><img
                     src="https://img.icons8.com/ios-glyphs/30/null/share.png" alt="Share Icon"> مشاركة الأرض</button>
         </div>
-        <button class="button btn-primary" style="display: none;" aria-label="Land status"></button>
         <div class="details-container" style="display: none;">
             <div>رقم القطعة<br />522/1</div>
             <div>رقم البلوك<br />29</div>
@@ -94,13 +99,12 @@
             <ul id="lengthList"></ul>
         </div>
         <div class="details" style="display: none;">
-            إجمالي المساحة<br />713.5 
+            إجمالي المساحة<br />713.5
         </div>
-        <div id="contact-box" style="display: none;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2048px-WhatsApp.svg.png"
-                alt="WhatsApp" width="24" height="24">
-            <a href="https://wa.me/966547719991" target="_blank">مهتم بالشراء تواصل معنا</a>
-        </div>
+        <button id="contact-box" class="contact-button" style="display: none;" aria-label="Contact us via WhatsApp">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2048px-WhatsApp.svg.png" alt="WhatsApp" width="24" height="24">
+            <a href="https://wa.me/966547719991" target="_blank" style="text-decoration: none; color: inherit;">مهتم بالشراء تواصل معنا</a>
+        </button>
     </div>
 
     <script src="script.js"></script>
