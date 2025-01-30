@@ -16,8 +16,9 @@ body {
 
 #sidebar {
     width: 350px;
-    margin-top: 80px;
-    background-color: #f1f1f1e1;
+    margin-top: 60px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
     padding: 20px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     z-index: 1;
@@ -29,7 +30,7 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
     transition: transform 0.3s ease, height 0.3s ease;
 }
 
@@ -195,7 +196,14 @@ body {
     background-color: #198754;
     font-family: 'Open Sans Bold';
     color: rgb(255, 255, 255);
-    width: 100%;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: none; /* Initially hidden */
+    width: 20%;
+    text-align: center;
+    margin-top: 10px; /* Adjust as necessary */
+    margin-right: 80%; /* Adjust as necessary */margin-top: 10px; /* Adjust as necessary */
+
     justify-content: center;
 }
 
@@ -215,8 +223,20 @@ body {
     align-items: center;
 }
 
+.center-text {
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 5px;
+    font-size: 20px;
+    font-family: 'Open Sans Bold';
+    font-weight: bold;
+    padding: 10px 20px;
+    margin-top: 10px; /* Space between text and the next element */
+    margin-bottom: 10px; /* Space between text and the next element */
+}
+
 .details-container div {
-    background-color: #b1b1b1;
+    background-color: #ffffff;
     border-radius: 5px;
     text-align: right;
     font-family: 'Open Sans Bold';
@@ -237,18 +257,27 @@ body {
 
 .details {
     background-color: #CFA37A;
+    border-radius: 5px;
     font-family: 'Open Sans Bold';
+    font-weight: bold;
     text-align: center;
     padding: 5px;
 }
 
 #message {
     text-align: center;
+    font-family: 'Open Sans Bold';
     font-size: 18px;
     margin-top: 50px;
 }
 
 #contact-box {
+    background-color: #198754;
+    border-color: transparent;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    font-family: 'Open Sans Bold';
     display: flex;
     align-items: center;
     justify-content: center;
