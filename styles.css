@@ -262,6 +262,7 @@ body {
     font-weight: bold;
     text-align: center;
     padding: 5px;
+    margin-top: 5px;
 }
 
 #message {
@@ -281,7 +282,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: auto;
+    margin-top: 5px;
 }
 
 #contact-box img {
@@ -296,18 +297,20 @@ body {
 
 #project-dropdown {
     z-index: 3;
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 5px;
+    background-color: rgba(255, 255, 255, 0.688);
+    padding: 10px;
     border-radius: 5px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     font-size: 14px;
-    text-align: right;
-    width: 120px;
+    font-weight: bold;
+    text-align: center;
+    width: 200px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     top: 55px;
     display: none;
+    margin-bottom: 5px;
 }
 
 #logo {
@@ -383,7 +386,7 @@ body {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 90px;
+    top: 100px;
     display: flex;
     gap: 20px;
 }
