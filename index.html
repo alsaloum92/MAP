@@ -4,15 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الخارطة الجغرافية</title>
+    <title>الخريطة العقارية</title>
+    <link rel="icon" type="image/png" href="https://falek.sa/wp-content/uploads/2023/01/شعار-فالك-مفرغ-2@2x-8.png">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js"></script>
     <script src="https://cdn.rawgit.com/Keyang/node-csvtojson/d41f44aa/browser/csvtojson.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/csvtojson@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/dist/turf.min.js"></script>
-    <script type="module" src="csvLinks.js"></script>
     <script type="module" src="script.js"></script>
 </head>
 
@@ -27,6 +28,12 @@
 
     <!-- Add an accessible label for the region button -->
     <button id="region-button" aria-label="اختر المنطقة">اختر المنطقة</button>
+
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder=" بحث عن قطعة... " />
+        <button id="search-button"><i class="fas fa-search"></i></button>
+        <div id="search-notification" style="display:none; color: red;">لم يتم العثور على القطعة</div>
+    </div>
 
     <!-- Popup for regions -->
     <div id="region-popup" class="popup">
@@ -77,7 +84,7 @@
         </div>
         <button id="close-sidebar" class="close-button" aria-label="Close Sidebar">&times;</button>
         <!-- New Text Element -->
-    <div id="top-text" class="center-text" style="display: none;" > تفاصيل العقار </div>
+        <div id="top-text" class="center-text" style="display: none;"> تفاصيل العقار </div>
         <div id="message">أختر منطقة وحدد مشروع وحدد القطعة المراد عرض تفاصيلها</div>
         <button class="button btn-primary" style="display: none;" aria-label="Land status"></button>
         <div class="details-title" style="display: none;"></div>
@@ -102,8 +109,10 @@
             إجمالي المساحة<br />713.5
         </div>
         <button id="contact-box" class="contact-button" style="display: none;" aria-label="Contact us via WhatsApp">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2048px-WhatsApp.svg.png" alt="WhatsApp" width="24" height="24">
-            <a href="https://wa.me/966547719991" target="_blank" style="text-decoration: none; color: inherit;">مهتم بالشراء تواصل معنا</a>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2048px-WhatsApp.svg.png"
+                alt="WhatsApp" width="24" height="24">
+            <a href="https://wa.me/966547719991" target="_blank" style="text-decoration: none; color: inherit;">مهتم
+                بالشراء تواصل معنا</a>
         </button>
     </div>
 
