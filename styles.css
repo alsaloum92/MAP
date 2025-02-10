@@ -110,20 +110,20 @@ body {
     /* Red color on hover */
 }
 
+input, textarea, select {
+    font-size: 16px; /* Set to at least 16px to prevent iOS zoom on focus */
+}
+
 #popup-search-input {
-    width: 133.333333333%;
+    width: 100%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
-    border-radius: 6.666666667px;
-    font-size: 16px;
+    border-radius: 5px;
+    font-size: 18px;
     box-sizing: border-box;
     /* Account for padding in width */
     transition: border-color 0.3s ease;
-    transform: scale(0.75);
-    transform-origin: left top;
-    margin-bottom: -10px;
-    margin-right: -33.333333333%;
 }
 
 #popup-search-input:focus {
@@ -140,7 +140,6 @@ body {
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
-    margin-top: 10px;
     cursor: pointer;
     font-size: 18px;
     transition: background-color 0.3s ease;
@@ -412,16 +411,10 @@ body {
         right: 0;
         transform: translateY(calc(100% - 40px));
     }
+
 }
 
-@media screen and (-webkit-min-device-pixel-ratio:0)
-{ 
-  select,
-  textarea,
-  input {
-    font-size: 16px;
-  }
-}
+
 
 /* Full screen control button */
 #fullscreen-btn {
