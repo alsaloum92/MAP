@@ -409,19 +409,14 @@ body {
     }
 }
 
-@media (max-width: 767px) {
-input[type="text"],
-input[type="email"],
-textarea {
-touch-action: manipulation;
-user-select: none;
--webkit-user-select: none;
--moz-user-select: none;
--ms-user-select: none;
-user-scalable: no;
+@media screen and (-webkit-overflow-scrolling: touch)
+{ 
+  select,
+  textarea,
+  input {
+    font-size: 16px;
+  }
 }
-}
-
 
 /* Full screen control button */
 #fullscreen-btn {
