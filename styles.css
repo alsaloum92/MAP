@@ -109,10 +109,15 @@ body {
     color: #ff0000;
     /* Red color on hover */
 }
-
-input, textarea, select {
-    font-size: 16px; /* Set to at least 16px to prevent iOS zoom on focus */
-}
+ input[type="text"],
+   input[type="number"],
+   input[type="email"],
+   input[type="password"],
+   input[type="tel"],
+   textarea,
+   select {
+       font-size: 16px;
+   }
 
 #popup-search-input {
     width: 100%;
