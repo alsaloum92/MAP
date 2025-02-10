@@ -111,15 +111,19 @@ body {
 }
 
 #popup-search-input {
-    width: 100%;
+    width: 133.333333333%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 18px;
+    border-radius: 6.666666667px;
+    font-size: 16px;
     box-sizing: border-box;
     /* Account for padding in width */
     transition: border-color 0.3s ease;
+    transform: scale(0.75);
+    transform-origin: left top;
+    margin-bottom: -10px;
+    margin-right: -33.333333333%;
 }
 
 #popup-search-input:focus {
@@ -136,6 +140,7 @@ body {
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
+    margin-top: 10px;
     cursor: pointer;
     font-size: 18px;
     transition: background-color 0.3s ease;
