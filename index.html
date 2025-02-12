@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0", maximum-scale=1.0, user-scalable=no>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الخارطة العقارية</title>
     <link rel="icon" type="image/png" href="https://falek.sa/wp-content/uploads/2023/01/شعار-فالك-مفرغ-2@2x-8.png">
 
@@ -38,7 +38,7 @@
     <!-- Search Popup -->
     <div id="search-popup" class="popup" style="display: none;">
         <div class="popup-content">
-            <button id="close-search-popup" class="close-button" aria-label="Close">&times;</button>
+            <button id="close-search-popup" class="close-search-popup" aria-label="Close">&times;</button>
             <h3 class="popup-title">بحث عن قطعة</h3>
             <input type="text" id="popup-search-input" placeholder="أدخل اسم القطعة...">
             <button id="popup-search-button">بحث</button>
@@ -49,7 +49,7 @@
     <!-- Popup for regions -->
     <div id="region-popup" class="popup">
         <div class="popup-content">
-            <button id="close-popup" class="close-button" aria-label="Close">&times;</button>
+            <button id="close-popup" class="close-search-popup" aria-label="Close">&times;</button>
             <h3 class="popup-title">اختر المنطقة</h3>
             <button data-region="madina" class="region-option" aria-label="Region: Madina">منطقة المدينة
                 المنورة</button>
@@ -64,11 +64,9 @@
     </select>
 
     <div id="legend">
+        
         <div class="legend-item">
-            <span>الحالة:</span>
-        </div>
-        <div class="legend-item">
-            <span class="legend-color" style="background-color: #7DA683;"></span>
+            <span class="legend-color" style="background-color: #7ede86;"></span>
             <span>متاح</span>
         </div>
         <div class="legend-item">
@@ -82,6 +80,10 @@
         <div class="legend-item">
             <span class="legend-color" style="background-color: #A8A38B;"></span>
             <span>تجاري</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: grey;"></span>
+            <span>مرفق</span>
         </div>
     </div>
 
@@ -99,7 +101,8 @@
         <div id="message">أختر منطقة وحدد مشروع وحدد القطعة المراد عرض تفاصيلها</div>
         <button class="button btn-primary" style="display: none;" aria-label="Land status"></button>
         <div class="details-title" style="display: none;"></div>
-        <div class="details-subtitle" style="display: none;"></div>
+        <div class="details-subtitle" style="display: none;">
+    </div>
         <div class="button-container" style="display: none;">
             <button class="button btn-secondary" id="open-on-map" aria-label="Open in Google Maps"><img
                     src="https://img.icons8.com/ios-glyphs/30/null/marker.png" alt="Map Icon"> فتح على خرائط
