@@ -42,6 +42,7 @@ body {
     margin: 0 auto;
     cursor: pointer;
     text-align: center;
+    display: none;
 }
 
 
@@ -50,13 +51,16 @@ body {
     top: 20px;
     left: 50%;
     z-index: 3;
-    background-color: #CFA37A;
-    color: white;
+    background-color: #fcfcfcd0;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
     border: none;
     padding: 5px 20px;
     border-radius: 5px;
     transform: translateX(-50%);
     cursor: pointer;
+    width: 150px;
+    height: 35px;
 }
 
 .popup {
@@ -93,7 +97,7 @@ body {
     color: #333;
 }
 
-.close-button {
+.close-search-popup {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -109,15 +113,10 @@ body {
     color: #ff0000;
     /* Red color on hover */
 }
- input[type="text"],
-   input[type="number"],
-   input[type="email"],
-   input[type="password"],
-   input[type="tel"],
-   textarea,
-   select {
-       font-size: 16px;
-   }
+
+input, textarea, select {
+    font-size: 16px; /* Set to at least 16px to prevent iOS zoom on focus */
+}
 
 #popup-search-input {
     width: 100%;
@@ -179,7 +178,7 @@ body {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: none;
+    background: rgb(255, 255, 255);
     border: none;
     font-size: 20px;
     cursor: pointer;
@@ -210,6 +209,7 @@ body {
     width: 0px;
 }
 
+
 .close-button {
     background: none;
     border: none;
@@ -219,6 +219,8 @@ body {
     top: 10px;
     right: 10px;
     color: #333333;
+    display: none;
+    /*sidebar*/
 }
 
 .close-button:hover {
@@ -310,12 +312,29 @@ body {
     font-size: 20px;
     font-family: 'Open Sans Bold';
     font-weight: bold;
+    background-color: #ffffff;
+    width: fit-content;
+    min-width: 100px;
+    padding: 10px;
+    border-radius: 5px;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 5px;
 }
 
 .details-subtitle {
-    color: #6c757d;
+    font-size: 14px;
     font-family: 'Open Sans Bold';
-    margin-bottom: 20px;
+    font-weight: bold;
+    background-color: #ffffff;
+    width: fit-content;
+    min-width: 100px;
+    padding: 10px;
+    border-radius: 5px;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 5px;
+
 }
 
 .details {
@@ -360,7 +379,7 @@ body {
 
 #project-dropdown {
     z-index: 3;
-    background-color: rgba(255, 255, 255, 0.688);
+    background-color: rgba(255, 255, 255, 0.738);
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
@@ -393,7 +412,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.877);
+    background-color: rgba(255, 255, 255, 0.950);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -416,17 +435,43 @@ body {
         right: 0;
         transform: translateY(calc(100% - 40px));
     }
+    #search-popup-button {
+        display: none;
+    }
+    .close-button {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: #333333;
+        display: block;
+        /*sidebar*/
+    }
+    .drag-handle {
+        width: 50px;
+        height: 10px;
+        background-color: #ccc;
+        border-radius: 5px;
+        margin: 0 auto;
+        cursor: pointer;
+        text-align: center;
+        display: block;
+    }
 
 }
+
 
 
 
 /* Full screen control button */
 #fullscreen-btn {
     position: absolute;
-    top: 100px;
-    right: 10px;
-    background-color: white;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(255, 255, 255, 0.738);
     border: none;
     cursor: pointer;
     padding: 10px;
@@ -441,32 +486,37 @@ body {
 
 #legend {
     z-index: 3;
-    background-color: rgba(255, 255, 255, 0.507);
+    background-color: rgba(255, 255, 255, 0);
     padding: 5px;
     border-radius: 5px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     text-align: right;
     font-size: 9px;
     font-family: 'Open Sans Bold';
+    font-weight: bold;
     width: fit-content;
-    position: absolute;
+    position: absolute; 
     left: 50%;
     transform: translateX(-50%);
-    top: 100px;
+    top: 65px;
     display: flex;
-    gap: 20px;
+    gap: 10px;
 }
 
 .legend-item {
     display: flex;
     align-items: center;
+    padding: 5px;
     gap: 5px;
+    width: 60px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.695);
 }
 
 .legend-color {
     width: 20px;
     height: 20px;
-    border-radius: 10%;
+    border-radius: 5PX;
     display: inline-block;
 }
 
@@ -514,10 +564,10 @@ body {
 
 #search-popup-button {
     position: absolute;
-    top: 140px;
+    top: 60px;
     /* Adjust depending on desired spacing from the fullscreen button */
-    right: 10px;
-    background-color: white;
+    right: 20px;
+    background-color: rgba(255, 255, 255, 0.738);
     border: none;
     cursor: pointer;
     padding: 10px;
@@ -526,7 +576,7 @@ body {
 }
 
 #search-popup-button img {
-    width: 10px;
+    width: 9px;
     height: 10px;
 }
 
