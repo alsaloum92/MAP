@@ -51,12 +51,13 @@ body {
     top: 20px;
     left: 50%;
     z-index: 3;
-    background-color: #fcfcfcd0;
+    background-color: #CFA37A;
     font-weight: bold;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     border: none;
     padding: 5px 20px;
     border-radius: 5px;
+    border: 0.5px solid #ffffff;
     transform: translateX(-50%);
     cursor: pointer;
     width: 150px;
@@ -210,7 +211,7 @@ input, textarea, select {
 }
 
 
-.close-button {
+.close-button-s {
     background: none;
     border: none;
     font-size: 20px;
@@ -218,7 +219,7 @@ input, textarea, select {
     position: absolute;
     top: 10px;
     right: 10px;
-    color: #333333;
+    color: #33333300;
     display: none;
     /*sidebar*/
 }
@@ -251,14 +252,18 @@ input, textarea, select {
 }
 
 .btn-primary {
-    background-color: #198754;
+    background-color: #198754c7;
+    opacity: 80%;
     font-family: 'Open Sans Bold';
+    font-weight: bold;
     color: rgb(255, 255, 255);
     padding: 10px 20px;
     border-radius: 5px;
     display: none;
     /* Initially hidden */
-    width: 25%;
+    width:fit-content;
+    min-width: 150px;
+    min-width:85px;
     text-align: center;
     margin-top: 10px;
     /* Adjust as necessary */
@@ -271,24 +276,36 @@ input, textarea, select {
 }
 
 .btn-secondary {
-    background-color: #CFA37A;
+    background-color: #ffffff;
     font-family: 'Open Sans Bold';
     color: rgb(0, 0, 0);
-    width: calc(50% - 5px);
+    width: calc(15% - 5px);
     display: flex;
     justify-content: center;
+    border-radius: 5px; /* Adjust the value to round the corners */
+    padding: 5px 20px; /* Add padding for better appearance */
+    height: 45px;
+    align-items: center;
+    margin-top: 5px;
+    border: 0.5px solid #a87c50;
 }
 
 .details-container {
     display: grid;
+    background-color: #ffffff;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 5px;
+    gap: 0px;
     align-items: center;
+    border-radius: 5px;
+    border: 1px solid #f1f1f1;
+    margin-bottom: 0px;
+    margin-top: 5px;
+    padding: 5px 0px;
 }
 
 .center-text {
     text-align: center;
-    background-color: #ffffff;
+    background-color: #ffffff00;
     border-radius: 5px;
     font-size: 20px;
     font-family: 'Open Sans Bold';
@@ -296,55 +313,29 @@ input, textarea, select {
     padding: 10px 20px;
     margin-top: 10px;
     /* Space between text and the next element */
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     /* Space between text and the next element */
 }
 
 .details-container div {
-    background-color: #ffffff;
-    border-radius: 5px;
-    text-align: right;
+    
+    border-radius: 0px;
+    border-left: 1px solid #f1f1f1;
+    text-align: center;
     font-family: 'Open Sans Bold';
     padding: 5px;
 }
 
-.details-title {
-    font-size: 20px;
-    font-family: 'Open Sans Bold';
-    font-weight: bold;
-    background-color: #ffffff;
-    width: fit-content;
-    min-width: 100px;
-    padding: 10px;
-    border-radius: 5px;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.details-subtitle {
-    font-size: 14px;
-    font-family: 'Open Sans Bold';
-    font-weight: bold;
-    background-color: #ffffff;
-    width: fit-content;
-    min-width: 100px;
-    padding: 10px;
-    border-radius: 5px;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 5px;
-
-}
 
 .details {
-    background-color: #CFA37A;
+    background-color: #ffffff;;
     border-radius: 5px;
+    border: 1px solid #f1f1f1;
     font-family: 'Open Sans Bold';
     font-weight: bold;
     text-align: center;
     padding: 5px;
-    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 #message {
@@ -355,7 +346,7 @@ input, textarea, select {
 }
 
 #contact-box {
-    background-color: #198754;
+    background-color: #CFA37A;
     border-color: transparent;
     padding: 10px 20px;
     border-radius: 5px;
@@ -365,6 +356,7 @@ input, textarea, select {
     align-items: center;
     justify-content: center;
     margin-top: 5px;
+    width: calc(70% - 5px);
 }
 
 #contact-box img {
@@ -430,6 +422,7 @@ input, textarea, select {
         max-height: 60%;
         position: absolute;
         bottom: 0;
+        padding-bottom: 30px;
         top: auto;
         left: 0;
         right: 0;
@@ -438,16 +431,18 @@ input, textarea, select {
     #search-popup-button {
         display: none;
     }
-    .close-button {
-        background: none;
+    .close-button-s {
+        background: white;
         border: none;
+        border-radius: 5px;
+        padding:3px 10px;
         font-size: 20px;
         cursor: pointer;
         position: absolute;
+        margin-bottom: 5px;
         top: 10px;
         right: 10px;
         color: #333333;
-        display: block;
         /*sidebar*/
     }
     .drag-handle {
@@ -460,19 +455,38 @@ input, textarea, select {
         text-align: center;
         display: block;
     }
+    .btn-primary {
+ 
+        margin-right: 74%;
+        /* Adjust as necessary */
+        width: fit-content;
+        min-width: 100px;
+
+    }
+
+}
+
+@media(max-width: 390px) {
+   
+    .btn-primary {
+ 
+        margin-right: 70%;
+        /* Adjust as necessary */
+        width: fit-content;
+        min-width: 100px;
+
+    }
 
 }
 
 
-
-
 /* Full screen control button */
 #fullscreen-btn {
-     position: absolute;
+    position: absolute;
     top: 20px;
     right: 20px;
-    background-color: rgba(255, 255, 255, 0.738);
-    border: none;
+    background-color: rgb(255, 255, 255);
+    border: 0.5px solid #000000;
     cursor: pointer;
     padding: 10px;
     border-radius: 5px;
@@ -488,7 +502,7 @@ input, textarea, select {
 
 #legend {
     z-index: 3;
-    background-color: rgba(255, 255, 255, 0);
+    background-color: rgba(255, 255, 255, 0.163);
     padding: 5px;
     border-radius: 5px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
