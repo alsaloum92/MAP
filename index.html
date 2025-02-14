@@ -64,7 +64,7 @@
     </select>
 
     <div id="legend">
-        
+
         <div class="legend-item">
             <span class="legend-color" style="background-color: #7ede86;"></span>
             <span>متاح</span>
@@ -95,38 +95,36 @@
         <div class="drag-handle" aria-label="Drag the sidebar to resize">
             <img src="https://img.icons8.com/ios-glyphs/30/null/expand.png" alt="Drag Handle">
         </div>
-        <button id="close-sidebar" class="close-button" aria-label="Close Sidebar">&times;</button>
+        <button id="close-sidebar" class="close-button-s" aria-label="Close Sidebar">&times;</button>
         <!-- New Text Element -->
-        <div id="top-text" class="center-text" style="display: none;"> تفاصيل العقار </div>
         <div id="message">أختر منطقة وحدد مشروع وحدد القطعة المراد عرض تفاصيلها</div>
         <button class="button btn-primary" style="display: none;" aria-label="Land status"></button>
-        <div class="details-title" style="display: none;"></div>
-        <div class="details-subtitle" style="display: none;">
+        <div id="top-text" class="center-text" style="display: none;"> تفاصيل العقار </div>
+    
+    <div class="details-container" style="display: none;">
+        <div>رقم القطعة<br />522/1</div>
+        <div>رقم البلوك<br />29</div>
+        <div>رقم المخطط<br />3119</div>
     </div>
-        <div class="button-container" style="display: none;">
-            <button class="button btn-secondary" id="open-on-map" aria-label="Open in Google Maps"><img
-                    src="https://img.icons8.com/ios-glyphs/30/null/marker.png" alt="Map Icon"> فتح على خرائط
-                قوقل</button>
-            <button class="button btn-secondary" id="share-land" aria-label="Share land details"><img
-                    src="https://img.icons8.com/ios-glyphs/30/null/share.png" alt="Share Icon"> مشاركة الأرض</button>
-        </div>
-        <div class="details-container" style="display: none;">
-            <div>رقم القطعة<br />522/1</div>
-            <div>رقم البلوك<br />29</div>
-            <div>رقم المخطط<br />3119</div>
-        </div>
-        <div id="line-lengths" style="display: none;">
-            <h3>أطوال القطعة</h3>
-            <ul id="lengthList"></ul>
-        </div>
-        <div class="details" style="display: none;">
-            إجمالي المساحة<br />713.5
-        </div>
-        <button id="contact-box" class="contact-button" style="display: none;" aria-label="Contact us via WhatsApp">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/2048px-WhatsApp.svg.png"
-                alt="WhatsApp" width="24" height="24">
-            <a href="https://wa.me/966547719991" target="_blank" style="text-decoration: none; color: inherit;">مهتم
-                بالشراء تواصل معنا</a>
+    <div id="line-lengths" style="display: none;">
+        <h3>أطوال القطعة</h3>
+        <ul id="lengthList"></ul>
+    </div>
+    <div class="details" style="display: none;">
+        إجمالي المساحة<br />713.5
+    </div>
+    <div class="button-container" style="display: none;">
+         <!-- WhatsApp Contact Button Added -->
+    <button id="contact-box" class="contact-box" style="display: none;" aria-label="Contact us via WhatsApp">
+        <a href="https://wa.me/966547719991" target="_blank" style="text-decoration: none; color: inherit;">
+            حجز العقار   
+        </a>
+    </button>
+        <button class="button btn-secondary" id="open-on-map" aria-label="Open in Google Maps">
+            <img src="https://img.icons8.com/ios-glyphs/30/null/marker.png" alt="Map Icon"> 
+        </button>
+        <button class="button btn-secondary" id="share-land" aria-label="Share land details">
+            <img src="https://img.icons8.com/ios-glyphs/30/null/share.png" alt="Share Icon"> 
         </button>
     </div>
 
