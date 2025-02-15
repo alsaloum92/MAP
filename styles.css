@@ -490,7 +490,7 @@ select {
         top: auto;
         left: 0;
         right: 0;
-        transform: translateY(calc(100% - 40px));
+        transform: translateY(calc(100% - 0px));
     }
 
     #search-popup-button {
