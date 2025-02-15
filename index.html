@@ -10,6 +10,7 @@
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js"></script>
     <script src="https://cdn.rawgit.com/Keyang/node-csvtojson/d41f44aa/browser/csvtojson.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/csvtojson@2"></script>
@@ -100,35 +101,52 @@
         <div id="message">أختر منطقة وحدد مشروع وحدد القطعة المراد عرض تفاصيلها</div>
         <button class="button btn-primary" style="display: none;" aria-label="Land status"></button>
         <div id="top-text" class="center-text" style="display: none;"> تفاصيل العقار </div>
-    
-    <div class="details-container" style="display: none;">
-        <div>رقم القطعة<br />522/1</div>
-        <div>رقم البلوك<br />29</div>
-        <div>رقم المخطط<br />3119</div>
-    </div>
-    <div id="line-lengths" style="display: none;">
-        <h3>أطوال القطعة</h3>
-        <ul id="lengthList"></ul>
-    </div>
-    <div class="details" style="display: none;">
-        إجمالي المساحة<br />713.5
-    </div>
-    <div class="button-container" style="display: none;">
-         <!-- WhatsApp Contact Button Added -->
-    <button id="contact-box" class="contact-box" style="display: none;" aria-label="Contact us via WhatsApp">
-        <a href="https://wa.me/966547719991" target="_blank" style="text-decoration: none; color: inherit;">
-            حجز العقار   
-        </a>
-    </button>
-        <button class="button btn-secondary" id="open-on-map" aria-label="Open in Google Maps">
-            <img src="https://img.icons8.com/ios-glyphs/30/null/marker.png" alt="Map Icon"> 
-        </button>
-        <button class="button btn-secondary" id="share-land" aria-label="Share land details">
-            <img src="https://img.icons8.com/ios-glyphs/30/null/share.png" alt="Share Icon"> 
-        </button>
-    </div>
 
-    <script src="script.js"></script>
+        <div class="details-container" style="display: none;">
+            <div>رقم القطعة<br />522/1</div>
+            <div>رقم البلوك<br />29</div>
+            <div>رقم المخطط<br />3119</div>
+        </div>
+        <div id="line-lengths" style="display: none;">
+            <h3>أطوال القطعة</h3>
+            <ul id="lengthList"></ul>
+        </div>
+        <div class="details" style="display: none;">
+            إجمالي المساحة<br />713.5
+        </div>
+
+        <div id="med-text" class="med-text" style="display: none;">المرافق والخدمات</div>
+
+        <!-- New Details Container -->
+        <div class="details-container-1" style="display: none;">
+            
+                <div><i class="fas fa-school"></i></div> <!-- مرافق تعليمية -->
+                <div><i class="fas fa-mosque"></i></div> <!-- مساجد -->
+                <div><i class="fas fa-tree"></i></div> <!-- حدائق -->
+                <div><i class="fas fa-bolt"></i></div> <!-- كهرباء -->
+                <div><i class="fas fa-toilet"></i></div> <!-- صرف صحي -->
+                <div><i class="fas fa-lightbulb"></i></div> <!-- إنارة -->
+                <div><i class="fas fa-water"></i></div> <!-- صرف سيول -->
+                <div><i class="fas fa-road"></i></div> <!-- طرق -->
+           
+        </div>
+
+        <div class="button-container" style="display: none;">
+            <!-- WhatsApp Contact Button Added -->
+            <button id="contact-box" class="contact-box" style="display: none;" aria-label="Contact us via WhatsApp">
+                <a href="https://wa.me/966547719991" target="_blank" style="text-decoration: none; color: inherit;">
+                    حجز العقار
+                </a>
+            </button>
+            <button class="button btn-secondary" id="open-on-map" aria-label="Open in Google Maps">
+                <img src="https://img.icons8.com/ios-glyphs/30/null/marker.png" alt="Map Icon">
+            </button>
+            <button class="button btn-secondary" id="share-land" aria-label="Share land details">
+                <img src="https://img.icons8.com/ios-glyphs/30/null/share.png" alt="Share Icon">
+            </button>
+        </div>
+
+        <script src="script.js"></script>
 </body>
 
 </html>
