@@ -251,7 +251,7 @@ select {
     margin-bottom: 20px;
     padding: 5px;
     width: 100%;
-    height: auto;
+    height: fit-content;
     box-sizing: border-box;
     scroll-snap-type: x mandatory;
     /* Optional: smooth scrolling experience */
@@ -263,7 +263,7 @@ select {
     text-align: center;
     font-family: 'Open Sans Bold';
     padding: 5px;
-    font-size: 25px;
+    font-size: 15px;
     flex: 0 0 auto;
     /* Prevents items from shrinking */
     border-left: 1px solid #f1f1f1;
@@ -271,9 +271,10 @@ select {
     /* Optional: align items when scrolling */
     width: fit-content;
     /* Set a minimum width for each item */
-    min-width: 40px;
+    min-width: 20px;
     color: #a87c50;
 }
+
 
 .button {
     padding: 10px;
@@ -482,7 +483,7 @@ select {
 @media(max-width: 768px) {
     #sidebar {
         width: auto;
-        max-height: 50%;
+        max-height: 60%;
         position: absolute;
         bottom: 0;
         padding-bottom: 30px;
