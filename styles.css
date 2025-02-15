@@ -275,7 +275,6 @@ select {
     color: #a87c50;
 }
 
-
 .button {
     padding: 10px;
     font-size: 12px;
@@ -487,6 +486,8 @@ select {
         position: absolute;
         bottom: 0;
         padding-bottom: 30px;
+        border-bottom-right-radius: 0px;
+        border-bottom-left-radius: 0px;
         top: auto;
         left: 0;
         right: 0;
